@@ -1,0 +1,25 @@
+commit structure:
+_______________________________________________________
+tag: shortcut
+additional section;
+_______________________________________________________
+
+where:
+
+tags               - keyword for changes.
+shortcut           - several main words about changes.
+additional section - more main info about changes.
+
+_______________________________________________________
+
+tags may be:
+
+create:  creation of files/directories;
+edit:    files editing;
+feature: new functional;
+fix:     bug fix and problems solving;
+doc:     documentation adding/editing;
+ui:      UI adding/editing;
+test:    adding/edidting tests;
+
+_______________________________________________________
