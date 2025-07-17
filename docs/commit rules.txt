@@ -14,12 +14,13 @@ _______________________________________________________
 
 tags may be:
 
-create:  creation of files/directories;
-edit:    files editing;
-feature: new functional;
-fix:     bug fix and problems solving;
-doc:     documentation adding/editing;
-ui:      UI adding/editing;
-test:    adding/edidting tests;
+create:   creation of files/directories;
+edit:     editing functionality of code;
+feature:  new functional;
+refactor: code refactor;
+fix:      bug fix and problems solving;
+doc:      documentation adding/editing;
+ui:       UI adding/editing (appUI folder);
+test:     adding/edidting tests;
 
 _______________________________________________________
