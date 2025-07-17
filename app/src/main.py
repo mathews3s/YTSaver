@@ -7,11 +7,7 @@ import sys
 
 
 if __name__ == "__main__":
-    app = AppQT([])
     model = Model()
     view = View()
     controller = Controller(model, view)
-    controller.initUi()
-    controller.showUI()
-    sys.exit(app.exec_())
 
