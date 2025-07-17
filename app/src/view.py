@@ -1,14 +1,11 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-
-
-
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication as AppQT
 
 class View():
 
     def __init__(self):
+        self.app = AppQT([])
         self.window = QtWidgets.QMainWindow()
-
-    def setupMainWindow(self):
         self.window.setObjectName("MainWindow") ###
         self.window.resize(1010, 730) ###
         self.sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -746,6 +743,11 @@ class View():
         self.MainMenu.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
+        self.ST_LanguagesBox.addItem("en")
+        self.ST_LanguagesBox.addItem("en")
+        self.ST_LanguagesBox.addItem("en")
+        self.ST_LanguagesBox.addItem("en")
+
     def setupGraphicalEvents(self):
         # self.Playlist1_Icon.mousePressEvent = lambda event: self.hide()
         self.PlaylistsTabButton.enterEvent = lambda event: self.highlightItem(self.PlaylistsTabButton)
@@ -796,6 +798,15 @@ class View():
         self.Video2_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Video2_EditButton)
         self.Video2_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Video2_DeleteButton)
         self.Video2_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Video2_DeleteButton)
+
+        self.FT_FindButton.enterEvent = lambda event: self.highlightItem(self.FT_FindButton)
+        self.FT_FindButton.leaveEvent = lambda event: self.unhighlightItem(self.FT_FindButton)
+
+
+        self.ST_LanguagesBox.enterEvent = lambda event: self.highlightItem(self.ST_LanguagesBox)
+        self.ST_LanguagesBox.leaveEvent = lambda event: self.unhighlightItem(self.ST_LanguagesBox)
+        self.ST_SaveButton.enterEvent = lambda event: self.highlightItem(self.ST_SaveButton)
+        self.ST_SaveButton.leaveEvent = lambda event: self.unhighlightItem(self.ST_SaveButton)
 
     def retranslate(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -896,8 +907,6 @@ class View():
             self.window.show()
         else:
             self.window.hide()
-
-
 
     def highlightItem(self, item):
         current_style = item.styleSheet()
