@@ -6,6 +6,8 @@ class Controller:
     def __init__(self, model, view):
         self.view = view
         self.model = model
+        self.id_of_first
+        self.model.get_firsts_playlist()
         self.setupUI()
         self.startUI()
 
@@ -24,6 +26,9 @@ class Controller:
 
     def switchMainMenuTab(self, tab):
         self.view.MainMenu.setCurrentWidget(tab)
+
+    def showPlaylists(self):
+        self.model.get_firsts_playlist()
 
 
 
