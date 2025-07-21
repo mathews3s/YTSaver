@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication as AppQT
+
 from controller import Controller
 from view import View
 from model import Model
