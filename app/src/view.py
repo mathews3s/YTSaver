@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QApplication as AppQT
 class View():
 
     def __init__(self):
+        self.px_low = 2
+        self.px_medium = 4
         self.app = AppQT([])
         self.window = QtWidgets.QMainWindow()
         self.window.setObjectName("MainWindow") ###
@@ -67,12 +69,12 @@ class View():
 "color: rgb(255, 255, 255);\n"
 "border-radius: 20px;")
         self.FindTabButton.setObjectName("FindTabButton")
-        self.SettingsTabButton = QtWidgets.QPushButton(self.ControlButtonsBar)
-        self.SettingsTabButton.setGeometry(QtCore.QRect(340, 10, 141, 41))
-        self.SettingsTabButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 20px;")
-        self.SettingsTabButton.setObjectName("SettingsTabButton")
+#         self.SettingsTabButton = QtWidgets.QPushButton(self.ControlButtonsBar)
+#         self.SettingsTabButton.setGeometry(QtCore.QRect(340, 10, 141, 41))
+#         self.SettingsTabButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+# "color: rgb(255, 255, 255);\n"
+# "border-radius: 20px;")
+#         self.SettingsTabButton.setObjectName("SettingsTabButton")
         self.MainMenu = QtWidgets.QStackedWidget(self.WorkSpace)
         self.MainMenu.setGeometry(QtCore.QRect(10, 160, 991, 561))
         self.MainMenu.setObjectName("MainMenu")
@@ -160,6 +162,8 @@ class View():
 "border-radius: 10px\n"
 "")
         self.Playlist1_EditButton.setObjectName("Playlist1_EditButton")
+        self.VTP_Playlist1_Container.setVisible(False)
+
         self.VTP_Playlist2_Container = QtWidgets.QGroupBox(self.VT_PlaylistsContainer)
         self.VTP_Playlist2_Container.setGeometry(QtCore.QRect(20, 250, 301, 141))
         self.VTP_Playlist2_Container.setObjectName("VTP_Playlist2_Container")
@@ -204,6 +208,8 @@ class View():
 "border-radius: 10px\n"
 "")
         self.Playlist2_EditButton.setObjectName("Playlist2_EditButton")
+        self.VTP_Playlist2_Container.setVisible(False)
+
         self.VTP_NothingLabel = QtWidgets.QLabel(self.VT_PlaylistsContainer)
         self.VTP_NothingLabel.setGeometry(QtCore.QRect(100, 230, 141, 16))
         self.VTP_NothingLabel.setStyleSheet("\n"
@@ -333,11 +339,11 @@ class View():
         self.Video2_DescriptionLabel.setStyleSheet("\n"
 "color: rgb(255, 255, 255);")
         self.Video2_DescriptionLabel.setObjectName("Video2_DescriptionLabel")
-        self.Playlist1_PathLabel_3 = QtWidgets.QLabel(self.VT_VideosContainer)
-        self.Playlist1_PathLabel_3.setGeometry(QtCore.QRect(340, 240, 141, 16))
-        self.Playlist1_PathLabel_3.setStyleSheet("\n"
+        self.VTV_NothingLabel = QtWidgets.QLabel(self.VT_VideosContainer)
+        self.VTV_NothingLabel.setGeometry(QtCore.QRect(340, 240, 141, 16))
+        self.VTV_NothingLabel.setStyleSheet("\n"
 "color: rgb(255, 255, 255);")
-        self.Playlist1_PathLabel_3.setObjectName("Playlist1_PathLabel_3")
+        self.VTV_NothingLabel.setObjectName("Playlist1_PathLabel_3")
         self.VT_PlaylistsLabel = QtWidgets.QLabel(self.ViewingTab)
         self.VT_PlaylistsLabel.setGeometry(QtCore.QRect(10, 10, 81, 16))
         self.VT_PlaylistsLabel.setStyleSheet("background-color: rgb(85, 85, 127);\n"
@@ -385,72 +391,72 @@ class View():
 "color: rgb(255, 255, 255);")
         self.FindTabLabel.setObjectName("FindTabLabel")
         self.MainMenu.addWidget(self.FindTab)
-        self.SettingsTab = QtWidgets.QWidget()
-        self.SettingsTab.setObjectName("SettingsTab")
-        self.SettingsTabContainer = QtWidgets.QFrame(self.SettingsTab)
-        self.SettingsTabContainer.setGeometry(QtCore.QRect(0, 50, 991, 491))
-        self.SettingsTabContainer.setStyleSheet("background-color: rgb(0, 0, 0);\n"
-"border-radius: 20px;")
-        self.SettingsTabContainer.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.SettingsTabContainer.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.SettingsTabContainer.setObjectName("SettingsTabContainer")
-        self.ST_LanguagesLabel = QtWidgets.QLabel(self.SettingsTabContainer)
-        self.ST_LanguagesLabel.setGeometry(QtCore.QRect(60, 60, 121, 41))
-        self.ST_LanguagesLabel.setStyleSheet("background-color: rgb(0, 0, 0);\n"
-"color: rgb(255, 255, 255);")
-        self.ST_LanguagesLabel.setObjectName("ST_LanguagesLabel")
-        self.ST_LanguagesBox = QtWidgets.QComboBox(self.SettingsTabContainer)
-        self.ST_LanguagesBox.setGeometry(QtCore.QRect(230, 70, 171, 22))
-        self.ST_LanguagesBox.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 20px;")
-        self.ST_LanguagesBox.setObjectName("ST_LanguagesBox")
-        self.ST_StreamsDASHLabel = QtWidgets.QLabel(self.SettingsTabContainer)
-        self.ST_StreamsDASHLabel.setGeometry(QtCore.QRect(60, 140, 141, 41))
-        self.ST_StreamsDASHLabel.setStyleSheet("background-color: rgb(0, 0, 0);\n"
-"color: rgb(255, 255, 255);")
-        self.ST_StreamsDASHLabel.setObjectName("ST_StreamsDASHLabel")
-        self.ST_DefaultPlaylistLabel = QtWidgets.QLabel(self.SettingsTabContainer)
-        self.ST_DefaultPlaylistLabel.setGeometry(QtCore.QRect(60, 220, 141, 41))
-        self.ST_DefaultPlaylistLabel.setStyleSheet("background-color: rgb(0, 0, 0);\n"
-"color: rgb(255, 255, 255);")
-        self.ST_DefaultPlaylistLabel.setObjectName("ST_DefaultPlaylistLabel")
-        self.ST_StreamsDASHButtons = QtWidgets.QGroupBox(self.SettingsTabContainer)
-        self.ST_StreamsDASHButtons.setGeometry(QtCore.QRect(220, 120, 101, 91))
-        self.ST_StreamsDASHButtons.setObjectName("ST_StreamsDASHButtons")
-        self.ST_ActivateDASHButton = QtWidgets.QRadioButton(self.ST_StreamsDASHButtons)
-        self.ST_ActivateDASHButton.setGeometry(QtCore.QRect(10, 20, 158, 13))
-        self.ST_ActivateDASHButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px;")
-        self.ST_ActivateDASHButton.setObjectName("ST_ActivateDASHButton")
-        self.ST_DeactivateDASHButton = QtWidgets.QRadioButton(self.ST_StreamsDASHButtons)
-        self.ST_DeactivateDASHButton.setGeometry(QtCore.QRect(10, 50, 158, 13))
-        self.ST_DeactivateDASHButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px;")
-        self.ST_DeactivateDASHButton.setObjectName("ST_DeactivateDASHButton")
-        self.ST_DefaultPlaylistPathInput = QtWidgets.QLineEdit(self.SettingsTabContainer)
-        self.ST_DefaultPlaylistPathInput.setGeometry(QtCore.QRect(230, 220, 411, 31))
-        self.ST_DefaultPlaylistPathInput.setStyleSheet("padding-left: 10px;\n"
-"background-color: rgb(255, 255, 255);\n"
-"border: 3px solid rgb(85, 85, 127);;\n"
-"border-radius: 10px;\n"
-"\n"
-"")
-        self.ST_DefaultPlaylistPathInput.setObjectName("ST_DefaultPlaylistPathInput")
-        self.ST_SaveButton = QtWidgets.QPushButton(self.SettingsTabContainer)
-        self.ST_SaveButton.setGeometry(QtCore.QRect(50, 390, 141, 41))
-        self.ST_SaveButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 20px;")
-        self.ST_SaveButton.setObjectName("ST_SaveButton")
-        self.SettingsTabLabel = QtWidgets.QLabel(self.SettingsTab)
-        self.SettingsTabLabel.setGeometry(QtCore.QRect(10, 10, 55, 16))
-        self.SettingsTabLabel.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);")
-        self.SettingsTabLabel.setObjectName("SettingsTabLabel")
-        self.MainMenu.addWidget(self.SettingsTab)
+#         self.SettingsTab = QtWidgets.QWidget()
+#         self.SettingsTab.setObjectName("SettingsTab")
+#         self.SettingsTabContainer = QtWidgets.QFrame(self.SettingsTab)
+#         self.SettingsTabContainer.setGeometry(QtCore.QRect(0, 50, 991, 491))
+#         self.SettingsTabContainer.setStyleSheet("background-color: rgb(0, 0, 0);\n"
+# "border-radius: 20px;")
+#         self.SettingsTabContainer.setFrameShape(QtWidgets.QFrame.StyledPanel)
+#         self.SettingsTabContainer.setFrameShadow(QtWidgets.QFrame.Raised)
+#         self.SettingsTabContainer.setObjectName("SettingsTabContainer")
+#         self.ST_LanguagesLabel = QtWidgets.QLabel(self.SettingsTabContainer)
+#         self.ST_LanguagesLabel.setGeometry(QtCore.QRect(60, 60, 121, 41))
+#         self.ST_LanguagesLabel.setStyleSheet("background-color: rgb(0, 0, 0);\n"
+# "color: rgb(255, 255, 255);")
+#         self.ST_LanguagesLabel.setObjectName("ST_LanguagesLabel")
+#         self.ST_LanguagesBox = QtWidgets.QComboBox(self.SettingsTabContainer)
+#         self.ST_LanguagesBox.setGeometry(QtCore.QRect(230, 70, 171, 22))
+#         self.ST_LanguagesBox.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+# "color: rgb(255, 255, 255);\n"
+# "border-radius: 20px;")
+#         self.ST_LanguagesBox.setObjectName("ST_LanguagesBox")
+#         self.ST_StreamsDASHLabel = QtWidgets.QLabel(self.SettingsTabContainer)
+#         self.ST_StreamsDASHLabel.setGeometry(QtCore.QRect(60, 140, 141, 41))
+#         self.ST_StreamsDASHLabel.setStyleSheet("background-color: rgb(0, 0, 0);\n"
+# "color: rgb(255, 255, 255);")
+#         self.ST_StreamsDASHLabel.setObjectName("ST_StreamsDASHLabel")
+#         self.ST_DefaultPlaylistLabel = QtWidgets.QLabel(self.SettingsTabContainer)
+#         self.ST_DefaultPlaylistLabel.setGeometry(QtCore.QRect(60, 220, 141, 41))
+#         self.ST_DefaultPlaylistLabel.setStyleSheet("background-color: rgb(0, 0, 0);\n"
+# "color: rgb(255, 255, 255);")
+#         self.ST_DefaultPlaylistLabel.setObjectName("ST_DefaultPlaylistLabel")
+#         self.ST_StreamsDASHButtons = QtWidgets.QGroupBox(self.SettingsTabContainer)
+#         self.ST_StreamsDASHButtons.setGeometry(QtCore.QRect(220, 120, 101, 91))
+#         self.ST_StreamsDASHButtons.setObjectName("ST_StreamsDASHButtons")
+#         self.ST_ActivateDASHButton = QtWidgets.QRadioButton(self.ST_StreamsDASHButtons)
+#         self.ST_ActivateDASHButton.setGeometry(QtCore.QRect(10, 20, 158, 13))
+#         self.ST_ActivateDASHButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+# "color: rgb(255, 255, 255);\n"
+# "border-radius: 10px;")
+#         self.ST_ActivateDASHButton.setObjectName("ST_ActivateDASHButton")
+#         self.ST_DeactivateDASHButton = QtWidgets.QRadioButton(self.ST_StreamsDASHButtons)
+#         self.ST_DeactivateDASHButton.setGeometry(QtCore.QRect(10, 50, 158, 13))
+#         self.ST_DeactivateDASHButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+# "color: rgb(255, 255, 255);\n"
+# "border-radius: 10px;")
+#         self.ST_DeactivateDASHButton.setObjectName("ST_DeactivateDASHButton")
+#         self.ST_DefaultPlaylistPathInput = QtWidgets.QLineEdit(self.SettingsTabContainer)
+#         self.ST_DefaultPlaylistPathInput.setGeometry(QtCore.QRect(230, 220, 411, 31))
+#         self.ST_DefaultPlaylistPathInput.setStyleSheet("padding-left: 10px;\n"
+# "background-color: rgb(255, 255, 255);\n"
+# "border: 3px solid rgb(85, 85, 127);;\n"
+# "border-radius: 10px;\n"
+# "\n"
+# "")
+#         self.ST_DefaultPlaylistPathInput.setObjectName("ST_DefaultPlaylistPathInput")
+#         self.ST_SaveButton = QtWidgets.QPushButton(self.SettingsTabContainer)
+#         self.ST_SaveButton.setGeometry(QtCore.QRect(50, 390, 141, 41))
+#         self.ST_SaveButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+# "color: rgb(255, 255, 255);\n"
+# "border-radius: 20px;")
+#         self.ST_SaveButton.setObjectName("ST_SaveButton")
+#         self.SettingsTabLabel = QtWidgets.QLabel(self.SettingsTab)
+#         self.SettingsTabLabel.setGeometry(QtCore.QRect(10, 10, 55, 16))
+#         self.SettingsTabLabel.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+# "color: rgb(255, 255, 255);")
+#         self.SettingsTabLabel.setObjectName("SettingsTabLabel")
+#         self.MainMenu.addWidget(self.SettingsTab)
         self.DownloadTab = QtWidgets.QWidget()
         self.DownloadTab.setObjectName("DownloadTab")
         self.DownloadTabContainer = QtWidgets.QFrame(self.DownloadTab)
@@ -743,70 +749,70 @@ class View():
         self.MainMenu.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
-        self.ST_LanguagesBox.addItem("en")
-        self.ST_LanguagesBox.addItem("en")
-        self.ST_LanguagesBox.addItem("en")
-        self.ST_LanguagesBox.addItem("en")
+        # self.ST_LanguagesBox.addItem("en")
+        # self.ST_LanguagesBox.addItem("en")
+        # self.ST_LanguagesBox.addItem("en")
+        # self.ST_LanguagesBox.addItem("en")
 
     def setupGraphicalEvents(self):
         # self.Playlist1_Icon.mousePressEvent = lambda event: self.hide()
-        self.PlaylistsTabButton.enterEvent = lambda event: self.highlightItem(self.PlaylistsTabButton)
-        self.PlaylistsTabButton.leaveEvent = lambda event: self.unhighlightItem(self.PlaylistsTabButton)
-        self.FindTabButton.enterEvent = lambda event: self.highlightItem(self.FindTabButton)
-        self.FindTabButton.leaveEvent = lambda event: self.unhighlightItem(self.FindTabButton)
-        self.SettingsTabButton.enterEvent = lambda event: self.highlightItem(self.SettingsTabButton)
-        self.SettingsTabButton.leaveEvent = lambda event: self.unhighlightItem(self.SettingsTabButton)
+        self.PlaylistsTabButton.enterEvent = lambda event: self.highlightItem(self.PlaylistsTabButton, self.px_low)
+        self.PlaylistsTabButton.leaveEvent = lambda event: self.unhighlightItem(self.PlaylistsTabButton, self.px_low)
+        self.FindTabButton.enterEvent = lambda event: self.highlightItem(self.FindTabButton, self.px_low)
+        self.FindTabButton.leaveEvent = lambda event: self.unhighlightItem(self.FindTabButton, self.px_low)
+        # self.SettingsTabButton.enterEvent = lambda event: self.highlightItem(self.SettingsTabButton)
+        # self.SettingsTabButton.leaveEvent = lambda event: self.unhighlightItem(self.SettingsTabButton)
 
-        self.VTP_AddButton.enterEvent = lambda event: self.highlightItem(self.VTP_AddButton)
-        self.VTP_AddButton.leaveEvent = lambda event: self.unhighlightItem(self.VTP_AddButton)
-        self.VTP_UpButton.enterEvent = lambda event: self.highlightItem(self.VTP_UpButton)
-        self.VTP_UpButton.leaveEvent = lambda event: self.unhighlightItem(self.VTP_UpButton)
-        self.VTP_DownButton.enterEvent = lambda event: self.highlightItem(self.VTP_DownButton)
-        self.VTP_DownButton.leaveEvent = lambda event: self.unhighlightItem(self.VTP_DownButton)
+        self.VTP_AddButton.enterEvent = lambda event: self.highlightItem(self.VTP_AddButton, self.px_low)
+        self.VTP_AddButton.leaveEvent = lambda event: self.unhighlightItem(self.VTP_AddButton, self.px_low)
+        self.VTP_UpButton.enterEvent = lambda event: self.highlightItem(self.VTP_UpButton, self.px_low)
+        self.VTP_UpButton.leaveEvent = lambda event: self.unhighlightItem(self.VTP_UpButton, self.px_low)
+        self.VTP_DownButton.enterEvent = lambda event: self.highlightItem(self.VTP_DownButton, self.px_low)
+        self.VTP_DownButton.leaveEvent = lambda event: self.unhighlightItem(self.VTP_DownButton, self.px_low)
 
-        self.Playlist1_Icon.enterEvent = lambda event: self.highlightItem(self.Playlist1_Icon)
-        self.Playlist1_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Playlist1_Icon)
-        self.Playlist1_EditButton.enterEvent = lambda event: self.highlightItem(self.Playlist1_EditButton)
-        self.Playlist1_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist1_EditButton)
-        self.Playlist1_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Playlist1_DeleteButton)
-        self.Playlist1_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist1_DeleteButton)
+        self.Playlist1_Icon.enterEvent = lambda event: self.highlightItem(self.Playlist1_Icon, self.px_low)
+        self.Playlist1_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Playlist1_Icon, self.px_low)
+        self.Playlist1_EditButton.enterEvent = lambda event: self.highlightItem(self.Playlist1_EditButton, self.px_low)
+        self.Playlist1_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist1_EditButton, self.px_low)
+        self.Playlist1_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Playlist1_DeleteButton, self.px_low)
+        self.Playlist1_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist1_DeleteButton, self.px_low)
 
-        self.Playlist2_Icon.enterEvent = lambda event: self.highlightItem(self.Playlist2_Icon)
-        self.Playlist2_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Playlist2_Icon)
-        self.Playlist2_EditButton.enterEvent = lambda event: self.highlightItem(self.Playlist2_EditButton)
-        self.Playlist2_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist2_EditButton)
-        self.Playlist2_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Playlist2_DeleteButton)
-        self.Playlist2_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist2_DeleteButton)
+        self.Playlist2_Icon.enterEvent = lambda event: self.highlightItem(self.Playlist2_Icon, self.px_low)
+        self.Playlist2_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Playlist2_Icon, self.px_low)
+        self.Playlist2_EditButton.enterEvent = lambda event: self.highlightItem(self.Playlist2_EditButton, self.px_low)
+        self.Playlist2_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist2_EditButton, self.px_low)
+        self.Playlist2_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Playlist2_DeleteButton, self.px_low)
+        self.Playlist2_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Playlist2_DeleteButton, self.px_low)
 
-        self.VTV_AddButton.enterEvent = lambda event: self.highlightItem(self.VTV_AddButton)
-        self.VTV_AddButton.leaveEvent = lambda event: self.unhighlightItem(self.VTV_AddButton)
-        self.VTV_UpButton.enterEvent = lambda event: self.highlightItem(self.VTV_UpButton)
-        self.VTV_UpButton.leaveEvent = lambda event: self.unhighlightItem(self.VTV_UpButton)
-        self.VTV_DownButton.enterEvent = lambda event: self.highlightItem(self.VTV_DownButton)
-        self.VTV_DownButton.leaveEvent = lambda event: self.unhighlightItem(self.VTV_DownButton)
+        self.VTV_AddButton.enterEvent = lambda event: self.highlightItem(self.VTV_AddButton, self.px_low)
+        self.VTV_AddButton.leaveEvent = lambda event: self.unhighlightItem(self.VTV_AddButton, self.px_low)
+        self.VTV_UpButton.enterEvent = lambda event: self.highlightItem(self.VTV_UpButton, self.px_low)
+        self.VTV_UpButton.leaveEvent = lambda event: self.unhighlightItem(self.VTV_UpButton, self.px_low)
+        self.VTV_DownButton.enterEvent = lambda event: self.highlightItem(self.VTV_DownButton, self.px_low)
+        self.VTV_DownButton.leaveEvent = lambda event: self.unhighlightItem(self.VTV_DownButton, self.px_low)
 
-        self.Video1_Icon.enterEvent = lambda event: self.highlightItem(self.Video1_Icon)
-        self.Video1_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Video1_Icon)
-        self.Video1_EditButton.enterEvent = lambda event: self.highlightItem(self.Video1_EditButton)
-        self.Video1_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Video1_EditButton)
-        self.Video1_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Video1_DeleteButton)
-        self.Video1_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Video1_DeleteButton)
+        self.Video1_Icon.enterEvent = lambda event: self.highlightItem(self.Video1_Icon, self.px_low)
+        self.Video1_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Video1_Icon, self.px_low)
+        self.Video1_EditButton.enterEvent = lambda event: self.highlightItem(self.Video1_EditButton, self.px_low)
+        self.Video1_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Video1_EditButton, self.px_low)
+        self.Video1_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Video1_DeleteButton, self.px_low)
+        self.Video1_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Video1_DeleteButton, self.px_low)
 
-        self.Video2_Icon.enterEvent = lambda event: self.highlightItem(self.Video2_Icon)
-        self.Video2_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Video2_Icon)
-        self.Video2_EditButton.enterEvent = lambda event: self.highlightItem(self.Video2_EditButton)
-        self.Video2_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Video2_EditButton)
-        self.Video2_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Video2_DeleteButton)
-        self.Video2_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Video2_DeleteButton)
+        self.Video2_Icon.enterEvent = lambda event: self.highlightItem(self.Video2_Icon, self.px_low)
+        self.Video2_Icon.leaveEvent = lambda event: self.unhighlightItem(self.Video2_Icon, self.px_low)
+        self.Video2_EditButton.enterEvent = lambda event: self.highlightItem(self.Video2_EditButton, self.px_low)
+        self.Video2_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.Video2_EditButton, self.px_low)
+        self.Video2_DeleteButton.enterEvent = lambda event: self.highlightItem(self.Video2_DeleteButton, self.px_low)
+        self.Video2_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.Video2_DeleteButton, self.px_low)
 
-        self.FT_FindButton.enterEvent = lambda event: self.highlightItem(self.FT_FindButton)
-        self.FT_FindButton.leaveEvent = lambda event: self.unhighlightItem(self.FT_FindButton)
+        self.FT_FindButton.enterEvent = lambda event: self.highlightItem(self.FT_FindButton, self.px_low)
+        self.FT_FindButton.leaveEvent = lambda event: self.unhighlightItem(self.FT_FindButton, self.px_low)
 
 
-        self.ST_LanguagesBox.enterEvent = lambda event: self.highlightItem(self.ST_LanguagesBox)
-        self.ST_LanguagesBox.leaveEvent = lambda event: self.unhighlightItem(self.ST_LanguagesBox)
-        self.ST_SaveButton.enterEvent = lambda event: self.highlightItem(self.ST_SaveButton)
-        self.ST_SaveButton.leaveEvent = lambda event: self.unhighlightItem(self.ST_SaveButton)
+        # self.ST_LanguagesBox.enterEvent = lambda event: self.highlightItem(self.ST_LanguagesBox)
+        # self.ST_LanguagesBox.leaveEvent = lambda event: self.unhighlightItem(self.ST_LanguagesBox)
+        # self.ST_SaveButton.enterEvent = lambda event: self.highlightItem(self.ST_SaveButton)
+        # self.ST_SaveButton.leaveEvent = lambda event: self.unhighlightItem(self.ST_SaveButton)
 
     def retranslate(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -814,7 +820,7 @@ class View():
         self.AppMessagerOutput.setText(_translate("MainWindow", "SysMsg"))
         self.PlaylistsTabButton.setText(_translate("MainWindow", "Playlists"))
         self.FindTabButton.setText(_translate("MainWindow", "Download"))
-        self.SettingsTabButton.setText(_translate("MainWindow", "Settings"))
+        # self.SettingsTabButton.setText(_translate("MainWindow", "Settings"))
         self.VTP_UpButton.setText(_translate("MainWindow", "↑"))
         self.VTP_DownButton.setText(_translate("MainWindow", "↓"))
         self.VTP_SearchInput.setText(_translate("MainWindow", "Default"))
@@ -852,22 +858,22 @@ class View():
         self.Video2_DeleteButton.setText(_translate("MainWindow", "×"))
         self.Video2_EditButton.setText(_translate("MainWindow", "ed"))
         self.Video2_DescriptionLabel.setText(_translate("MainWindow", "Video description: dsssssssssssssssssf fffffffffffffffff"))
-        self.Playlist1_PathLabel_3.setText(_translate("MainWindow", "nothing found"))
+        self.VTV_NothingLabel.setText(_translate("MainWindow", "nothing found"))
         self.VT_PlaylistsLabel.setText(_translate("MainWindow", "Playlists Count:"))
         self.VT_VideosLabel.setText(_translate("MainWindow", "Videos:"))
         self.VT_PlaylistsCount.setText(_translate("MainWindow", "2"))
         self.FT_FindButton.setText(_translate("MainWindow", "Find"))
         self.FT_URLInput.setText(_translate("MainWindow", "url"))
         self.FindTabLabel.setText(_translate("MainWindow", "Find"))
-        self.ST_LanguagesLabel.setText(_translate("MainWindow", "Language"))
-        self.ST_StreamsDASHLabel.setText(_translate("MainWindow", "Allow DASH streams catch:"))
-        self.ST_DefaultPlaylistLabel.setText(_translate("MainWindow", "Default playlist"))
-        self.ST_StreamsDASHButtons.setTitle(_translate("MainWindow", "GroupBox"))
-        self.ST_ActivateDASHButton.setText(_translate("MainWindow", "Yes"))
-        self.ST_DeactivateDASHButton.setText(_translate("MainWindow", "No"))
-        self.ST_DefaultPlaylistPathInput.setText(_translate("MainWindow", "path"))
-        self.ST_SaveButton.setText(_translate("MainWindow", "save"))
-        self.SettingsTabLabel.setText(_translate("MainWindow", "Settings"))
+        # self.ST_LanguagesLabel.setText(_translate("MainWindow", "Language"))
+        # self.ST_StreamsDASHLabel.setText(_translate("MainWindow", "Allow DASH streams catch:"))
+        # self.ST_DefaultPlaylistLabel.setText(_translate("MainWindow", "Default playlist"))
+        # self.ST_StreamsDASHButtons.setTitle(_translate("MainWindow", "GroupBox"))
+        # self.ST_ActivateDASHButton.setText(_translate("MainWindow", "Yes"))
+        # self.ST_DeactivateDASHButton.setText(_translate("MainWindow", "No"))
+        # self.ST_DefaultPlaylistPathInput.setText(_translate("MainWindow", "path"))
+        # self.ST_SaveButton.setText(_translate("MainWindow", "save"))
+        # self.SettingsTabLabel.setText(_translate("MainWindow", "Settings"))
         self.DDT_NameLabel.setText(_translate("MainWindow", "Video name:"))
         self.DDT_PlaylistsLabel.setText(_translate("MainWindow", "Сhoose playlist:"))
         self.DDT_QualityLabel.setText(_translate("MainWindow", "Сhoose quality:"))
@@ -908,12 +914,27 @@ class View():
         else:
             self.window.hide()
 
-    def highlightItem(self, item):
+    def highlightItem(self, item, px):
         current_style = item.styleSheet()
-        new_style = current_style + ";border: 2px solid white;"
+        new_style = current_style + f";border: {px}px solid white;"
         item.setStyleSheet(new_style)
 
-    def unhighlightItem(self, item):
+    def unhighlightItem(self, item, px):
         current_style = item.styleSheet()
-        new_style = current_style.replace("border: 2px solid white;", "")
+        new_style = current_style.replace(f"border: {px}px solid white;", "")
         item.setStyleSheet(new_style)
+
+
+
+    def set_playlist1_info(self, playlist_info):
+        self.Playlist1_NameLabel.setText(str(playlist_info[1]))
+        self.Playlist1_CountVideosLabel.setText(str(playlist_info[2]))
+        self.Playlist1_PathLabel.setText(str(playlist_info[3]))
+        self.Playlist1_DateCreationLabel.setText(str(playlist_info[5]))
+
+    def set_playlist2_info(self, playlist_info):
+        self.Playlist2_NameLabel.setText(str(playlist_info[1]))
+        self.Playlist2_CountVideosLabel.setText(str(playlist_info[2]))
+        self.Playlist2_PathLabel.setText(str(playlist_info[3]))
+        self.Playlist2_DateCreationLabel.setText(str(playlist_info[5]))
+
