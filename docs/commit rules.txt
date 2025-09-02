@@ -6,6 +6,7 @@ _______________________________________________________
 
 where:
 
+#XXX               - number of commit.
 tags               - keyword for changes.
 shortcut           - several main words about changes.
 additional section - more main info about changes.

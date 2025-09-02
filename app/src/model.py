@@ -17,7 +17,6 @@ class Model:
 
         self.videos = None
         self.videos_count = None
-        self.current_video = None
 
         self.video_1 = None
         self.video_2 = None
@@ -35,6 +34,32 @@ class Model:
 
     def set_playlist2_as_current(self):
         self.selected_playlist = self.playlist_2
+
+
+
+
+
+
+    def get_videos_count(self):
+        return self.videos_count
+
+    def get_current_videos_info(self):
+        return self.video_1, self.video_2, self.selected_video
+
+    def set_video1_as_current(self):
+        self.selected_video = self.video_1
+
+    def set_video2_as_current(self):
+        self.selected_video = self.video_2
+
+
+
+
+
+
+
+
+
 
     def get_playlists_db(self):
         try:
@@ -100,14 +125,10 @@ class Model:
 
 
 
-    def get_current_videos_info(self):
-        return self.video_1, self.video_2, self.selected_video
 
-    def set_video1_as_current(self):
-        self.selected_video = self.video_1
 
-    def set_video2_as_current(self):
-        self.selected_video = self.video_2
+
+
 
     def get_videos_db(self):
         try:
@@ -115,57 +136,57 @@ class Model:
                 cursor = connection.cursor()
                 cursor.execute('''
                     SELECT 
-                    id, playlist_name, playlist_count_videos, 
+                    id, video_name, video_desc, video_format, video_date
                     playlist_path, playlist_icon, playlist_date
                     FROM 
                     video
-                    ORDER BY playlist_name''')
+                    ORDER BY video_name''')
                 playlists = cursor.fetchall()
                 print(playlists)
                 return playlists
         except Exception as e:
             print("Произошла ошибка во время выполнения операции вставки: %s", e)
 
-    def get_playlists_count_db(self):
+    def get_videos_count_db(self):
         try:
             with db.connect(self.db) as connection:
                 cursor = connection.cursor()
                 cursor.execute('''
                     SELECT COUNT(*)
-                    FROM 
-                    playlist''')
+                    FROM
+                    video''')
                 count = cursor.fetchone()[0]
                 print(count)
                 return count
         except Exception as e:
             print("Произошла ошибка во время выполнения операции вставки: %s", e)
 
-    def setup_current_playlists(self):
+    def setup_current_videos(self):
         item1 = None
         item2 = None
         try:
-            item1 = self.playlists[0 + self.offset_playlists]
-            item2 = self.playlists[1 + self.offset_playlists]
+            item1 = self.videos[0 + self.offset_videos]
+            item2 = self.videos[1 + self.offset_videos]
         except Exception as e:
-            print("Произошла ошибка во время выбора playlists", e)
+            print("Произошла ошибка во время выбора videos", e)
         if (item1 is None) and (not (item2 is None)):
-            self.playlist_1 = item2
-            self.playlist_2 = None
+            self.video_1 = item2
+            self.video_2 = None
         elif (item2 is None) and (not (item1 is None)):
-            self.playlist_1 = item1
-            self.playlist_2 = None
+            self.video_1 = item1
+            self.video_2 = None
         else:
-            self.playlist_1 = item1
-            self.playlist_2 = item2
+            self.video_1 = item1
+            self.video_2 = item2
 
-    def playlists_offset_up(self):
-        if self.offset_playlists > 0:
-            self.offset_playlists -= 2
+    def videos_offset_up(self):
+        if self.offset_videos > 0:
+            self.offset_videos -= 2
 
-    def playlists_offset_down(self):
-        if self.offset_playlists < self.playlists_count - 1:
-            self.offset_playlists += 2
-            print(self.offset_playlists)
+    def videos_offset_down(self):
+        if self.offset_videos < self.videos_count - 1:
+            self.offset_videos += 2
+            print(self.offset_videos)
 
 
 

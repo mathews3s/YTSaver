@@ -69,6 +69,8 @@ class Controller:
     def switch_to_find_tab(self):
         self.view.MainMenu.setCurrentWidget(self.view.FindTab)
 
+
+
     def playlists_scroll_down(self):
         self.model.playlists_offset_down()
         self.update_view_tab()
@@ -86,3 +88,23 @@ class Controller:
         self.model.set_playlist2_as_current()
         self.view.highlightItem(self.view.Playlist2_Icon, self.view.px_medium)
         self.view.unhighlightItem(self.view.Playlist1_Icon, self.view.px_medium)
+
+
+
+    def videos_scroll_down(self):
+        self.model.videos_offset_down()
+        self.update_view_tab()
+
+    def videos_scroll_up(self):
+        self.model.videos_offset_up()
+        self.update_view_tab()
+
+    def video1_icon_clicked(self):
+        self.model.set_video1_as_current()
+        self.view.highlightItem(self.view.Video1_Icon, self.view.px_medium)
+        self.view.unhighlightItem(self.view.Video2_Icon, self.view.px_medium)
+
+    def video2_icon_clicked(self):
+        self.model.set_video2_as_current()
+        self.view.highlightItem(self.view.Video2_Icon, self.view.px_medium)
+        self.view.unhighlightItem(self.view.Video1_Icon, self.view.px_medium)

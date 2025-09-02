@@ -749,10 +749,10 @@ class View():
         self.MainMenu.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
-        # self.ST_LanguagesBox.addItem("en")
-        # self.ST_LanguagesBox.addItem("en")
-        # self.ST_LanguagesBox.addItem("en")
-        # self.ST_LanguagesBox.addItem("en")
+        self.VTV_Video1_Container.setVisible(False)
+        self.VTV_Video2_Container.setVisible(False)
+        self.VTP_SearchInput.setVisible(False)
+        self.VTV_SearchInput.setVisible(False)
 
     def setupGraphicalEvents(self):
         # self.Playlist1_Icon.mousePressEvent = lambda event: self.hide()
