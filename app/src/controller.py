@@ -20,7 +20,6 @@ class Controller:
         sys.exit(self.view.app.exec_())
 
     def setup_ui_signals(self):
-        # self.view.SettingsTabButton.clicked.connect(lambda: self.switchToSettingsTab())
         self.view.FindTabButton.clicked.connect(lambda: self.switch_to_find_tab())
         self.view.PlaylistsTabButton.clicked.connect(lambda: self.switch_to_view_tab())
 
@@ -38,37 +37,33 @@ class Controller:
     def update_view_tab(self):
         count = self.model.get_playlists_count()
         self.model.setup_current_playlists()
-
-        if count == 0:
-            self.view.VTP_NothingLabel.setVisible(True)
-        else:
-            self.view.VTP_NothingLabel.setVisible(False)
-
-            playlists_info = self.model.get_current_playlists_info()
-
-            if not playlists_info[0] is None:
-                self.view.set_playlist1_info(playlists_info[0])
-                if playlists_info[2] == playlists_info[0]:
-                    self.view.highlightItem(self.view.Playlist1_Icon, self.view.px_medium)
-                else:
-                    self.view.unhighlightItem(self.view.Playlist1_Icon, self.view.px_medium)
-                self.view.VTP_Playlist1_Container.setVisible(True)
-
-            if not playlists_info[1] is None:
-                self.view.set_playlist2_info(playlists_info[1])
-                if playlists_info[2] == playlists_info[1]:
-                    self.view.highlightItem(self.view.Playlist2_Icon, self.view.px_medium)
-                else:
-                    self.view.unhighlightItem(self.view.Playlist2_Icon, self.view.px_medium)
-                self.view.VTP_Playlist2_Container.setVisible(True)
-            else:
-                self.view.VTP_Playlist2_Container.setVisible(False)
-
+        self.show_playlists()
         self.view.VT_PlaylistsCount.setText(str(count))
+
+    def show_playlists(self):
+        displayed_playlists = self.model.get_current_playlists_info()
+
+        if not (displayed_playlists[0] is None):
+            self.view.set_playlist1_info(displayed_playlists[0])
+            if displayed_playlists[2] is displayed_playlists[0]:
+                self.view.highlightItem(self.view.Playlist1_Icon, self.view.px_medium)
+            else:
+                self.view.unhighlightItem(self.view.Playlist1_Icon, self.view.px_medium)
+            self.view.VTP_Playlist1_Container.setVisible(True)
+
+        if not (displayed_playlists[1] is None):
+            self.view.set_playlist2_info(displayed_playlists[1])
+            if displayed_playlists[2]['id'] == displayed_playlists[1]['id']:
+                self.view.highlightItem(self.view.Playlist2_Icon, self.view.px_medium)
+            else:
+                self.view.unhighlightItem(self.view.Playlist2_Icon, self.view.px_medium)
+            self.view.VTP_Playlist2_Container.setVisible(True)
+        else:
+            self.view.VTP_Playlist2_Container.setVisible(False)
+
 
     def switch_to_find_tab(self):
         self.view.MainMenu.setCurrentWidget(self.view.FindTab)
-
 
 
     def playlists_scroll_down(self):

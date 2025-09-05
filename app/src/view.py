@@ -927,14 +927,14 @@ class View():
 
 
     def set_playlist1_info(self, playlist_info):
-        self.Playlist1_NameLabel.setText(str(playlist_info[1]))
-        self.Playlist1_CountVideosLabel.setText(str(playlist_info[2]))
-        self.Playlist1_PathLabel.setText(str(playlist_info[3]))
-        self.Playlist1_DateCreationLabel.setText(str(playlist_info[5]))
+        self.Playlist1_NameLabel.setText(str(playlist_info['name']))
+        self.Playlist1_CountVideosLabel.setText(str(playlist_info['count']))
+        self.Playlist1_PathLabel.setText(str(playlist_info['path']))
+        self.Playlist1_DateCreationLabel.setText(str(playlist_info['date']))
 
     def set_playlist2_info(self, playlist_info):
-        self.Playlist2_NameLabel.setText(str(playlist_info[1]))
-        self.Playlist2_CountVideosLabel.setText(str(playlist_info[2]))
-        self.Playlist2_PathLabel.setText(str(playlist_info[3]))
-        self.Playlist2_DateCreationLabel.setText(str(playlist_info[5]))
+        self.Playlist2_NameLabel.setText(str(playlist_info['name']))
+        self.Playlist2_CountVideosLabel.setText(str(playlist_info['count']))
+        self.Playlist2_PathLabel.setText(str(playlist_info['path']))
+        self.Playlist2_DateCreationLabel.setText(str(playlist_info['date']))
 

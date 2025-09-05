@@ -9,14 +9,14 @@ class Model:
         self.playlists = self.get_playlists_db()
         self.playlists_count = self.get_playlists_count_db()
 
-        self.playlist_1 = None
-        self.playlist_2 = None
+        self.playlist_1 = {}
+        self.playlist_2 = {}
         self.selected_playlist = None
         self.offset_playlists = 0
         self.setup_current_playlists()
 
         self.videos = None
-        self.videos_count = None
+        self.videos_count = 0
 
         self.video_1 = None
         self.video_2 = None
@@ -48,6 +48,7 @@ class Model:
 
     def set_video1_as_current(self):
         self.selected_video = self.video_1
+        #self.get_videos_db()
 
     def set_video2_as_current(self):
         self.selected_video = self.video_2
@@ -101,14 +102,19 @@ class Model:
         except Exception as e:
             print("Произошла ошибка во время выбора playlists", e)
         if (item1 is None) and (not (item2 is None)):
-            self.playlist_1 = item2
-            self.playlist_2 = None
+            self.update_playlist_dict(self.playlist_1, item2)
         elif (item2 is None) and (not (item1 is None)):
-            self.playlist_1 = item1
-            self.playlist_2 = None
+            self.update_playlist_dict(self.playlist_1, item1)
         else:
-            self.playlist_1 = item1
-            self.playlist_2 = item2
+
+            self.update_playlist_dict(self.playlist_1, item1)
+            self.update_playlist_dict(self.playlist_2, item2)
+
+    def update_playlist_dict(self, playlist_dict, playlist_tuple):
+        keys = ['id', 'name', 'count', 'path', 'date']
+
+        for key, value in zip(keys, playlist_tuple):
+            playlist_dict[key] = value
 
     def playlists_offset_up(self):
         if self.offset_playlists > 0:
@@ -130,7 +136,7 @@ class Model:
 
 
 
-    def get_videos_db(self):
+    def get_videos_db(self, playlist):
         try:
             with db.connect(self.db) as connection:
                 cursor = connection.cursor()
@@ -140,7 +146,8 @@ class Model:
                     playlist_path, playlist_icon, playlist_date
                     FROM 
                     video
-                    ORDER BY video_name''')
+                    WHERE playlist_name = %s
+                    ORDER BY video_name''', (playlist,))
                 playlists = cursor.fetchall()
                 print(playlists)
                 return playlists
