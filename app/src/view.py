@@ -743,8 +743,8 @@ class View():
 "color: rgb(255, 255, 255);")
         self.DialogTabLabel.setObjectName("DialogTabLabel")
         self.MainMenu.addWidget(self.DialogTab)
-        self.window.setCentralWidget(self.WorkSpace)
 
+        self.window.setCentralWidget(self.WorkSpace)
         self.retranslate(self.window)
         self.MainMenu.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.window)
@@ -908,6 +908,10 @@ class View():
         self.DT_DetailsLabel.setText(_translate("MainWindow", "details?"))
         self.DialogTabLabel.setText(_translate("MainWindow", "Warning"))
 
+
+
+
+
     def showMainWindow(self, allow):
         if allow:
             self.window.show()
@@ -926,15 +930,17 @@ class View():
 
 
 
-    def set_playlist1_info(self, playlist_info):
+    def show_playlist1_info(self, playlist_info):
         self.Playlist1_NameLabel.setText(str(playlist_info['name']))
         self.Playlist1_CountVideosLabel.setText(str(playlist_info['count']))
         self.Playlist1_PathLabel.setText(str(playlist_info['path']))
         self.Playlist1_DateCreationLabel.setText(str(playlist_info['date']))
 
-    def set_playlist2_info(self, playlist_info):
+    def show_playlist2_info(self, playlist_info):
         self.Playlist2_NameLabel.setText(str(playlist_info['name']))
         self.Playlist2_CountVideosLabel.setText(str(playlist_info['count']))
         self.Playlist2_PathLabel.setText(str(playlist_info['path']))
         self.Playlist2_DateCreationLabel.setText(str(playlist_info['date']))
 
+    def show_nothing(self):
+        self.VID

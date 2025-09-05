@@ -1,199 +1,105 @@
 import sqlite3 as db
 import json
+import copy
 
 
 class Model:
     def __init__(self):
         self.db = "../appData/database.db"
 
-        self.playlists = self.get_playlists_db()
-        self.playlists_count = self.get_playlists_count_db()
-
-        self.playlist_1 = {}
-        self.playlist_2 = {}
-        self.selected_playlist = None
-        self.offset_playlists = 0
-        self.setup_current_playlists()
-
-        self.videos = None
-        self.videos_count = 0
+        self.founded_videos = self.fetch_videos_db()
+        self.founded_count = len(self.founded_videos)
 
         self.video_1 = None
         self.video_2 = None
-        self.selected_video = None
-        self.offset_videos = 0
+        self.current_video = None
+        self.offset_collection = 0
+        # self.setup_current_videos()
 
-    def get_playlists_count(self):
-        return self.playlists_count
-
-    def get_current_playlists_info(self):
-        return self.playlist_1, self.playlist_2, self.selected_playlist
-
-    def set_playlist1_as_current(self):
-        self.selected_playlist = self.playlist_1
-
-    def set_playlist2_as_current(self):
-        self.selected_playlist = self.playlist_2
-
-
-
-
-
+    def get_videos_info(self):
+        info = {
+            'first': self.video_1,
+            'second': self.video_2,
+            'current': self.current_video
+        }
+        return info
 
     def get_videos_count(self):
-        return self.videos_count
+        return len(self.founded_videos)
 
-    def get_current_videos_info(self):
-        return self.video_1, self.video_2, self.selected_video
-
-    def set_video1_as_current(self):
-        self.selected_video = self.video_1
-        #self.get_videos_db()
-
-    def set_video2_as_current(self):
-        self.selected_video = self.video_2
+    def set_video_as_current(self, video):
+        self.current_video = copy.deepcopy(video)
 
 
-
-
-
-
-
-
-
-
-    def get_playlists_db(self):
+    def fetch_videos_db(self):
         try:
             with db.connect(self.db) as connection:
                 cursor = connection.cursor()
                 cursor.execute('''
                     SELECT 
-                    id, playlist_name, playlist_count_videos, 
-                    playlist_path, playlist_icon, playlist_date
-                    FROM 
-                    playlist
-                    ORDER BY playlist_name''')
-                playlists = cursor.fetchall()
-                print(playlists)
-                return playlists
-        except Exception as e:
-            print("Произошла ошибка во время выполнения операции вставки: %s", e)
-
-    def get_playlists_count_db(self):
-        try:
-            with db.connect(self.db) as connection:
-                cursor = connection.cursor()
-                cursor.execute('''
-                    SELECT COUNT(*)
-                    FROM 
-                    playlist''')
-                count = cursor.fetchone()[0]
-                print(count)
-                return count
-        except Exception as e:
-            print("Произошла ошибка во время выполнения операции вставки: %s", e)
-
-    def setup_current_playlists(self):
-        item1 = None
-        item2 = None
-        try:
-            item1 = self.playlists[0 + self.offset_playlists]
-            item2 = self.playlists[1 + self.offset_playlists]
-        except Exception as e:
-            print("Произошла ошибка во время выбора playlists", e)
-        if (item1 is None) and (not (item2 is None)):
-            self.update_playlist_dict(self.playlist_1, item2)
-        elif (item2 is None) and (not (item1 is None)):
-            self.update_playlist_dict(self.playlist_1, item1)
-        else:
-
-            self.update_playlist_dict(self.playlist_1, item1)
-            self.update_playlist_dict(self.playlist_2, item2)
-
-    def update_playlist_dict(self, playlist_dict, playlist_tuple):
-        keys = ['id', 'name', 'count', 'path', 'date']
-
-        for key, value in zip(keys, playlist_tuple):
-            playlist_dict[key] = value
-
-    def playlists_offset_up(self):
-        if self.offset_playlists > 0:
-            self.offset_playlists -= 2
-
-    def playlists_offset_down(self):
-        if self.offset_playlists < self.playlists_count - 1:
-            self.offset_playlists += 2
-            print(self.offset_playlists)
-
-
-
-
-
-
-
-
-
-
-
-
-    def get_videos_db(self, playlist):
-        try:
-            with db.connect(self.db) as connection:
-                cursor = connection.cursor()
-                cursor.execute('''
-                    SELECT 
-                    id, video_name, video_desc, video_format, video_date
-                    playlist_path, playlist_icon, playlist_date
+                    id, video_name, video_desc, video_format, video_date,
+                    video_path, video_icon
                     FROM 
                     video
-                    WHERE playlist_name = %s
-                    ORDER BY video_name''', (playlist,))
-                playlists = cursor.fetchall()
-                print(playlists)
-                return playlists
+                    ORDER BY video_name''')
+                records = cursor.fetchall()
+                print(records)
+                # return records
+                return []
         except Exception as e:
             print("Произошла ошибка во время выполнения операции вставки: %s", e)
 
-    def get_videos_count_db(self):
-        try:
-            with db.connect(self.db) as connection:
-                cursor = connection.cursor()
-                cursor.execute('''
-                    SELECT COUNT(*)
-                    FROM
-                    video''')
-                count = cursor.fetchone()[0]
-                print(count)
-                return count
-        except Exception as e:
-            print("Произошла ошибка во время выполнения операции вставки: %s", e)
+
+
 
     def setup_current_videos(self):
         item1 = None
         item2 = None
         try:
-            item1 = self.videos[0 + self.offset_videos]
-            item2 = self.videos[1 + self.offset_videos]
+            item1 = self.founded_videos[0 + self.offset_collection]
+            item2 = self.founded_videos[1 + self.offset_collection]
         except Exception as e:
-            print("Произошла ошибка во время выбора videos", e)
+            print("Произошла ошибка во время выбора playlists", e)
         if (item1 is None) and (not (item2 is None)):
-            self.video_1 = item2
-            self.video_2 = None
+            self.transform_in_dict(self.video_1, item2)
         elif (item2 is None) and (not (item1 is None)):
-            self.video_1 = item1
+            self.transform_in_dict(self.video_1, item1)
             self.video_2 = None
-        else:
-            self.video_1 = item1
-            self.video_2 = item2
+        elif (not item1 is None) and (not item2 is None):
+            self.video_1 = {}
+            self.video_2 = {}
+            self.transform_in_dict(self.video_1, item1)
+            self.transform_in_dict(self.video_2, item2)
+
+    def transform_in_dict(self, playlist_dict, playlist_tuple):
+        keys = ['id', 'name', 'desc', 'format', 'date', 'path', 'icon']
+        for key, value in zip(keys, playlist_tuple):
+            playlist_dict[key] = value
 
     def videos_offset_up(self):
-        if self.offset_videos > 0:
-            self.offset_videos -= 2
+        if self.offset_collection > 0:
+            self.offset_collection -= 2
 
     def videos_offset_down(self):
-        if self.offset_videos < self.videos_count - 1:
-            self.offset_videos += 2
-            print(self.offset_videos)
+        if self.offset_collection < self.founded_count - 2:
+            self.offset_collection += 2
+            print(self.offset_collection)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -7,82 +7,68 @@ class Controller:
         self.view = view
         self.model = model
         self.setup_ui()
-        self.start_ui()
+        self.startup_ui()
 
     def setup_ui(self):
         self.view.setupGraphicalEvents()
         self.setup_ui_signals()
         self.view.showMainWindow(True)
         self.update_view_tab()
-        self.switch_to_view_tab()
+        self.switch_to_video_tab()
 
-    def start_ui(self):
+    def startup_ui(self):
         sys.exit(self.view.app.exec_())
 
     def setup_ui_signals(self):
-        self.view.FindTabButton.clicked.connect(lambda: self.switch_to_find_tab())
-        self.view.PlaylistsTabButton.clicked.connect(lambda: self.switch_to_view_tab())
+        self.view.DownloadTabButton.clicked.connect(lambda: self.switch_to_find_tab())
+        self.view.VideosTabButton.clicked.connect(lambda: self.switch_to_video_tab())
 
-        self.view.VTP_UpButton.clicked.connect(lambda: self.playlists_scroll_up())
-        self.view.VTP_DownButton.clicked.connect(lambda: self.playlists_scroll_down())
-        self.view.VTV_UpButton.clicked.connect(lambda: self.videos_scroll_up())
-        self.view.VTV_DownButton.clicked.connect(lambda: self.videos_scroll_down())
+        self.view.VID_UpButton.clicked.connect(lambda: self.videos_scroll_up())
+        self.view.VID_DownButton.clicked.connect(lambda: self.videos_scroll_down())
 
-        self.view.Playlist1_Icon.mousePressEvent = lambda event: self.playlist1_icon_clicked()
-        self.view.Playlist2_Icon.mousePressEvent = lambda event: self.playlist2_icon_clicked()
+        self.view.VID1_Icon.mousePressEvent = lambda event: self.video1_icon_clicked()
+        self.view.VID2_Icon.mousePressEvent = lambda event: self.video2_icon_clicked()
 
-    def switch_to_view_tab(self):
-        self.view.MainMenu.setCurrentWidget(self.view.ViewingTab)
+    def switch_to_video_tab(self):
+        self.view.MainMenu.setCurrentWidget(self.view.VideoTab)
 
     def update_view_tab(self):
-        count = self.model.get_playlists_count()
-        self.model.setup_current_playlists()
-        self.show_playlists()
-        self.view.VT_PlaylistsCount.setText(str(count))
+        count = self.model.get_videos_count()
+        self.model.setup_current_videos()
+        self.show_videos(count)
+        self.view.VID_CountValue.setText(str(count))
 
-    def show_playlists(self):
-        displayed_playlists = self.model.get_current_playlists_info()
+    def show_videos(self, count):
+        # if count == 0:
+        #     self.view.videos_empty()
+        #     return
+        self.view.videos_exists()
+        displayed_videos = self.model.get_videos_info()
+        first = displayed_videos['first']
+        second = displayed_videos['second']
+        current = displayed_videos['current']
 
-        if not (displayed_playlists[0] is None):
-            self.view.set_playlist1_info(displayed_playlists[0])
-            if displayed_playlists[2] is displayed_playlists[0]:
-                self.view.highlightItem(self.view.Playlist1_Icon, self.view.px_medium)
+        if not (first is None):
+            self.view.set_video1_info(first)
+            if current == first:
+                self.view.highlightItem(self.view.VID1_Icon, self.view.px_medium)
             else:
-                self.view.unhighlightItem(self.view.Playlist1_Icon, self.view.px_medium)
-            self.view.VTP_Playlist1_Container.setVisible(True)
+                self.view.unhighlightItem(self.view.VID1_Icon, self.view.px_medium)
+            self.view.VID1_Container.setVisible(True)
 
-        if not (displayed_playlists[1] is None):
-            self.view.set_playlist2_info(displayed_playlists[1])
-            if displayed_playlists[2]['id'] == displayed_playlists[1]['id']:
-                self.view.highlightItem(self.view.Playlist2_Icon, self.view.px_medium)
+        if not (second is None):
+            self.view.set_video2_info(second)
+            if current == second:
+                self.view.highlightItem(self.view.VID2_Icon, self.view.px_medium)
             else:
-                self.view.unhighlightItem(self.view.Playlist2_Icon, self.view.px_medium)
-            self.view.VTP_Playlist2_Container.setVisible(True)
+                self.view.unhighlightItem(self.view.VID2_Icon, self.view.px_medium)
+            self.view.VID2_Container.setVisible(True)
         else:
-            self.view.VTP_Playlist2_Container.setVisible(False)
+            self.view.VID2_Container.setVisible(False)
 
 
     def switch_to_find_tab(self):
         self.view.MainMenu.setCurrentWidget(self.view.FindTab)
-
-
-    def playlists_scroll_down(self):
-        self.model.playlists_offset_down()
-        self.update_view_tab()
-
-    def playlists_scroll_up(self):
-        self.model.playlists_offset_up()
-        self.update_view_tab()
-
-    def playlist1_icon_clicked(self):
-        self.model.set_playlist1_as_current()
-        self.view.highlightItem(self.view.Playlist1_Icon, self.view.px_medium)
-        self.view.unhighlightItem(self.view.Playlist2_Icon, self.view.px_medium)
-
-    def playlist2_icon_clicked(self):
-        self.model.set_playlist2_as_current()
-        self.view.highlightItem(self.view.Playlist2_Icon, self.view.px_medium)
-        self.view.unhighlightItem(self.view.Playlist1_Icon, self.view.px_medium)
 
 
 
@@ -95,11 +81,11 @@ class Controller:
         self.update_view_tab()
 
     def video1_icon_clicked(self):
-        self.model.set_video1_as_current()
-        self.view.highlightItem(self.view.Video1_Icon, self.view.px_medium)
-        self.view.unhighlightItem(self.view.Video2_Icon, self.view.px_medium)
+        self.model.set_video_as_current(self.model.video_1)
+        self.view.highlightItem(self.view.VID1_Icon, self.view.px_medium)
+        self.view.unhighlightItem(self.view.VID2_Icon, self.view.px_medium)
 
     def video2_icon_clicked(self):
-        self.model.set_video2_as_current()
-        self.view.highlightItem(self.view.Video2_Icon, self.view.px_medium)
-        self.view.unhighlightItem(self.view.Video1_Icon, self.view.px_medium)
+        self.model.set_video_as_current(self.model.video_2)
+        self.view.highlightItem(self.view.VID2_Icon, self.view.px_medium)
+        self.view.unhighlightItem(self.view.VID1_Icon, self.view.px_medium)
