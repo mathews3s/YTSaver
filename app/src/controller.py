@@ -13,7 +13,7 @@ class Controller:
         self.view.setup_graphical_events()
         self.setup_ui_signals()
         self.view.show_main_window(True)
-        self.model.found_videos()
+        self.model.update_videos_info()
         self.update_video_tab()
         self.switch_to_video_tab()
 
@@ -57,13 +57,15 @@ class Controller:
             self.view.display_second_video(second_video_data)
         else:
             self.view.hide_second_video()
-
-        if current_video_data == second_video_data:
+        if current_video_data == None:
+            self.view.mark_first_video_as_current(False)
+            self.view.mark_second_video_as_current(False)
+        elif current_video_data == second_video_data:
             self.view.mark_second_video_as_current(True)
         elif current_video_data == first_video_data:
             self.view.mark_first_video_as_current(True)
         else:
-            self.view.mark_second_video_as_current(False)
+            self.view.mark_first_video_as_current(False)
             self.view.mark_second_video_as_current(False)
 
     def switch_to_find_tab(self):
@@ -79,10 +81,8 @@ class Controller:
 
     def video1_icon_clicked(self):
         self.model.set_video_as_current(self.model.video_1)
-        self.view.highlight_item(self.view.VID1_Icon, self.view.px_medium)
-        self.view.unhighlight_item(self.view.VID2_Icon, self.view.px_medium)
+        self.view.mark_first_video_as_current(True)
 
     def video2_icon_clicked(self):
         self.model.set_video_as_current(self.model.video_2)
-        self.view.highlight_item(self.view.VID2_Icon, self.view.px_medium)
-        self.view.unhighlight_item(self.view.VID1_Icon, self.view.px_medium)
+        self.view.mark_second_video_as_current(True)
