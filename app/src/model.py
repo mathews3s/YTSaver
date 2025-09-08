@@ -1,20 +1,44 @@
 import sqlite3 as db
 import json
 import copy
-
+import os
 
 class Model:
     def __init__(self):
         self.db = "../appData/database.db"
+        self.download_directory = "../../download"
 
-        self.founded_videos = self.fetch_videos_db()
-        self.founded_count = len(self.founded_videos)
+        self.founded_videos = None
+        self.founded_count = None
+
+        self.check_default_directory_exists()
+        self.found_videos()
+        self.check_files()
 
         self.video_1 = None
         self.video_2 = None
         self.current_video = None
         self.offset_collection = 0
-        # self.setup_current_videos()
+
+
+
+    def check_default_directory_exists(self):
+        if not os.path.exists(self.download_directory):
+            os.makedirs(self.download_directory)
+
+    def check_files(self):
+        for video in self.founded_videos:
+            video_path = video[5]
+            icon_path = video[6]
+            if os.path.exists(video_path):
+                if not os.path.exists(icon_path):
+                    self.delete_videos_db(video[0])
+            else:
+                print(f"Видео Файл {video_path} ----")
+
+    def found_videos(self):
+        self.founded_videos = self.fetch_videos_db()
+        self.founded_count = len(self.founded_videos)
 
     def get_videos_info(self):
         info = {
@@ -44,15 +68,26 @@ class Model:
                     ORDER BY video_name''')
                 records = cursor.fetchall()
                 print(records)
-                # return records
-                return []
+                return records
+                # return []
         except Exception as e:
             print("Произошла ошибка во время выполнения операции вставки: %s", e)
 
+    def delete_videos_db(self, id):
+        try:
+            with db.connect(self.db) as connection:
+                cursor = connection.cursor()
+                cursor.execute('''
+                        DELETE FROM video
+                        WHERE id = ?
+                    ''', (id,))
+                connection.commit()  # Фиксация изменений
+                print(f"Видео с id {id} успешно удалено из базы данных.")
+        except Exception as e:
+            print(f"Произошла ошибка во время выполнения операции удаления: {e}")
 
 
-
-    def setup_current_videos(self):
+    def switch_current_videos(self):
         item1 = None
         item2 = None
         try:
@@ -114,44 +149,44 @@ class Model:
 
 
 
-
-
-
-
-
-
-
-    def get_default_settings(self):
-        with open('../appData/default-app-settings.json', 'r') as file:
-            parsed = json.load(file)
-        return parsed
-
-    def insert_playlist_into_db(self, ):
-        try:
-            with db.connect(self.db) as connection:
-                cursor = connection.cursor()
-                cursor.execute('''
-                    INSERT INTO playlist (
-                        playlist_name, 
-                        playlist_count_videos,
-                        playlist_path, 
-                        playlist_icon)
-                    VALUES (?, ?, ?, ?)''',
-                ("f1", "en", 1, "../../"))
-                connection.commit()
-        except Exception as e:
-            print("Произошла ошибка во время выполнения операции вставки: %s", e)
-
-
-    def insert(self):
-         try:
-             with db.connect(self.db) as connection:
-                 cursor = connection.cursor()
-                 cursor.execute('''
-                     INSERT INTO SETTINGS_SET
-                     (SET_NAME, LANGUAGE, DASH_ALLOW, DEF_PATH)
-                     VALUES (?, ?, ?, ?)''',
-                 ("f1", "en", 1, "../../"))
-                 connection.commit()
-         except Exception as e:
-             print("Произошла ошибка во время выполнения операции вставки: %s", e)
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    # def get_default_settings(self):
+    #     with open('../appData/default-app-settings.json', 'r') as file:
+    #         parsed = json.load(file)
+    #     return parsed
+    #
+    # def insert_playlist_into_db(self, ):
+    #     try:
+    #         with db.connect(self.db) as connection:
+    #             cursor = connection.cursor()
+    #             cursor.execute('''
+    #                 INSERT INTO playlist (
+    #                     playlist_name,
+    #                     playlist_count_videos,
+    #                     playlist_path,
+    #                     playlist_icon)
+    #                 VALUES (?, ?, ?, ?)''',
+    #             ("f1", "en", 1, "../../"))
+    #             connection.commit()
+    #     except Exception as e:
+    #         print("Произошла ошибка во время выполнения операции вставки: %s", e)
+    #
+    #
+    # def insert(self):
+    #      try:
+    #          with db.connect(self.db) as connection:
+    #              cursor = connection.cursor()
+    #              cursor.execute('''
+    #                  INSERT INTO SETTINGS_SET
+    #                  (SET_NAME, LANGUAGE, DASH_ALLOW, DEF_PATH)
+    #                  VALUES (?, ?, ?, ?)''',
+    #              ("f1", "en", 1, "../../"))
+    #              connection.commit()
+    #      except Exception as e:
+    #          print("Произошла ошибка во время выполнения операции вставки: %s", e)

@@ -6,17 +6,18 @@ class Controller:
     def __init__(self, model, view):
         self.view = view
         self.model = model
-        self.setup_ui()
-        self.startup_ui()
+        self.setup_app()
+        self.startup_app()
 
-    def setup_ui(self):
-        self.view.setupGraphicalEvents()
+    def setup_app(self):
+        self.view.setup_graphical_events()
         self.setup_ui_signals()
-        self.view.showMainWindow(True)
-        self.update_view_tab()
+        self.view.show_main_window(True)
+        self.model.found_videos()
+        self.update_video_tab()
         self.switch_to_video_tab()
 
-    def startup_ui(self):
+    def startup_app(self):
         sys.exit(self.view.app.exec_())
 
     def setup_ui_signals(self):
@@ -32,60 +33,56 @@ class Controller:
     def switch_to_video_tab(self):
         self.view.MainMenu.setCurrentWidget(self.view.VideoTab)
 
-    def update_view_tab(self):
+    def update_video_tab(self):
         count = self.model.get_videos_count()
-        self.model.setup_current_videos()
-        self.show_videos(count)
-        self.view.VID_CountValue.setText(str(count))
+        self.view.update_displayed_count_videos(count)
+        match count:
+            case 0:
+                self.view.disable_videos_display()
+            case _:
+                self.view.enable_videos_display()
+                self.model.switch_current_videos()
+                self.update_displayed_videos()
 
-    def show_videos(self, count):
-        # if count == 0:
-        #     self.view.videos_empty()
-        #     return
-        self.view.videos_exists()
-        displayed_videos = self.model.get_videos_info()
-        first = displayed_videos['first']
-        second = displayed_videos['second']
-        current = displayed_videos['current']
+    def update_displayed_videos(self):
+        videos_data_for_show = self.model.get_videos_info()
+        first_video_data = videos_data_for_show['first']
+        second_video_data = videos_data_for_show['second']
+        current_video_data = videos_data_for_show['current']
 
-        if not (first is None):
-            self.view.set_video1_info(first)
-            if current == first:
-                self.view.highlightItem(self.view.VID1_Icon, self.view.px_medium)
-            else:
-                self.view.unhighlightItem(self.view.VID1_Icon, self.view.px_medium)
-            self.view.VID1_Container.setVisible(True)
+        if not (first_video_data is None):
+            self.view.display_first_video(first_video_data)
 
-        if not (second is None):
-            self.view.set_video2_info(second)
-            if current == second:
-                self.view.highlightItem(self.view.VID2_Icon, self.view.px_medium)
-            else:
-                self.view.unhighlightItem(self.view.VID2_Icon, self.view.px_medium)
-            self.view.VID2_Container.setVisible(True)
+        if not (second_video_data is None):
+            self.view.display_second_video(second_video_data)
         else:
-            self.view.VID2_Container.setVisible(False)
+            self.view.hide_second_video()
 
+        if current_video_data == second_video_data:
+            self.view.mark_second_video_as_current(True)
+        elif current_video_data == first_video_data:
+            self.view.mark_first_video_as_current(True)
+        else:
+            self.view.mark_second_video_as_current(False)
+            self.view.mark_second_video_as_current(False)
 
     def switch_to_find_tab(self):
-        self.view.MainMenu.setCurrentWidget(self.view.FindTab)
-
-
+        self.view.MainMenu.setCurrentWidget(self.view.DownloadTab)
 
     def videos_scroll_down(self):
         self.model.videos_offset_down()
-        self.update_view_tab()
+        self.update_video_tab()
 
     def videos_scroll_up(self):
         self.model.videos_offset_up()
-        self.update_view_tab()
+        self.update_video_tab()
 
     def video1_icon_clicked(self):
         self.model.set_video_as_current(self.model.video_1)
-        self.view.highlightItem(self.view.VID1_Icon, self.view.px_medium)
-        self.view.unhighlightItem(self.view.VID2_Icon, self.view.px_medium)
+        self.view.highlight_item(self.view.VID1_Icon, self.view.px_medium)
+        self.view.unhighlight_item(self.view.VID2_Icon, self.view.px_medium)
 
     def video2_icon_clicked(self):
         self.model.set_video_as_current(self.model.video_2)
-        self.view.highlightItem(self.view.VID2_Icon, self.view.px_medium)
-        self.view.unhighlightItem(self.view.VID1_Icon, self.view.px_medium)
+        self.view.highlight_item(self.view.VID2_Icon, self.view.px_medium)
+        self.view.unhighlight_item(self.view.VID1_Icon, self.view.px_medium)

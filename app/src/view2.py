@@ -464,39 +464,39 @@ class View2():
         self.MainMenu.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
-    def setupGraphicalEvents(self):
+
+    def setup_graphical_events(self):
         # self.Playlist1_Icon.mousePressEvent = lambda event: self.hide()
-        self.VideosTabButton.enterEvent = lambda event: self.highlightItem(self.VideosTabButton, self.px_low)
-        self.VideosTabButton.leaveEvent = lambda event: self.unhighlightItem(self.VideosTabButton, self.px_low)
-        self.DownloadTabButton.enterEvent = lambda event: self.highlightItem(self.DownloadTabButton, self.px_low)
-        self.DownloadTabButton.leaveEvent = lambda event: self.unhighlightItem(self.DownloadTabButton, self.px_low)
+        self.VideosTabButton.enterEvent = lambda event: self.highlight_item(self.VideosTabButton, self.px_low)
+        self.VideosTabButton.leaveEvent = lambda event: self.unhighlight_item(self.VideosTabButton, self.px_low)
+        self.DownloadTabButton.enterEvent = lambda event: self.highlight_item(self.DownloadTabButton, self.px_low)
+        self.DownloadTabButton.leaveEvent = lambda event: self.unhighlight_item(self.DownloadTabButton, self.px_low)
 
-        self.VID_UpButton.enterEvent = lambda event: self.highlightItem(self.VID_UpButton, self.px_low)
-        self.VID_UpButton.leaveEvent = lambda event: self.unhighlightItem(self.VID_UpButton, self.px_low)
-        self.VID_DownButton.enterEvent = lambda event: self.highlightItem(self.VID_DownButton, self.px_low)
-        self.VID_DownButton.leaveEvent = lambda event: self.unhighlightItem(self.VID_DownButton, self.px_low)
+        self.VID_UpButton.enterEvent = lambda event: self.highlight_item(self.VID_UpButton, self.px_low)
+        self.VID_UpButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_UpButton, self.px_low)
+        self.VID_DownButton.enterEvent = lambda event: self.highlight_item(self.VID_DownButton, self.px_low)
+        self.VID_DownButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_DownButton, self.px_low)
 
-        self.VID1_Icon.enterEvent = lambda event: self.highlightItem(self.VID1_Icon, self.px_low)
-        self.VID1_Icon.leaveEvent = lambda event: self.unhighlightItem(self.VID1_Icon, self.px_low)
-        self.VID1_WatchButton.enterEvent = lambda event: self.highlightItem(self.VID1_WatchButton, self.px_low)
-        self.VID1_WatchButton.leaveEvent = lambda event: self.unhighlightItem(self.VID1_WatchButton, self.px_low)
-        self.VID1_EditButton.enterEvent = lambda event: self.highlightItem(self.VID1_EditButton, self.px_low)
-        self.VID1_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.VID1_EditButton, self.px_low)
-        self.VID1_DeleteButton.enterEvent = lambda event: self.highlightItem(self.VID1_DeleteButton, self.px_low)
-        self.VID1_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.VID1_DeleteButton, self.px_low)
+        self.VID1_Icon.enterEvent = lambda event: self.highlight_item(self.VID1_Icon, self.px_low)
+        self.VID1_Icon.leaveEvent = lambda event: self.unhighlight_item(self.VID1_Icon, self.px_low)
+        self.VID1_WatchButton.enterEvent = lambda event: self.highlight_item(self.VID1_WatchButton, self.px_low)
+        self.VID1_WatchButton.leaveEvent = lambda event: self.unhighlight_item(self.VID1_WatchButton, self.px_low)
+        self.VID1_EditButton.enterEvent = lambda event: self.highlight_item(self.VID1_EditButton, self.px_low)
+        self.VID1_EditButton.leaveEvent = lambda event: self.unhighlight_item(self.VID1_EditButton, self.px_low)
+        self.VID1_DeleteButton.enterEvent = lambda event: self.highlight_item(self.VID1_DeleteButton, self.px_low)
+        self.VID1_DeleteButton.leaveEvent = lambda event: self.unhighlight_item(self.VID1_DeleteButton, self.px_low)
 
-        self.VID2_Icon.enterEvent = lambda event: self.highlightItem(self.VID2_Icon, self.px_low)
-        self.VID2_Icon.leaveEvent = lambda event: self.unhighlightItem(self.VID2_Icon, self.px_low)
-        self.VID2_WatchButton.enterEvent = lambda event: self.highlightItem(self.VID1_WatchButton, self.px_low)
-        self.VID2_WatchButton.leaveEvent = lambda event: self.unhighlightItem(self.VID1_WatchButton, self.px_low)
-        self.VID2_EditButton.enterEvent = lambda event: self.highlightItem(self.VID2_EditButton, self.px_low)
-        self.VID2_EditButton.leaveEvent = lambda event: self.unhighlightItem(self.VID2_EditButton, self.px_low)
-        self.VID2_DeleteButton.enterEvent = lambda event: self.highlightItem(self.VID2_DeleteButton, self.px_low)
-        self.VID2_DeleteButton.leaveEvent = lambda event: self.unhighlightItem(self.VID2_DeleteButton, self.px_low)
+        self.VID2_Icon.enterEvent = lambda event: self.highlight_item(self.VID2_Icon, self.px_low)
+        self.VID2_Icon.leaveEvent = lambda event: self.unhighlight_item(self.VID2_Icon, self.px_low)
+        self.VID2_WatchButton.enterEvent = lambda event: self.highlight_item(self.VID2_WatchButton, self.px_low)
+        self.VID2_WatchButton.leaveEvent = lambda event: self.unhighlight_item(self.VID2_WatchButton, self.px_low)
+        self.VID2_EditButton.enterEvent = lambda event: self.highlight_item(self.VID2_EditButton, self.px_low)
+        self.VID2_EditButton.leaveEvent = lambda event: self.unhighlight_item(self.VID2_EditButton, self.px_low)
+        self.VID2_DeleteButton.enterEvent = lambda event: self.highlight_item(self.VID2_DeleteButton, self.px_low)
+        self.VID2_DeleteButton.leaveEvent = lambda event: self.unhighlight_item(self.VID2_DeleteButton, self.px_low)
 
-        self.DOW_FindButton.enterEvent = lambda event: self.highlightItem(self.DOW_FindButton, self.px_low)
-        self.DOW_FindButton.leaveEvent = lambda event: self.unhighlightItem(self.DOW_FindButton, self.px_low)
-
+        self.DOW_FindButton.enterEvent = lambda event: self.highlight_item(self.DOW_FindButton, self.px_low)
+        self.DOW_FindButton.leaveEvent = lambda event: self.unhighlight_item(self.DOW_FindButton, self.px_low)
     def retranslate(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "YTSaver"))
@@ -552,27 +552,21 @@ class View2():
         self.DLG_CancelButton.setText(_translate("MainWindow", "cancel"))
         self.DLG_DetailsLabel.setText(_translate("MainWindow", "details?"))
         self.DLG_TabLabel.setText(_translate("MainWindow", "Warning"))
-
-
-
-
-    def showMainWindow(self, allow):
+    def show_main_window(self, allow):
         if allow:
             self.window.show()
         else:
             self.window.hide()
 
-    def highlightItem(self, item, px):
+    def highlight_item(self, item, px):
         current_style = item.styleSheet()
         new_style = current_style + f";border: {px}px solid white;"
         item.setStyleSheet(new_style)
 
-    def unhighlightItem(self, item, px):
+    def unhighlight_item(self, item, px):
         current_style = item.styleSheet()
         new_style = current_style.replace(f"border: {px}px solid white;", "")
         item.setStyleSheet(new_style)
-
-
 
     def set_video1_info(self, playlist_info):
         self.VID1_NameLabel.setText(str(playlist_info['name']))
@@ -587,9 +581,44 @@ class View2():
         self.VID2_DateCreationLabel.setText(str(playlist_info['date']))
 
 
-    def videos_empty(self):
+    def disable_videos_display(self):
         self.VID_NothingLabel.setVisible(True)
+        self.VID1_Container.setVisible(False)
+        self.VID2_Container.setVisible(False)
 
 
-    def videos_exists(self):
+    def enable_videos_display(self):
         self.VID_NothingLabel.setVisible(False)
+
+
+    def update_displayed_count_videos(self, count):
+        self.VID_CountValue.setText(str(count))
+
+
+    def display_first_video(self, data):
+        self.set_video1_info(data)
+        self.VID1_Container.setVisible(True)
+
+    def hide_first_video(self):
+        self.VID1_Container.setVisible(False)
+
+    def display_second_video(self, data):
+        self.set_video2_info(data)
+        self.VID2_Container.setVisible(True)
+
+    def hide_second_video(self):
+        self.VID2_Container.setVisible(False)
+
+    def mark_first_video_as_current(self, flag):
+        if flag:
+            self.highlight_item(self.VID1_Icon, self.px_medium)
+        else:
+            self.unhighlight_item(self.VID1_Icon, self.px_medium)
+
+    def mark_second_video_as_current(self, flag):
+        if flag:
+            self.highlight_item(self.VID1_Icon, self.px_medium)
+        else:
+            self.unhighlight_item(self.VID1_Icon, self.px_medium)
+
+
