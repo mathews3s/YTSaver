@@ -1,11 +1,15 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication as AppQT
+from player import VideoPlayer
+
 
 class View():
 
     def __init__(self):
         self.px_low = 2
         self.px_medium = 4
+        self.player = None
+
         self.app = AppQT([])
         self.window = QtWidgets.QMainWindow()
         self.window.setObjectName("MainWindow")
@@ -77,142 +81,176 @@ class View():
         self.VID_Container = QtWidgets.QFrame(self.VideoTab)
         self.VID_Container.setGeometry(QtCore.QRect(0, 50, 781, 371))
         self.VID_Container.setStyleSheet("background-color: rgb(0, 0, 0);\n"
-"border-radius: 20px;\n"
-"text-align: center;\n"
-"")
+                                         "border-radius: 20px;\n"
+                                         "text-align: center;\n"
+                                         "")
         self.VID_Container.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.VID_Container.setFrameShadow(QtWidgets.QFrame.Raised)
         self.VID_Container.setObjectName("VID_Container")
         self.VID_UpButton = QtWidgets.QPushButton(self.VID_Container)
         self.VID_UpButton.setGeometry(QtCore.QRect(20, 30, 31, 61))
         self.VID_UpButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
+                                        "color: rgb(255, 255, 255);\n"
+                                        "border-radius: 10px\n"
+                                        "")
         self.VID_UpButton.setObjectName("VID_UpButton")
         self.VID_DownButton = QtWidgets.QPushButton(self.VID_Container)
         self.VID_DownButton.setGeometry(QtCore.QRect(20, 250, 31, 61))
         self.VID_DownButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
+                                          "color: rgb(255, 255, 255);\n"
+                                          "border-radius: 10px\n"
+                                          "")
         self.VID_DownButton.setObjectName("VID_DownButton")
         self.VID1_Container = QtWidgets.QGroupBox(self.VID_Container)
-        self.VID1_Container.setGeometry(QtCore.QRect(120, 20, 441, 141))
+        self.VID1_Container.setGeometry(QtCore.QRect(120, 20, 451, 141))
         self.VID1_Container.setObjectName("VID1_Container")
         self.VID1_Icon = QtWidgets.QLabel(self.VID1_Container)
         self.VID1_Icon.setGeometry(QtCore.QRect(10, 10, 121, 121))
-        self.VID1_Icon.setStyleSheet("background-color: rgb(85, 85, 127);color: rgb(255, 255, 255);border-radius: 20px;")
+        self.VID1_Icon.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                     "color: rgb(255, 255, 255);\n"
+                                     "border-radius: 20px;")
         self.VID1_Icon.setText("")
         self.VID1_Icon.setObjectName("VID1_Icon")
         self.VID1_NameLabel = QtWidgets.QLabel(self.VID1_Container)
-        self.VID1_NameLabel.setGeometry(QtCore.QRect(150, 20, 81, 16))
+        self.VID1_NameLabel.setGeometry(QtCore.QRect(150, 20, 281, 16))
         self.VID1_NameLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                          "color: rgb(255, 255, 255);")
         self.VID1_NameLabel.setObjectName("VID1_NameLabel")
         self.VID1_DateCreationLabel = QtWidgets.QLabel(self.VID1_Container)
         self.VID1_DateCreationLabel.setGeometry(QtCore.QRect(150, 40, 141, 16))
         self.VID1_DateCreationLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                                  "color: rgb(255, 255, 255);")
         self.VID1_DateCreationLabel.setObjectName("VID1_DateCreationLabel")
         self.VID1_DescriptionLabel = QtWidgets.QLabel(self.VID1_Container)
-        self.VID1_DescriptionLabel.setGeometry(QtCore.QRect(150, 60, 141, 16))
+        self.VID1_DescriptionLabel.setGeometry(QtCore.QRect(150, 60, 301, 16))
         self.VID1_DescriptionLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                                 "color: rgb(255, 255, 255);")
         self.VID1_DescriptionLabel.setObjectName("VID1_DescriptionLabel")
         self.VID1_PathLabel = QtWidgets.QLabel(self.VID1_Container)
-        self.VID1_PathLabel.setGeometry(QtCore.QRect(150, 100, 141, 16))
+        self.VID1_PathLabel.setGeometry(QtCore.QRect(150, 100, 301, 16))
         self.VID1_PathLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                          "color: rgb(255, 255, 255);")
         self.VID1_PathLabel.setObjectName("VID1_PathLabel")
-        self.VID1_DeleteButton = QtWidgets.QPushButton(self.VID1_Container)
-        self.VID1_DeleteButton.setGeometry(QtCore.QRect(380, 50, 31, 31))
-        self.VID1_DeleteButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
-        self.VID1_DeleteButton.setObjectName("VID1_DeleteButton")
-        self.VID1_EditButton = QtWidgets.QPushButton(self.VID1_Container)
-        self.VID1_EditButton.setGeometry(QtCore.QRect(380, 100, 31, 31))
-        self.VID1_EditButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
-        self.VID1_EditButton.setObjectName("VID1_EditButton")
-        self.VID1_WatchButton = QtWidgets.QPushButton(self.VID1_Container)
-        self.VID1_WatchButton.setGeometry(QtCore.QRect(380, 0, 31, 31))
-        self.VID1_WatchButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
-        self.VID1_WatchButton.setObjectName("VID1_WatchButton")
         self.VID2_Container = QtWidgets.QGroupBox(self.VID_Container)
-        self.VID2_Container.setGeometry(QtCore.QRect(120, 190, 421, 141))
+        self.VID2_Container.setGeometry(QtCore.QRect(120, 190, 451, 141))
         self.VID2_Container.setObjectName("VID2_Container")
         self.VID2_Icon = QtWidgets.QLabel(self.VID2_Container)
         self.VID2_Icon.setGeometry(QtCore.QRect(10, 10, 121, 121))
         self.VID2_Icon.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 20px;")
+                                     "color: rgb(255, 255, 255);\n"
+                                     "border-radius: 20px;")
         self.VID2_Icon.setText("")
         self.VID2_Icon.setObjectName("VID2_Icon")
         self.VID2_NameLabel = QtWidgets.QLabel(self.VID2_Container)
-        self.VID2_NameLabel.setGeometry(QtCore.QRect(150, 20, 81, 16))
+        self.VID2_NameLabel.setGeometry(QtCore.QRect(150, 20, 301, 16))
         self.VID2_NameLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                          "color: rgb(255, 255, 255);")
         self.VID2_NameLabel.setObjectName("VID2_NameLabel")
         self.VID2_DateCreationLabel = QtWidgets.QLabel(self.VID2_Container)
         self.VID2_DateCreationLabel.setGeometry(QtCore.QRect(150, 40, 141, 16))
         self.VID2_DateCreationLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                                  "color: rgb(255, 255, 255);")
         self.VID2_DateCreationLabel.setObjectName("VID2_DateCreationLabel")
         self.VID2_DescriptionLabel = QtWidgets.QLabel(self.VID2_Container)
-        self.VID2_DescriptionLabel.setGeometry(QtCore.QRect(150, 60, 141, 16))
+        self.VID2_DescriptionLabel.setGeometry(QtCore.QRect(150, 60, 301, 16))
         self.VID2_DescriptionLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                                 "color: rgb(255, 255, 255);")
         self.VID2_DescriptionLabel.setObjectName("VID2_DescriptionLabel")
         self.VID2_PathLabel = QtWidgets.QLabel(self.VID2_Container)
-        self.VID2_PathLabel.setGeometry(QtCore.QRect(150, 100, 141, 16))
+        self.VID2_PathLabel.setGeometry(QtCore.QRect(150, 100, 301, 16))
         self.VID2_PathLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                          "color: rgb(255, 255, 255);")
         self.VID2_PathLabel.setObjectName("VID2_PathLabel")
-        self.VID2_DeleteButton = QtWidgets.QPushButton(self.VID2_Container)
-        self.VID2_DeleteButton.setGeometry(QtCore.QRect(380, 50, 31, 31))
-        self.VID2_DeleteButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
-        self.VID2_DeleteButton.setObjectName("VID2_DeleteButton")
-        self.VID2_EditButton = QtWidgets.QPushButton(self.VID2_Container)
-        self.VID2_EditButton.setGeometry(QtCore.QRect(380, 100, 31, 31))
-        self.VID2_EditButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
-        self.VID2_EditButton.setObjectName("VID2_EditButton")
-        self.VID2_WatchButton = QtWidgets.QPushButton(self.VID2_Container)
-        self.VID2_WatchButton.setGeometry(QtCore.QRect(380, 0, 31, 31))
-        self.VID2_WatchButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 10px\n"
-"")
-        self.VID2_WatchButton.setObjectName("VID2_WatchButton")
         self.VID_NothingLabel = QtWidgets.QLabel(self.VID_Container)
         self.VID_NothingLabel.setGeometry(QtCore.QRect(270, 170, 141, 16))
         self.VID_NothingLabel.setStyleSheet("\n"
-"color: rgb(255, 255, 255);")
+                                            "color: rgb(255, 255, 255);")
         self.VID_NothingLabel.setObjectName("VID_NothingLabel")
+        self.VID_WatchButton = QtWidgets.QPushButton(self.VID_Container)
+        self.VID_WatchButton.setGeometry(QtCore.QRect(600, 90, 141, 31))
+        self.VID_WatchButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                           "color: rgb(255, 255, 255);\n"
+                                           "border-radius: 10px\n"
+                                           "")
+        self.VID_WatchButton.setObjectName("VID_WatchButton")
+        self.VID_DeleteButton = QtWidgets.QPushButton(self.VID_Container)
+        self.VID_DeleteButton.setGeometry(QtCore.QRect(600, 150, 141, 31))
+        self.VID_DeleteButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                            "color: rgb(255, 255, 255);\n"
+                                            "border-radius: 10px\n"
+                                            "")
+        self.VID_DeleteButton.setObjectName("VID_DeleteButton")
+        self.VID_EditButton = QtWidgets.QPushButton(self.VID_Container)
+        self.VID_EditButton.setGeometry(QtCore.QRect(600, 210, 141, 31))
+        self.VID_EditButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                          "color: rgb(255, 255, 255);\n"
+                                          "border-radius: 10px\n"
+                                          "")
+        self.VID_EditButton.setObjectName("VID_EditButton")
+        self.VID1_NameLabel_2 = QtWidgets.QLabel(self.VID_Container)
+        self.VID1_NameLabel_2.setGeometry(QtCore.QRect(640, 40, 81, 16))
+        self.VID1_NameLabel_2.setStyleSheet("\n"
+                                            "color: rgb(255, 255, 255);")
+        self.VID1_NameLabel_2.setObjectName("VID1_NameLabel_2")
         self.VID_TabLabel = QtWidgets.QLabel(self.VideoTab)
         self.VID_TabLabel.setGeometry(QtCore.QRect(10, 10, 141, 16))
         self.VID_TabLabel.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);")
+                                        "color: rgb(255, 255, 255);")
         self.VID_TabLabel.setObjectName("VID_TabLabel")
         self.VID_CountValue = QtWidgets.QLabel(self.VideoTab)
         self.VID_CountValue.setGeometry(QtCore.QRect(170, 10, 55, 16))
         self.VID_CountValue.setStyleSheet("background-color: rgb(85, 85, 127);\n"
-"color: rgb(255, 255, 255);")
+                                          "color: rgb(255, 255, 255);")
         self.VID_CountValue.setObjectName("VID_CountValue")
         self.MainMenu.addWidget(self.VideoTab)
+
+        self.PreviewTab = QtWidgets.QWidget()
+        self.PreviewTab.setObjectName("PreviewTab")
+        self.PT_Container = QtWidgets.QFrame(self.PreviewTab)
+        self.PT_Container.setGeometry(QtCore.QRect(0, 0, 781, 421))
+        self.PT_Container.setStyleSheet("background-color: rgb(0, 0, 0);\n"
+                                        "border-radius: 20px;")
+        self.PT_Container.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.PT_Container.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.PT_Container.setObjectName("PT_Container")
+        self.PT_CancelButton = QtWidgets.QPushButton(self.PT_Container)
+        self.PT_CancelButton.setGeometry(QtCore.QRect(30, 360, 141, 41))
+        self.PT_CancelButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                           "color: rgb(255, 255, 255);\n"
+                                           "border-radius: 20px;")
+        self.PT_CancelButton.setObjectName("PT_CancelButton")
+        self.PT_Video = QtWidgets.QLabel(self.PT_Container)
+        self.PT_Video.setGeometry(QtCore.QRect(20, 20, 741, 321))
+        self.PT_Video.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                    "color: rgb(255, 255, 255);\n"
+                                    "border-radius: 20px;")
+        self.PT_Video.setText("")
+        self.PT_Video.setObjectName("PT_Video")
+        self.PT_StopOrPlayButton = QtWidgets.QPushButton(self.PT_Container)
+        self.PT_StopOrPlayButton.setGeometry(QtCore.QRect(190, 360, 141, 41))
+        self.PT_StopOrPlayButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                               "color: rgb(255, 255, 255);\n"
+                                               "border-radius: 20px;")
+        self.PT_StopOrPlayButton.setObjectName("PT_StopOrPlayButton")
+        self.PT_ShipForwardButton = QtWidgets.QPushButton(self.PT_Container)
+        self.PT_ShipForwardButton.setGeometry(QtCore.QRect(590, 360, 141, 41))
+        self.PT_ShipForwardButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                                "color: rgb(255, 255, 255);\n"
+                                                "border-radius: 20px;")
+        self.PT_ShipForwardButton.setObjectName("PT_ShipForwardButton")
+        self.PT_SkipBackButton = QtWidgets.QPushButton(self.PT_Container)
+        self.PT_SkipBackButton.setGeometry(QtCore.QRect(350, 360, 141, 41))
+        self.PT_SkipBackButton.setStyleSheet("background-color: rgb(85, 85, 127);\n"
+                                             "color: rgb(255, 255, 255);\n"
+                                             "border-radius: 20px;")
+        self.PT_SkipBackButton.setObjectName("PT_SkipBackButton")
+        self.PT_TimeLabel = QtWidgets.QLabel(self.PT_Container)
+        self.PT_TimeLabel.setGeometry(QtCore.QRect(510, 370, 81, 16))
+        self.PT_TimeLabel.setStyleSheet("\n"
+                                        "color: rgb(255, 255, 255);")
+        self.PT_TimeLabel.setObjectName("PT_TimeLabel")
+        self.MainMenu.addWidget(self.PreviewTab)
+
         self.DownloadTab = QtWidgets.QWidget()
         self.DownloadTab.setObjectName("DownloadTab")
         self.DOW_Container = QtWidgets.QFrame(self.DownloadTab)
@@ -458,6 +496,7 @@ class View():
         self.MainMenu.addWidget(self.DialogTab)
 
 
+        self.enable_video_controls(False)
 
 
         self.window.setCentralWidget(self.WorkSpace)
@@ -479,80 +518,100 @@ class View():
 
         self.VID1_Icon.enterEvent = lambda event: self.highlight_item(self.VID1_Icon, self.px_low)
         self.VID1_Icon.leaveEvent = lambda event: self.unhighlight_item(self.VID1_Icon, self.px_low)
-        self.VID1_WatchButton.enterEvent = lambda event: self.highlight_item(self.VID1_WatchButton, self.px_low)
-        self.VID1_WatchButton.leaveEvent = lambda event: self.unhighlight_item(self.VID1_WatchButton, self.px_low)
-        self.VID1_EditButton.enterEvent = lambda event: self.highlight_item(self.VID1_EditButton, self.px_low)
-        self.VID1_EditButton.leaveEvent = lambda event: self.unhighlight_item(self.VID1_EditButton, self.px_low)
-        self.VID1_DeleteButton.enterEvent = lambda event: self.highlight_item(self.VID1_DeleteButton, self.px_low)
-        self.VID1_DeleteButton.leaveEvent = lambda event: self.unhighlight_item(self.VID1_DeleteButton, self.px_low)
+        self.VID_WatchButton.enterEvent = lambda event: self.highlight_item(self.VID_WatchButton, self.px_low)
+        self.VID_WatchButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_WatchButton, self.px_low)
+        self.VID_EditButton.enterEvent = lambda event: self.highlight_item(self.VID_EditButton, self.px_low)
+        self.VID_EditButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_EditButton, self.px_low)
+        self.VID_DeleteButton.enterEvent = lambda event: self.highlight_item(self.VID_DeleteButton, self.px_low)
+        self.VID_DeleteButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_DeleteButton, self.px_low)
 
         self.VID2_Icon.enterEvent = lambda event: self.highlight_item(self.VID2_Icon, self.px_low)
         self.VID2_Icon.leaveEvent = lambda event: self.unhighlight_item(self.VID2_Icon, self.px_low)
-        self.VID2_WatchButton.enterEvent = lambda event: self.highlight_item(self.VID2_WatchButton, self.px_low)
-        self.VID2_WatchButton.leaveEvent = lambda event: self.unhighlight_item(self.VID2_WatchButton, self.px_low)
-        self.VID2_EditButton.enterEvent = lambda event: self.highlight_item(self.VID2_EditButton, self.px_low)
-        self.VID2_EditButton.leaveEvent = lambda event: self.unhighlight_item(self.VID2_EditButton, self.px_low)
-        self.VID2_DeleteButton.enterEvent = lambda event: self.highlight_item(self.VID2_DeleteButton, self.px_low)
-        self.VID2_DeleteButton.leaveEvent = lambda event: self.unhighlight_item(self.VID2_DeleteButton, self.px_low)
+
 
         self.DOW_FindButton.enterEvent = lambda event: self.highlight_item(self.DOW_FindButton, self.px_low)
         self.DOW_FindButton.leaveEvent = lambda event: self.unhighlight_item(self.DOW_FindButton, self.px_low)
 
+        self.DLG_AcceptButton.enterEvent = lambda event: self.highlight_item(self.DLG_AcceptButton, self.px_low)
+        self.DLG_AcceptButton.leaveEvent = lambda event: self.unhighlight_item(self.DLG_AcceptButton, self.px_low)
+        self.DLG_CancelButton.enterEvent = lambda event: self.highlight_item(self.DLG_CancelButton, self.px_low)
+        self.DLG_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.DLG_CancelButton, self.px_low)
+
+        self.EDT_SaveButton.enterEvent = lambda event: self.highlight_item(self.EDT_SaveButton, self.px_low)
+        self.EDT_SaveButton.leaveEvent = lambda event: self.unhighlight_item(self.EDT_SaveButton, self.px_low)
+        self.EDT_CancelButton.enterEvent = lambda event: self.highlight_item(self.EDT_CancelButton, self.px_low)
+        self.EDT_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.EDT_CancelButton, self.px_low)
+        self.EDT_ChangeButton.enterEvent = lambda event: self.highlight_item(self.EDT_ChangeButton, self.px_low)
+        self.EDT_ChangeButton.leaveEvent = lambda event: self.unhighlight_item(self.EDT_ChangeButton, self.px_low)
+
+        self.PT_CancelButton.enterEvent = lambda event: self.highlight_item(self.PT_CancelButton, self.px_low)
+        self.PT_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_CancelButton, self.px_low)
+        self.PT_StopOrPlayButton.enterEvent = lambda event: self.highlight_item(self.PT_StopOrPlayButton, self.px_low)
+        self.PT_StopOrPlayButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_StopOrPlayButton, self.px_low)
+        self.PT_ShipForwardButton.enterEvent = lambda event: self.highlight_item(self.PT_ShipForwardButton, self.px_low)
+        self.PT_ShipForwardButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_ShipForwardButton, self.px_low)
+        self.PT_SkipBackButton.enterEvent = lambda event: self.highlight_item(self.PT_SkipBackButton, self.px_low)
+        self.PT_SkipBackButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_SkipBackButton, self.px_low)
+
+
     def retranslate(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "YTSaver"))
-        self.AppMessagerOutput.setText(_translate("MainWindow", "SysMsg"))
-        self.VideosTabButton.setText(_translate("MainWindow", "Videos"))
-        self.DownloadTabButton.setText(_translate("MainWindow", "Download"))
-        self.VID_UpButton.setText(_translate("MainWindow", "↑"))
-        self.VID_DownButton.setText(_translate("MainWindow", "↓"))
-        self.VID1_Container.setTitle(_translate("MainWindow", "GroupBox"))
-        self.VID1_NameLabel.setText(_translate("MainWindow", "VideoName"))
-        self.VID1_DateCreationLabel.setText(_translate("MainWindow", "10.01.2003"))
-        self.VID1_DescriptionLabel.setText(_translate("MainWindow", "description"))
-        self.VID1_PathLabel.setText(_translate("MainWindow", "C:/USERS/DOCUMENTS/"))
-        self.VID1_DeleteButton.setText(_translate("MainWindow", "×"))
-        self.VID1_EditButton.setText(_translate("MainWindow", "E"))
-        self.VID1_WatchButton.setText(_translate("MainWindow", "O"))
-        self.VID2_Container.setTitle(_translate("MainWindow", "GroupBox"))
-        self.VID2_NameLabel.setText(_translate("MainWindow", "VideoName"))
-        self.VID2_DateCreationLabel.setText(_translate("MainWindow", "10.01.2003"))
-        self.VID2_DescriptionLabel.setText(_translate("MainWindow", "description"))
-        self.VID2_PathLabel.setText(_translate("MainWindow", "C:/USERS/DOCUMENTS/"))
-        self.VID2_DeleteButton.setText(_translate("MainWindow", "×"))
-        self.VID2_EditButton.setText(_translate("MainWindow", "E"))
-        self.VID2_WatchButton.setText(_translate("MainWindow", "O"))
-        self.VID_NothingLabel.setText(_translate("MainWindow", "nothing found"))
-        self.VID_TabLabel.setText(_translate("MainWindow", "Downloaded videos count:"))
-        self.VID_CountValue.setText(_translate("MainWindow", "0"))
-        self.DOW_FindButton.setText(_translate("MainWindow", "Find"))
-        self.DOW_LinkInput.setText(_translate("MainWindow", "url"))
-        self.DOW_TabLabel.setText(_translate("MainWindow", "Find"))
-        self.DDT_VideoName.setText(_translate("MainWindow", "Video name:"))
-        self.DDT_QualityLabel.setText(_translate("MainWindow", "Сhoose quality:"))
-        self.DDT_FormatLabel.setText(_translate("MainWindow", "Сhoose format:"))
-        self.DDT_BitrateLabel.setText(_translate("MainWindow", "Сhoose bitrate:"))
-        self.DDT_DownloadButton.setText(_translate("MainWindow", "download video"))
-        self.DDT_CancelButton.setText(_translate("MainWindow", "cancel"))
-        self.DDT_PathInput.setText(_translate("MainWindow", "..."))
-        self.DDT_PathLabel.setText(_translate("MainWindow", "Enter path"))
-        self.DDT_LabLabel.setText(_translate("MainWindow", "Download details:"))
-        self.EDT_TabLabel.setText(_translate("MainWindow", "Edit Video Info"))
-        self.EDT_IconLabel.setText(_translate("MainWindow", "Video icon:"))
-        self.EDT_NameLabel.setText(_translate("MainWindow", "video name:"))
-        self.EDT_PathLabel.setText(_translate("MainWindow", "path:"))
-        self.EDT_SaveButton.setText(_translate("MainWindow", "save"))
-        self.EDT_ChangeButton.setText(_translate("MainWindow", "change"))
-        self.EDT_DescriptionLabel.setText(_translate("MainWindow", "video description:"))
-        self.EDT_CancelButton.setText(_translate("MainWindow", "cancel"))
-        self.EDT_NameInput.setText(_translate("MainWindow", "name"))
-        self.EDT_DescriptionInput.setText(_translate("MainWindow", "desc"))
-        self.EDT_PathInput.setText(_translate("MainWindow", "path"))
-        self.DLG_TextLabel.setText(_translate("MainWindow", "Are you shure to"))
-        self.DLG_AcceptButton.setText(_translate("MainWindow", "shure"))
-        self.DLG_CancelButton.setText(_translate("MainWindow", "cancel"))
-        self.DLG_DetailsLabel.setText(_translate("MainWindow", "details?"))
-        self.DLG_TabLabel.setText(_translate("MainWindow", "Warning"))
+            _translate = QtCore.QCoreApplication.translate
+            MainWindow.setWindowTitle(_translate("MainWindow", "YTSaver"))
+            self.AppMessagerOutput.setText(_translate("MainWindow", "SysMsg"))
+            self.VideosTabButton.setText(_translate("MainWindow", "Videos"))
+            self.DownloadTabButton.setText(_translate("MainWindow", "Download"))
+            self.VID_UpButton.setText(_translate("MainWindow", "↑"))
+            self.VID_DownButton.setText(_translate("MainWindow", "↓"))
+            self.VID1_Container.setTitle(_translate("MainWindow", "GroupBox"))
+            self.VID1_NameLabel.setText(_translate("MainWindow", "VideoName"))
+            self.VID1_DateCreationLabel.setText(_translate("MainWindow", "10.01.2003"))
+            self.VID1_DescriptionLabel.setText(_translate("MainWindow", "description"))
+            self.VID1_PathLabel.setText(_translate("MainWindow", "C:/USERS/DOCUMENTS/"))
+            self.VID2_Container.setTitle(_translate("MainWindow", "GroupBox"))
+            self.VID2_NameLabel.setText(_translate("MainWindow", "VideoName"))
+            self.VID2_DateCreationLabel.setText(_translate("MainWindow", "10.01.2003"))
+            self.VID2_DescriptionLabel.setText(_translate("MainWindow", "description"))
+            self.VID2_PathLabel.setText(_translate("MainWindow", "C:/USERS/DOCUMENTS/"))
+            self.VID_NothingLabel.setText(_translate("MainWindow", "nothing found"))
+            self.VID_WatchButton.setText(_translate("MainWindow", "O"))
+            self.VID_DeleteButton.setText(_translate("MainWindow", "×"))
+            self.VID_EditButton.setText(_translate("MainWindow", "E"))
+            self.VID1_NameLabel_2.setText(_translate("MainWindow", "Controls"))
+            self.VID_TabLabel.setText(_translate("MainWindow", "Downloaded videos count:"))
+            self.VID_CountValue.setText(_translate("MainWindow", "0"))
+            self.DOW_FindButton.setText(_translate("MainWindow", "Find"))
+            self.DOW_LinkInput.setText(_translate("MainWindow", "url"))
+            self.DOW_TabLabel.setText(_translate("MainWindow", "Find"))
+            self.DDT_VideoName.setText(_translate("MainWindow", "Video name:"))
+            self.DDT_QualityLabel.setText(_translate("MainWindow", "Сhoose quality:"))
+            self.DDT_FormatLabel.setText(_translate("MainWindow", "Сhoose format:"))
+            self.DDT_BitrateLabel.setText(_translate("MainWindow", "Сhoose bitrate:"))
+            self.DDT_DownloadButton.setText(_translate("MainWindow", "download video"))
+            self.DDT_CancelButton.setText(_translate("MainWindow", "cancel"))
+            self.DDT_PathInput.setText(_translate("MainWindow", "..."))
+            self.DDT_PathLabel.setText(_translate("MainWindow", "Enter path"))
+            self.DDT_LabLabel.setText(_translate("MainWindow", "Download details:"))
+            self.EDT_TabLabel.setText(_translate("MainWindow", "Edit Video Info"))
+            self.EDT_IconLabel.setText(_translate("MainWindow", "Video icon:"))
+            self.EDT_NameLabel.setText(_translate("MainWindow", "video name:"))
+            self.EDT_PathLabel.setText(_translate("MainWindow", "path:"))
+            self.EDT_SaveButton.setText(_translate("MainWindow", "save"))
+            self.EDT_ChangeButton.setText(_translate("MainWindow", "change"))
+            self.EDT_DescriptionLabel.setText(_translate("MainWindow", "video description:"))
+            self.EDT_CancelButton.setText(_translate("MainWindow", "cancel"))
+            self.EDT_NameInput.setText(_translate("MainWindow", "name"))
+            self.EDT_DescriptionInput.setText(_translate("MainWindow", "desc"))
+            self.EDT_PathInput.setText(_translate("MainWindow", "path"))
+            self.DLG_TextLabel.setText(_translate("MainWindow", "Are you shure to"))
+            self.DLG_AcceptButton.setText(_translate("MainWindow", "shure"))
+            self.DLG_CancelButton.setText(_translate("MainWindow", "cancel"))
+            self.DLG_DetailsLabel.setText(_translate("MainWindow", "details?"))
+            self.DLG_TabLabel.setText(_translate("MainWindow", "Warning"))
+            self.PT_CancelButton.setText(_translate("MainWindow", "BACK"))
+            self.PT_StopOrPlayButton.setText(_translate("MainWindow", "STOP/PLAY"))
+            self.PT_ShipForwardButton.setText(_translate("MainWindow", ">> 5"))
+            self.PT_SkipBackButton.setText(_translate("MainWindow", "5<< "))
+            self.PT_TimeLabel.setText(_translate("MainWindow", "time"))
 
     def show_main_window(self, allow):
         if allow:
@@ -631,22 +690,62 @@ class View():
         new_style = current_style.replace(f";background-color: lightgray; color: darkgray;", "")
         element.setStyleSheet(new_style)
 
-    def enable_video1_controls(self, flag):
+    def enable_video_controls(self, flag):
         if flag:
-            self.set_enabled_style(self.VID1_WatchButton)
-            self.set_enabled_style(self.VID1_EditButton)
-            self.set_enabled_style(self.VID1_DeleteButton)
+            self.set_enabled_style(self.VID_WatchButton)
+            self.set_enabled_style(self.VID_EditButton)
+            self.set_enabled_style(self.VID_DeleteButton)
+            self.VID_WatchButton.setEnabled(True)
+            self.VID_EditButton.setEnabled(True)
+            self.VID_DeleteButton.setEnabled(True)
         else:
-            self.set_disabled_style(self.VID1_WatchButton)
-            self.set_disabled_style(self.VID1_EditButton)
-            self.set_disabled_style(self.VID1_DeleteButton)
+            self.set_disabled_style(self.VID_WatchButton)
+            self.set_disabled_style(self.VID_EditButton)
+            self.set_disabled_style(self.VID_DeleteButton)
+            self.VID_WatchButton.setEnabled(False)
+            self.VID_EditButton.setEnabled(False)
+            self.VID_DeleteButton.setEnabled(False)
 
-    def enable_video2_controls(self, flag):
-        if flag:
-            self.set_enabled_style(self.VID2_WatchButton)
-            self.set_enabled_style(self.VID2_EditButton)
-            self.set_enabled_style(self.VID2_DeleteButton)
-        else:
-            self.set_disabled_style(self.VID2_WatchButton)
-            self.set_disabled_style(self.VID2_EditButton)
-            self.set_disabled_style(self.VID2_DeleteButton)
+
+
+    def delete_video_dialog(self, video_name):
+        self.MainMenu.setCurrentWidget(self.DialogTab)
+        self.DLG_DetailsLabel.setText(f"to delete video {video_name}")
+
+
+    def edit_video(self, video_name):
+        self.MainMenu.setCurrentWidget(self.EditVideoTab)
+
+
+
+    def display_video(self, path):
+        self.MainMenu.setCurrentWidget(self.PreviewTab)
+        self.player = VideoPlayer(
+            path,
+            self.PT_Video,
+            self.PT_StopOrPlayButton,
+            self.PT_SkipBackButton,
+            self.PT_ShipForwardButton,
+            self.PT_TimeLabel
+        )
+
+    def undisplay_video(self):
+        self.MainMenu.setCurrentWidget(self.VideoTab)
+        del self.player
+
+
+    def get_data_from_edit_fields(self):
+        info = {
+            'video_name': self.EDT_NameInput,
+            'video_desc': self.EDT_DescriptionInput,
+            'video_path': self.EDT_PathInput,
+            'video_icon': self.EDT_Icon
+                }
+        return info
+
+
+
+
+
+
+
