@@ -169,7 +169,7 @@ border-radius: 20px;</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="VideoTab">
      <widget class="QFrame" name="VID_Container">
@@ -236,7 +236,7 @@ border-radius: 10px
         <rect>
          <x>120</x>
          <y>20</y>
-         <width>441</width>
+         <width>451</width>
          <height>141</height>
         </rect>
        </property>
@@ -266,7 +266,7 @@ border-radius: 20px;</string>
          <rect>
           <x>150</x>
           <y>20</y>
-          <width>81</width>
+          <width>281</width>
           <height>16</height>
          </rect>
         </property>
@@ -300,7 +300,7 @@ color: rgb(255, 255, 255);</string>
          <rect>
           <x>150</x>
           <y>60</y>
-          <width>141</width>
+          <width>301</width>
           <height>16</height>
          </rect>
         </property>
@@ -317,7 +317,7 @@ color: rgb(255, 255, 255);</string>
          <rect>
           <x>150</x>
           <y>100</y>
-          <width>141</width>
+          <width>301</width>
           <height>16</height>
          </rect>
         </property>
@@ -329,70 +329,13 @@ color: rgb(255, 255, 255);</string>
          <string>C:/USERS/DOCUMENTS/</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="VID1_DeleteButton">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>50</y>
-          <width>31</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 85, 127);
-color: rgb(255, 255, 255);
-border-radius: 10px
-</string>
-        </property>
-        <property name="text">
-         <string>×</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="VID1_EditButton">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>100</y>
-          <width>31</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 85, 127);
-color: rgb(255, 255, 255);
-border-radius: 10px
-</string>
-        </property>
-        <property name="text">
-         <string>E</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="VID1_WatchButton">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>0</y>
-          <width>31</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 85, 127);
-color: rgb(255, 255, 255);
-border-radius: 10px
-</string>
-        </property>
-        <property name="text">
-         <string>O</string>
-        </property>
-       </widget>
       </widget>
       <widget class="QGroupBox" name="VID2_Container">
        <property name="geometry">
         <rect>
          <x>120</x>
          <y>190</y>
-         <width>421</width>
+         <width>451</width>
          <height>141</height>
         </rect>
        </property>
@@ -422,7 +365,7 @@ border-radius: 20px;</string>
          <rect>
           <x>150</x>
           <y>20</y>
-          <width>81</width>
+          <width>301</width>
           <height>16</height>
          </rect>
         </property>
@@ -456,7 +399,7 @@ color: rgb(255, 255, 255);</string>
          <rect>
           <x>150</x>
           <y>60</y>
-          <width>141</width>
+          <width>301</width>
           <height>16</height>
          </rect>
         </property>
@@ -473,7 +416,7 @@ color: rgb(255, 255, 255);</string>
          <rect>
           <x>150</x>
           <y>100</y>
-          <width>141</width>
+          <width>301</width>
           <height>16</height>
          </rect>
         </property>
@@ -483,63 +426,6 @@ color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>C:/USERS/DOCUMENTS/</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="VID2_DeleteButton">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>50</y>
-          <width>31</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 85, 127);
-color: rgb(255, 255, 255);
-border-radius: 10px
-</string>
-        </property>
-        <property name="text">
-         <string>×</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="VID2_EditButton">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>100</y>
-          <width>31</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 85, 127);
-color: rgb(255, 255, 255);
-border-radius: 10px
-</string>
-        </property>
-        <property name="text">
-         <string>E</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="VID2_WatchButton">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>0</y>
-          <width>31</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(85, 85, 127);
-color: rgb(255, 255, 255);
-border-radius: 10px
-</string>
-        </property>
-        <property name="text">
-         <string>O</string>
         </property>
        </widget>
       </widget>
@@ -558,6 +444,80 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="text">
         <string>nothing found</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="VID_WatchButton">
+       <property name="geometry">
+        <rect>
+         <x>600</x>
+         <y>90</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>O</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="VID_DeleteButton">
+       <property name="geometry">
+        <rect>
+         <x>600</x>
+         <y>150</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>×</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="VID_EditButton">
+       <property name="geometry">
+        <rect>
+         <x>600</x>
+         <y>210</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>E</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="VID_ControlsLabel">
+       <property name="geometry">
+        <rect>
+         <x>640</x>
+         <y>40</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Controls</string>
        </property>
       </widget>
      </widget>
@@ -674,7 +634,135 @@ color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="SettingsTab"/>
+    <widget class="QWidget" name="PreviewTab">
+     <widget class="QFrame" name="PT_Container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>781</width>
+        <height>421</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="PT_CancelButton">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>360</y>
+         <width>141</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>BACK</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="PT_Video">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>741</width>
+         <height>321</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PT_StopOrPlayButton">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>360</y>
+         <width>141</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>STOP/PLAY</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PT_ShipForwardButton">
+       <property name="geometry">
+        <rect>
+         <x>590</x>
+         <y>360</y>
+         <width>141</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>&gt;&gt; 5</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PT_SkipBackButton">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>360</y>
+         <width>141</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>5&lt;&lt; </string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="PT_TimeLabel">
+       <property name="geometry">
+        <rect>
+         <x>510</x>
+         <y>370</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>time</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
     <widget class="QWidget" name="DownloadDetailsTab">
      <widget class="QFrame" name="DDT_Container">
       <property name="geometry">
