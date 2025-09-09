@@ -6,11 +6,12 @@ from PyQt5.QtCore import Qt
 
 
 class VideoPlayer():
-    def __init__(self, video_path, output_widget, pause_widget, forward_widget, back_widget, time_widget):
+    def __init__(self, video_path, output_widget, pause_widget, back_widget, forward_widget, time_widget):
 
         self.video_path = video_path
         self.cap = cv2.VideoCapture(video_path)
         self.paused = False
+        self.interval = 5000
 
         self.video_widget = output_widget
 
@@ -35,11 +36,11 @@ class VideoPlayer():
 
     def seek_forward(self):
         current_pos = self.cap.get(cv2.CAP_PROP_POS_MSEC)
-        self.cap.set(cv2.CAP_PROP_POS_MSEC, current_pos + 10000)
+        self.cap.set(cv2.CAP_PROP_POS_MSEC, current_pos + self.interval)
 
     def seek_backward(self):
         current_pos = self.cap.get(cv2.CAP_PROP_POS_MSEC)
-        self.cap.set(cv2.CAP_PROP_POS_MSEC, max(current_pos - 10000, 0))
+        self.cap.set(cv2.CAP_PROP_POS_MSEC, max(current_pos - self.interval, 0))
 
     def update_frame(self):
         if not self.paused:
