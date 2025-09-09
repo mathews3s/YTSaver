@@ -713,9 +713,20 @@ class View():
         self.DLG_DetailsLabel.setText(f"to delete video {video_name}")
 
 
-    def edit_video(self, video_name):
+    def edit_video(self, video):
         self.MainMenu.setCurrentWidget(self.EditVideoTab)
+        self.EDT_NameInput.setText(video['video_name'])
+        self.EDT_DescriptionInput.setText(video['video_desc'])
+        self.EDT_PathInput.setText(video['video_path'])
 
+    def get_data_from_edit_fields(self):
+        info = {
+            'video_name': self.EDT_NameInput,
+            'video_desc': self.EDT_DescriptionInput,
+            'video_path': self.EDT_PathInput,
+            'video_icon': self.EDT_Icon
+                }
+        return info
 
 
     def display_video(self, path):
@@ -734,14 +745,7 @@ class View():
         del self.player
 
 
-    def get_data_from_edit_fields(self):
-        info = {
-            'video_name': self.EDT_NameInput,
-            'video_desc': self.EDT_DescriptionInput,
-            'video_path': self.EDT_PathInput,
-            'video_icon': self.EDT_Icon
-                }
-        return info
+
 
 
 

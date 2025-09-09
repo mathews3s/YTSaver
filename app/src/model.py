@@ -232,4 +232,27 @@ class Model:
         except Exception as e:
             print("Произошла ошибка во время выполнения операции вставки: %s", e)
 
-
+    def update_video_in_db(self, video):
+        try:
+            with db.connect(self.db) as connection:
+                cursor = connection.cursor()
+                cursor.execute('''
+                                    UPDATE video 
+                                    SET video_name = ?,
+                                        video_desc = ?,
+                                        video_format = ?, 
+                                        video_date = ?,
+                                        video_path = ?, 
+                                        video_icon = ?
+                                    WHERE video_id = ?''',
+                               (
+                                   video['video_name'],
+                                   video['video_desc'],
+                                   video['video_format'],
+                                   video['video_date'],
+                                   video['video_path'],
+                                   video['video_icon'],
+                                   video['id']))
+                connection.commit()
+        except Exception as e:
+            print(f"Произошла ошибка во время выполнения операции обновления: {e}")
