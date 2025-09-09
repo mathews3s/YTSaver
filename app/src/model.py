@@ -21,7 +21,7 @@ class Model:
 
 
 
-    def update_videos_info(self):
+    def update_storages(self):
         # проверяю записи в бд на их существование в NTFS
         self.check_videos_in_db()
 
@@ -86,15 +86,12 @@ class Model:
 
     def check_videos_in_db(self):
         """
-            INFO:
-            Checking for the existing of video attributes (video file, icon) in records,
+            INFO: Checking for the existing of video attributes (video file, icon) in records,
             given from db;
 
-            GETS:
-            -
+            GETS: -
 
-            RETURNS:
-            -
+            RETURNS:  -
             """
         videos_to_remove = []
         videos_to_change = []
@@ -113,7 +110,7 @@ class Model:
                 videos_to_remove.append(video)
 
             for video in videos_to_remove:
-                self.delete_videos_db(video['id'])
+                self.delete_video(video, False)
 
 
     def set_videos_from_db(self):
@@ -156,8 +153,6 @@ class Model:
             self.video_1 = item1
             self.video_2 = item2
 
-
-
     def videos_offset_up(self):
         if self.offset_collection > 0:
             self.offset_collection -= 2
@@ -168,7 +163,13 @@ class Model:
             print(self.offset_collection)
 
 
-
+    def delete_video(self, video, full_delete):
+        video_path = video['video_path']
+        video_id = video['id']
+        self.delete_videos_db(video_id)
+        if full_delete:
+            if os.path.exists(video_path):
+                os.remove(video_path)
 
 
     def fetch_videos_db(self):
