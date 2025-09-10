@@ -753,9 +753,12 @@ class View():
         self.MainMenu.setCurrentWidget(self.VideoTab)
         del self.player
 
+    def get_data_search_bar(self):
+        url = self.DOW_LinkInput.text()
+        return url
 
-
-
+    def open_download_tab(self):
+        self.MainMenu.setCurrentWidget(self.DownloadDetailsTab)
 
 
 

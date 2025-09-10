@@ -3,8 +3,13 @@ import json
 import copy
 import os
 import time
-from datetime import datetime
 import re
+from datetime import datetime
+from pytubefix import YouTube as YTManager
+import ffmpeg
+
+test_url = "https://www.youtube.com/watch?v=K6rKRdayW78"
+
 
 class Model:
     def __init__(self):
@@ -17,6 +22,10 @@ class Model:
         self.video_2 = None
         self.current_video = None
         self.offset_collection = 0
+
+        self.download_url = None
+        self.manager = None
+
 
 
 
@@ -276,3 +285,32 @@ class Model:
                 connection.commit()
         except Exception as e:
             print(f"Произошла ошибка во время выполнения операции обновления: {e}")
+
+    def try_to_find(self, url):
+        test_url = "https://www.youtube.com/watch?v=K6rKRdayW78"
+        try:
+            self.manager = YTManager(url)
+            streams = self.manager.streams.all()
+
+            video_stream = self.manager.streams.filter(progressive=True, file_extension='mp4').order_by(
+                'resolution').desc().first()
+            audio_stream = self.manager.streams.filter(only_audio=True, file_extension='mp4').order_by(
+                'abr').desc().first()
+
+            video_filename = video_stream.download()
+            audio_filename = audio_stream.download()
+
+            input_video = ffmpeg.input(video_filename)
+            input_audio = ffmpeg.input(audio_filename)
+
+            ffmpeg.output(input_video, input_audio, "../finishedVid.mp4", codec='copy').overwrite_output().run(
+                quiet=True)
+
+
+            for stream in streams:
+                print(stream)
+            return True
+        except Exception as e:
+            self.manager = None
+            return False
+

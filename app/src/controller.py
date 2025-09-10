@@ -44,6 +44,8 @@ class Controller:
 
         self.view.VID2_Icon.mousePressEvent = lambda event: self.video2_icon_clicked()
 
+        self.view.DOW_FindButton.clicked.connect(lambda: self.find_clicked())
+
 
 
 
@@ -159,3 +161,11 @@ class Controller:
 
     def video_close(self):
         self.view.undisplay_video()
+
+    def find_clicked(self):
+        url = self.view.get_data_search_bar()
+        if self.model.try_to_find(url):
+            self.view.open_download_tab()
+            print("++")
+        else:
+            print("___")
