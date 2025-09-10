@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QApplication as AppQT
+from PyQt5.QtWidgets import QApplication as AppQT,  QFileDialog
 from player import VideoPlayer
-
+import os
 
 class View():
 
@@ -497,7 +497,7 @@ class View():
 
 
         self.enable_video_controls(False)
-
+        self.EDT_PathLabel.setEnabled(False)
 
         self.window.setCentralWidget(self.WorkSpace)
         self.retranslate(self.window)
@@ -552,6 +552,8 @@ class View():
         self.PT_ShipForwardButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_ShipForwardButton, self.px_low)
         self.PT_SkipBackButton.enterEvent = lambda event: self.highlight_item(self.PT_SkipBackButton, self.px_low)
         self.PT_SkipBackButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_SkipBackButton, self.px_low)
+
+        self.EDT_PathInput.mousePressEvent = lambda event: self.directory_discover()
 
 
     def retranslate(self, MainWindow):
@@ -612,6 +614,10 @@ class View():
             self.PT_ShipForwardButton.setText(_translate("MainWindow", ">> 5"))
             self.PT_SkipBackButton.setText(_translate("MainWindow", "5<< "))
             self.PT_TimeLabel.setText(_translate("MainWindow", "time"))
+
+    def directory_discover(self):
+        directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
+        self.EDT_PathInput.setText(directory)
 
     def show_main_window(self, allow):
         if allow:
@@ -715,16 +721,19 @@ class View():
 
     def edit_video(self, video):
         self.MainMenu.setCurrentWidget(self.EditVideoTab)
-        self.EDT_NameInput.setText(video['video_name'])
-        self.EDT_DescriptionInput.setText(video['video_desc'])
-        self.EDT_PathInput.setText(video['video_path'])
+        path, name = os.path.split(video['video_path'])
+        desc = video['video_desc']
+
+        self.EDT_NameInput.setText(name)
+        self.EDT_DescriptionInput.setText(desc)
+        self.EDT_PathInput.setText(path)
 
     def get_data_from_edit_fields(self):
         info = {
-            'video_name': self.EDT_NameInput,
-            'video_desc': self.EDT_DescriptionInput,
-            'video_path': self.EDT_PathInput,
-            'video_icon': self.EDT_Icon
+            'video_name': self.EDT_NameInput.text(),
+            'video_desc': self.EDT_DescriptionInput.text(),
+            'video_path': self.EDT_PathInput.text(),
+            'video_icon': self.EDT_Icon.text()
                 }
         return info
 

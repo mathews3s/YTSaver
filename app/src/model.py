@@ -4,7 +4,7 @@ import copy
 import os
 import time
 from datetime import datetime
-
+import re
 
 class Model:
     def __init__(self):
@@ -26,7 +26,7 @@ class Model:
         self.check_videos_in_db()
 
         # проверяю баз. дир на наличие файлов
-        if self.check_default_directory_exists():
+        if self.check_directory_exists(self.download_directory):
             self.check_default_directory()
 
         self.set_videos_from_db()
@@ -48,12 +48,9 @@ class Model:
             if video['video_name'] not in name_list_from_db:
                 self.insert_video_into_db(video)
 
-
-
-
-    def check_default_directory_exists(self):
-        if not os.path.exists(self.download_directory):
-            os.makedirs(self.download_directory)
+    def check_directory_exists(self, path):
+        if not os.path.exists(path):
+            os.makedirs(path)
             return False
         else:
             return True
@@ -81,8 +78,6 @@ class Model:
                     })
 
         return videos
-
-
 
     def check_videos_in_db(self):
         """
@@ -171,6 +166,31 @@ class Model:
             if os.path.exists(video_path):
                 os.remove(video_path)
 
+    def check_file_name(self, filename):
+        pattern = r"^[a-zA-Z0-9_.-]+$"
+
+        if re.match(pattern, filename):
+            return True
+        else:
+            return False
+
+    def check_video_data(self, new_video_data):
+        first_check = self.check_directory_exists(new_video_data['video_path'])
+        second_check = self.check_file_name(new_video_data['video_name'])
+
+        if not first_check:
+            print("dir problem")
+            return False
+        elif not second_check:
+            print("name problem")
+            return False
+        else:
+            return True
+
+    def update_video_info(self, new_info, with_replace):
+        self.update_video_in_db(new_info)
+        if with_replace:
+            os.rename(self.current_video['video_path'], new_info['video_path'])
 
     def fetch_videos_db(self):
         try:
@@ -244,7 +264,7 @@ class Model:
                                         video_date = ?,
                                         video_path = ?, 
                                         video_icon = ?
-                                    WHERE video_id = ?''',
+                                    WHERE id = ?''',
                                (
                                    video['video_name'],
                                    video['video_desc'],

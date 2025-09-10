@@ -136,15 +136,18 @@ class Controller:
     def accept_edit_clicked(self):
         current_video = self.model.get_videos_info()['current']
         new_video_data = self.view.get_data_from_edit_fields()
+        is_good = self.model.check_video_data(new_video_data)
+        if is_good:
+            new_video_data['id'] = current_video['id']
+            new_video_data['video_format'] = current_video['video_format']
+            new_video_data['video_date'] = current_video['video_date']
+            new_video_data['video_icon'] = current_video['video_icon']
+            self.model.update_video_in_db(new_video_data)
 
-        self.model.update_video_in_db(new_video_data)
-        self.switch_to_video_tab()
-        # answer = self.model.check_video_data(new_video_data)
-        # if answer['status']:
-        #     self.view.edit_video(current_video)
-        # else:
-        #     self.model.update_video_in_db(new_video_data)
-        #     self.switch_to_video_tab()
+            self.model.update_storages()
+            self.update_video_tab()
+            self.switch_to_video_tab()
+
 
     def video_open(self):
         data = self.model.get_videos_info()
