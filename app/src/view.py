@@ -9,6 +9,7 @@ class View():
         self.px_low = 2
         self.px_medium = 4
         self.player = None
+        self.controller = None
 
         self.app = AppQT([])
         self.window = QtWidgets.QMainWindow()
@@ -507,8 +508,40 @@ class View():
         self.retranslate(self.window)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
+    def set_feedback(self, cntrl):
+        self.controller = cntrl
+
     def setup_graphical_events(self):
-        # self.Icon.mousePressEvent = lambda event: self.hide()
+        self.DownloadTabButton.clicked.connect(lambda: self.controller.user_switch_to_download_tab())
+        self.VideosTabButton.clicked.connect(lambda: self.controller.user_switch_to_video_tab())
+
+        self.VID_UpButton.clicked.connect(lambda: self.controller.user_click_scroll_up())
+        self.VID_DownButton.clicked.connect(lambda: self.controller.user_click_scroll_down())
+
+        self.VID1_Icon.mousePressEvent = lambda event: self.controller.user_click_video1_icon()
+
+        self.DLG_AcceptButton.mousePressEvent = lambda event: self.controller.user_click_accept_delete()
+        self.DLG_CancelButton.mousePressEvent = lambda event: self.controller.user_click_cancel()
+
+        self.VID_DeleteButton.mousePressEvent = lambda event: self.controller.user_click_delete()
+        self.VID_EditButton.clicked.connect(lambda: self.controller.user_click_edit())
+        self.EDT_SaveButton.mousePressEvent = lambda event: self.controller.user_accept_edit_clicked()
+        self.EDT_CancelButton.mousePressEvent = lambda event: self.controller.user_click_cancel()
+
+        self.VID_WatchButton.clicked.connect(lambda: self.controller.user_click_watch())
+        self.PT_CancelButton.clicked.connect(lambda: self.controller.video_close())
+
+        self.VID2_Icon.mousePressEvent = lambda event: self.controller.user_click_video2_icon()
+
+        self.DOW_FindButton.clicked.connect(lambda: self.controller.user_click_find())
+
+        self.DDT_DownloadButton.clicked.connect(lambda: self.controller.user_clicked_download())
+        self.DDT_QualityBox.currentIndexChanged.connect(lambda: self.controller.user_select_resolution())
+        self.DDT_FormatBox.currentIndexChanged.connect(lambda: self.controller.user_select_format())
+        self.DDT_BitrateBox.currentIndexChanged.connect(lambda: self.controller.user_select_fps())
+
+
+
         self.VideosTabButton.enterEvent = lambda event: self.highlight_item(self.VideosTabButton, self.px_low)
         self.VideosTabButton.leaveEvent = lambda event: self.unhighlight_item(self.VideosTabButton, self.px_low)
         self.DownloadTabButton.enterEvent = lambda event: self.highlight_item(self.DownloadTabButton, self.px_low)
@@ -772,9 +805,7 @@ class View():
         url = self.DOW_LinkInput.text()
         return url
 
-    def open_download_tab(self, video_name):
-        self.MainMenu.setCurrentWidget(self.DownloadDetailsTab)
-        self.DDT_VideoName.setText(video_name)
+
 
 
 
@@ -829,7 +860,8 @@ class View():
         info = {
             'resolution': self.DDT_QualityBox.currentText(),
             'format': self.DDT_FormatBox.currentText(),
-            'fps': self.DDT_BitrateBox.currentText()
+            'fps': self.DDT_BitrateBox.currentText(),
+            'path': self.DDT_PathInput.text()
         }
         return info
 
@@ -840,3 +872,19 @@ class View():
         else:
             self.set_disabled_style(self.DDT_DownloadButton)
             self.DDT_DownloadButton.setEnabled(False)
+
+
+    def switch_to_video_tab(self):
+        self.MainMenu.setCurrentWidget(self.VideoTab)
+
+
+    def switch_to_download_tab(self):
+        self.MainMenu.setCurrentWidget(self.DownloadTab)
+
+    def switch_to_download_details_tab(self, video_name):
+        self.MainMenu.setCurrentWidget(self.DownloadDetailsTab)
+        self.DDT_VideoName.setText(video_name)
+
+    def switch_to_dialog_tab(self, msg):
+        self.MainMenu.setCurrentWidget(self.DialogTab)
+        self.DLG_DetailsLabel.setText(msg)
