@@ -7,6 +7,7 @@ import re
 from datetime import datetime
 from pytubefix import YouTube as YTManager
 import ffmpeg
+import threading
 
 test_url = "https://www.youtube.com/watch?v=K6rKRdayW78"
 
@@ -15,6 +16,7 @@ class Model:
     def __init__(self):
         self.db = "../appData/database.db"
         self.download_directory = "../../download"
+        self.controller = None
 
         self.founded_videos = None
         self.videos_count = None
@@ -35,8 +37,8 @@ class Model:
             'fps': None
         }
 
-
-
+    def set_feedback(self, cntrl):
+        self.controller = cntrl
 
 
     def update_storages(self):
@@ -300,31 +302,12 @@ class Model:
     def try_to_find(self, url):
         # test_url = "https://www.youtube.com/watch?v=mRfUpvpEasQ"
         try:
-            self.manager['youtube_obj'] = YTManager(url)
+            self.manager['youtube_obj'] = YTManager(url, on_progress_callback=self.on_progress)
             self.manager['video_name'] = self.manager['youtube_obj'].title
             self.update_streams_by_filter()
 
             return True
-            # streams = self.manager.streams.all()
-            #
-            # video_stream = self.manager.streams.filter(resolution='1080p', file_extension='mp4').order_by(
-            #     'resolution').desc().first()
-            # audio_stream = self.manager.streams.filter(only_audio=True, file_extension='mp4').order_by(
-            #     'abr').desc().first()
-            #
-            # video_filename = video_stream.download()
-            # audio_filename = audio_stream.download()
-            #
-            # input_video = ffmpeg.input(video_filename)
-            # input_audio = ffmpeg.input(audio_filename)
-            #
-            # ffmpeg.output(input_video, input_audio, "../finishedVid.mp4", codec='copy').overwrite_output().run(
-            #     quiet=True)
-            #
-            #
-            # for stream in streams:
-            #     print(stream)
-            # return True
+
         except Exception as e:
             return False
 
@@ -379,7 +362,6 @@ class Model:
                                        .streams.filter(progressive=False, res=res, file_extension=fmt, fps=int(fps) )
                                        .order_by('resolution')
                                        .desc())
-            self.select_suit_stream()
         elif res and fmt:
             self.manager['streams'] = (self.manager['youtube_obj']
                                        .streams.filter(progressive=False, res=res, file_extension=fmt)
@@ -399,5 +381,34 @@ class Model:
                                        .desc())
             self.manager['resolutions'] = self.fetch_resolutions()
 
+    def check_download_video_data(self, data):
+        first_check = self.check_directory_exists(data['path'])
+        if first_check:
+            return True
+        else:
+            return False
+
     def download_video(self):
-        pass
+        video_filename = self.manager['suit_video_stream'].download()
+        audio_filename = self.manager['suit_audio_stream'].download()
+
+        input_video = ffmpeg.input(video_filename)
+        input_audio = ffmpeg.input(audio_filename)
+
+        ffmpeg.output(input_video, input_audio, "../finishedVid.mp4", codec='copy').overwrite_output().run(
+            quiet=True)
+        return True
+
+    def on_progress(self, stream, chunk, bytes_remaining):
+        total_size = stream.filesize
+        bytes_downloaded = total_size - bytes_remaining
+        percentage = (bytes_downloaded / total_size) * 100
+        print(f"Downloaded {bytes_downloaded} out of {total_size} bytes ({percentage:.2f}%)")
+        self.feedback.download_going()
+
+    def start_download(self):
+
+        self.select_suit_stream()
+        thread = threading.Thread(target=self.download_video)
+        thread.start()
+
