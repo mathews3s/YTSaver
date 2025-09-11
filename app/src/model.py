@@ -24,7 +24,16 @@ class Model:
         self.offset_collection = 0
 
         self.download_url = None
-        self.manager = None
+        self.manager = {
+            'youtube_obj' : None,
+            'streams': None,
+            'suit_video_stream': None,
+            'suit_audio_stream': None,
+            'video_name': None,
+            'resolutions' : None,
+            'formats': None,
+            'fps': None
+        }
 
 
 
@@ -286,31 +295,109 @@ class Model:
         except Exception as e:
             print(f"Произошла ошибка во время выполнения операции обновления: {e}")
 
+
+
     def try_to_find(self, url):
-        test_url = "https://www.youtube.com/watch?v=K6rKRdayW78"
+        # test_url = "https://www.youtube.com/watch?v=mRfUpvpEasQ"
         try:
-            self.manager = YTManager(url)
-            streams = self.manager.streams.all()
+            self.manager['youtube_obj'] = YTManager(url)
+            self.manager['video_name'] = self.manager['youtube_obj'].title
+            self.update_streams_by_filter()
 
-            video_stream = self.manager.streams.filter(progressive=True, file_extension='mp4').order_by(
-                'resolution').desc().first()
-            audio_stream = self.manager.streams.filter(only_audio=True, file_extension='mp4').order_by(
-                'abr').desc().first()
-
-            video_filename = video_stream.download()
-            audio_filename = audio_stream.download()
-
-            input_video = ffmpeg.input(video_filename)
-            input_audio = ffmpeg.input(audio_filename)
-
-            ffmpeg.output(input_video, input_audio, "../finishedVid.mp4", codec='copy').overwrite_output().run(
-                quiet=True)
-
-
-            for stream in streams:
-                print(stream)
             return True
+            # streams = self.manager.streams.all()
+            #
+            # video_stream = self.manager.streams.filter(resolution='1080p', file_extension='mp4').order_by(
+            #     'resolution').desc().first()
+            # audio_stream = self.manager.streams.filter(only_audio=True, file_extension='mp4').order_by(
+            #     'abr').desc().first()
+            #
+            # video_filename = video_stream.download()
+            # audio_filename = audio_stream.download()
+            #
+            # input_video = ffmpeg.input(video_filename)
+            # input_audio = ffmpeg.input(audio_filename)
+            #
+            # ffmpeg.output(input_video, input_audio, "../finishedVid.mp4", codec='copy').overwrite_output().run(
+            #     quiet=True)
+            #
+            #
+            # for stream in streams:
+            #     print(stream)
+            # return True
         except Exception as e:
-            self.manager = None
             return False
 
+    def fetch_resolutions(self):
+
+        resolutions = []
+        for stream in self.manager['streams']:
+            resolution = stream.resolution
+            if resolution and resolution not in resolutions:
+                resolutions.append(resolution)
+        return resolutions
+
+    def fetch_formats(self):
+
+        formats = []
+        for stream in self.manager['streams']:
+            format = stream.subtype
+            if format and format not in formats:
+                formats.append(format)
+        return formats
+
+    def fetch_frames_per_second(self):
+
+        result = []
+        for stream in self.manager['streams']:
+            fps = stream.fps
+            if fps and fps not in result:
+                result.append(fps)
+        return result
+
+    def select_suit_stream(self):
+
+        self.manager['suit_video_stream'] = self.manager['streams'].first()
+        self.manager['suit_audio_stream'] = (self.manager['youtube_obj'].streams
+                                             .filter(only_audio=True, file_extension='mp4')
+                                             .order_by('abr')
+                                             .desc()
+                                             .first())
+
+    def get_suitable_streams_information(self):
+        return {
+            'video_name': self.manager['video_name'],
+            'resolutions': self.manager['resolutions'],
+            'formats': self.manager['formats'],
+            'fps': self.manager['fps']
+        }
+
+    def update_streams_by_filter(self, res=None, fmt=None, fps=None):
+
+        if res and fmt and fps:
+            self.manager['streams'] = (self.manager['youtube_obj']
+                                       .streams.filter(progressive=False, res=res, file_extension=fmt, fps=int(fps) )
+                                       .order_by('resolution')
+                                       .desc())
+            self.select_suit_stream()
+        elif res and fmt:
+            self.manager['streams'] = (self.manager['youtube_obj']
+                                       .streams.filter(progressive=False, res=res, file_extension=fmt)
+                                       .order_by('resolution')
+                                       .desc())
+            self.manager['fps'] = self.fetch_frames_per_second()
+        elif res:
+            self.manager['streams'] = (self.manager['youtube_obj']
+                                       .streams.filter(progressive=False,res=res)
+                                       .order_by('resolution')
+                                       .desc())
+            self.manager['formats'] = self.fetch_formats()
+        else:
+            self.manager['streams'] = (self.manager['youtube_obj']
+                                       .streams.filter(progressive=False)
+                                       .order_by('resolution')
+                                       .desc())
+            self.manager['resolutions'] = self.fetch_resolutions()
+
+    def download_video(self):
+        pass

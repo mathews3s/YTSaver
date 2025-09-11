@@ -27,7 +27,7 @@ class VideoPlayer():
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
-        self.timer.start(25)
+        self.timer.start(40)
 
         self.time_widget = time_widget
 

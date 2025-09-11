@@ -497,11 +497,14 @@ class View():
 
 
         self.enable_video_controls(False)
+        self.enable_download_controls(False)
         self.EDT_PathLabel.setEnabled(False)
+        self.download_details_reset()
+        self.MainMenu.setCurrentIndex(0)
+
 
         self.window.setCentralWidget(self.WorkSpace)
         self.retranslate(self.window)
-        self.MainMenu.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
     def setup_graphical_events(self):
@@ -553,7 +556,13 @@ class View():
         self.PT_SkipBackButton.enterEvent = lambda event: self.highlight_item(self.PT_SkipBackButton, self.px_low)
         self.PT_SkipBackButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_SkipBackButton, self.px_low)
 
-        self.EDT_PathInput.mousePressEvent = lambda event: self.directory_discover()
+        self.EDT_PathInput.mousePressEvent = lambda event: self.edit_video_directory_discover()
+        self.DDT_PathInput.mousePressEvent = lambda event: self.download_video_directory_discover()
+
+        self.DDT_CancelButton.enterEvent = lambda event: self.highlight_item(self.DDT_CancelButton, self.px_low)
+        self.DDT_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.DDT_CancelButton, self.px_low)
+        self.DDT_DownloadButton.enterEvent = lambda event: self.highlight_item(self.DDT_DownloadButton, self.px_low)
+        self.DDT_DownloadButton.leaveEvent = lambda event: self.unhighlight_item(self.DDT_DownloadButton, self.px_low)
 
 
     def retranslate(self, MainWindow):
@@ -615,9 +624,13 @@ class View():
             self.PT_SkipBackButton.setText(_translate("MainWindow", "5<< "))
             self.PT_TimeLabel.setText(_translate("MainWindow", "time"))
 
-    def directory_discover(self):
+    def edit_video_directory_discover(self):
         directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
         self.EDT_PathInput.setText(directory)
+
+    def download_video_directory_discover(self):
+        directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
+        self.DDT_PathInput.setText(directory)
 
     def show_main_window(self, allow):
         if allow:
@@ -690,11 +703,13 @@ class View():
         current_style = element.styleSheet()
         new_style = current_style + f";background-color: lightgray; color: darkgray;"
         element.setStyleSheet(new_style)
+        element.setEnabled(False)
 
     def set_enabled_style(self, element):
         current_style = element.styleSheet()
         new_style = current_style.replace(f";background-color: lightgray; color: darkgray;", "")
         element.setStyleSheet(new_style)
+        element.setEnabled(True)
 
     def enable_video_controls(self, flag):
         if flag:
@@ -757,11 +772,71 @@ class View():
         url = self.DOW_LinkInput.text()
         return url
 
-    def open_download_tab(self):
+    def open_download_tab(self, video_name):
         self.MainMenu.setCurrentWidget(self.DownloadDetailsTab)
+        self.DDT_VideoName.setText(video_name)
 
 
 
+    def show_available_resolutions(self, resolutions):
+
+        self.DDT_QualityBox.blockSignals(True)
 
 
+        self.set_disabled_style(self.DDT_FormatBox)
+        self.set_disabled_style(self.DDT_BitrateBox)
+        self.DDT_QualityBox.clear()
+        self.set_enabled_style(self.DDT_QualityBox)
+        self.DDT_QualityBox.addItem('-')
+        for element in resolutions:
+            self.DDT_QualityBox.addItem(element)
 
+        self.DDT_QualityBox.blockSignals(False)
+
+    def show_available_formats(self, formats):
+
+        self.DDT_FormatBox.blockSignals(True)
+
+
+        self.set_disabled_style(self.DDT_BitrateBox)
+        self.DDT_FormatBox.clear()
+        self.set_enabled_style(self.DDT_FormatBox)
+        self.DDT_FormatBox.addItem('-')
+        for element in formats:
+            self.DDT_FormatBox.addItem(element)
+
+        self.DDT_FormatBox.blockSignals(False)
+
+    def show_available_fps(self, frames):
+
+        self.DDT_BitrateBox.blockSignals(True)
+
+
+        self.DDT_BitrateBox.clear()
+        self.set_enabled_style(self.DDT_BitrateBox)
+        self.DDT_BitrateBox.addItem('-')
+        for element in frames:
+                self.DDT_BitrateBox.addItem(str(element))
+
+        self.DDT_BitrateBox.blockSignals(False)
+
+    def download_details_reset(self):
+        self.set_disabled_style(self.DDT_FormatBox)
+        self.set_disabled_style(self.DDT_QualityBox)
+        self.set_disabled_style(self.DDT_BitrateBox)
+
+    def get_data_from_download_fields(self):
+        info = {
+            'resolution': self.DDT_QualityBox.currentText(),
+            'format': self.DDT_FormatBox.currentText(),
+            'fps': self.DDT_BitrateBox.currentText()
+        }
+        return info
+
+    def enable_download_controls(self, flag):
+        if flag:
+            self.set_enabled_style(self.DDT_DownloadButton)
+            self.DDT_DownloadButton.setEnabled(True)
+        else:
+            self.set_disabled_style(self.DDT_DownloadButton)
+            self.DDT_DownloadButton.setEnabled(False)

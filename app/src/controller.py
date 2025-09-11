@@ -46,8 +46,9 @@ class Controller:
 
         self.view.DOW_FindButton.clicked.connect(lambda: self.find_clicked())
 
-
-
+        self.view.DDT_QualityBox.currentIndexChanged.connect(lambda: self.user_select_resolution())
+        self.view.DDT_FormatBox.currentIndexChanged.connect(lambda: self.user_select_format())
+        self.view.DDT_BitrateBox.currentIndexChanged.connect(lambda: self.user_select_fps())
 
     def switch_to_video_tab(self):
         self.view.MainMenu.setCurrentWidget(self.view.VideoTab)
@@ -162,10 +163,39 @@ class Controller:
     def video_close(self):
         self.view.undisplay_video()
 
+
+
+
     def find_clicked(self):
-        url = self.view.get_data_search_bar()
-        if self.model.try_to_find(url):
-            self.view.open_download_tab()
+        link = self.view.get_data_search_bar()
+        if self.model.try_to_find(link):
+            info = self.model.get_suitable_streams_information()
+            self.view.open_download_tab(info['video_name'])
+            self.view.show_available_resolutions(info['resolutions'])
             print("++")
         else:
             print("___")
+
+    def user_select_resolution(self):
+        data_from_view = self.view.get_data_from_download_fields()
+        self.model.update_streams_by_filter(res=data_from_view['resolution'])
+        data_from_model = self.model.get_suitable_streams_information()
+        self.view.show_available_formats(data_from_model['formats'])
+
+    def user_select_format(self):
+        data_from_view = self.view.get_data_from_download_fields()
+        self.model.update_streams_by_filter(res=data_from_view['resolution'],
+                                            fmt=data_from_view['format'])
+        data_from_model = self.model.get_suitable_streams_information()
+        self.view.show_available_fps(data_from_model['fps'])
+        print("+++")
+
+    def user_select_fps(self):
+        data_from_view = self.view.get_data_from_download_fields()
+        self.model.update_streams_by_filter(res=data_from_view['resolution'],
+                                            fmt=data_from_view['format'],
+                                            fps=data_from_view['fps'])
+        self.view.enable_download_controls(True)
+
+    def user_clicked_download(self):
+        self.model.download_video()
