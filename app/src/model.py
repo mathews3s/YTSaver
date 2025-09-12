@@ -8,11 +8,14 @@ from datetime import datetime
 from pytubefix import YouTube as YTManager
 import ffmpeg
 import threading
+import validators
+from pytubefix.request import stream
 
 test_url = "https://www.youtube.com/watch?v=K6rKRdayW78"
 
 
 class Model:
+
     def __init__(self):
         self.db = "../appData/database.db"
         self.download_directory = "../../download"
@@ -34,11 +37,60 @@ class Model:
             'video_name': None,
             'resolutions' : None,
             'formats': None,
-            'fps': None
+            'fps': None,
+            'user_path': None,
+            'user_format': None,
         }
 
     def set_feedback(self, cntrl):
         self.controller = cntrl
+
+    def get_first_video_info(self):
+        video_info = {
+            "id": self.video_1['id'],
+            "video_name": self.video_1['video_name'],
+            "video_desc": self.video_1['video_desc'],
+            "video_format": self.video_1['video_format'],
+            "video_date": self.video_1['video_date'],
+            "video_path": self.video_1['video_path'],
+            "video_icon": self.video_1['video_icon']
+        }
+        return video_info
+
+    def get_second_video_info(self):
+        video_info = {
+            "id": self.video_2['id'],
+            "video_name": self.video_2['video_name'],
+            "video_desc": self.video_2['video_desc'],
+            "video_format": self.video_2['video_format'],
+            "video_date": self.video_2['video_date'],
+            "video_path": self.video_2['video_path'],
+            "video_icon": self.video_2['video_icon']
+        }
+        return video_info
+
+    def get_current_video_info(self, en_full_path=None):
+        try:
+            if not en_full_path:
+                formated_path = os.path.dirname(self.current_video['video_path'])
+            else:
+                formated_path = self.current_video['video_path']
+            video_info = {
+                "id": self.current_video['id'],
+                "video_name": self.current_video['video_name'],
+                "video_desc": self.current_video['video_desc'],
+                "video_format": self.current_video['video_format'],
+                "video_date": self.current_video['video_date'],
+                "video_path": formated_path,
+                "video_icon": self.current_video['video_icon']
+            }
+            return video_info
+        except:
+            return None
+
+
+    def get_videos_count(self):
+        return self.videos_count
 
 
     def update_storages(self):
@@ -56,6 +108,8 @@ class Model:
         self.video_2 = None
         self.current_video = None
         self.offset_collection = 0
+
+
 
     def check_default_directory(self):
 
@@ -75,6 +129,14 @@ class Model:
         else:
             return True
 
+    def check_file_name(self, filename):
+        pattern = r'^[\w\sа-яА-ЯёЁ\-_.]+$'
+
+        if re.match(pattern, filename):
+            return True
+        else:
+            return False
+
     def find_videos_in_directory(self, dir):
         video_extensions = ('.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv')  # Расширения видеофайлов
         videos = []
@@ -86,9 +148,10 @@ class Model:
                     video_format = os.path.splitext(file)[1][1:]
                     creation_time = os.path.getctime(full_path)
                     formatted_date = datetime.fromtimestamp(creation_time).strftime('%d.%m.%Y')
+                    formated_name = file.split('.')[0]
 
                     videos.append({
-                        'video_name': file,
+                        'video_name': formated_name,
                         'video_path': full_path,
                         'video_date': formatted_date,
                         'video_format': video_format,
@@ -124,26 +187,19 @@ class Model:
             else:
                 videos_to_remove.append(video)
 
-            for video in videos_to_remove:
-                self.delete_video(video, False)
+        for video in videos_to_remove:
+            self.delete_video(video, False)
+
 
 
     def set_videos_from_db(self):
         self.founded_videos = self.fetch_videos_db()
 
-    def get_videos_info(self):
-        info = {
-            'first': self.video_1,
-            'second': self.video_2,
-            'current': self.current_video
-        }
-        return info
 
     def update_videos_count(self):
         self.videos_count = len(self.founded_videos)
 
-    def get_videos_count(self):
-        return self.videos_count
+
 
     def set_video_as_current(self, video):
         self.current_video = copy.deepcopy(video)
@@ -186,13 +242,7 @@ class Model:
             if os.path.exists(video_path):
                 os.remove(video_path)
 
-    def check_file_name(self, filename):
-        pattern = r"^[a-zA-Z0-9_.-]+$"
 
-        if re.match(pattern, filename):
-            return True
-        else:
-            return False
 
     def check_video_data(self, new_video_data):
         first_check = self.check_directory_exists(new_video_data['video_path'])
@@ -207,10 +257,36 @@ class Model:
         else:
             return True
 
-    def update_video_info(self, new_info, with_replace):
-        self.update_video_in_db(new_info)
+    def update_video_info(self, data_for_update, with_replace):
+        self.update_video_in_db(data_for_update)
         if with_replace:
-            os.rename(self.current_video['video_path'], new_info['video_path'])
+            os.rename(self.current_video['video_path'], data_for_update['video_path'])
+
+    def edit_video_info(self, data_for_update):
+
+        id = self.current_video['id']
+        date = self.current_video['video_date']
+        icon = self.current_video['video_icon']
+        format = self.current_video['video_format']
+
+        new_path = data_for_update['video_path']
+        new_name = data_for_update['video_name']
+        new_desc = data_for_update['video_desc']
+
+        new_full_path = f"{new_path}/{new_name}.{format}"
+        old_full_path = self.current_video['video_path']
+        replace_flag = True if new_full_path != old_full_path else False
+
+        data_for_update['id'] = id
+        data_for_update['video_format'] = format
+        data_for_update['video_date'] = date
+        data_for_update['video_icon'] = icon
+        data_for_update['video_path'] = new_full_path
+        data_for_update['video_name'] = new_name
+        data_for_update['video_desc'] = new_desc
+
+        self.update_video_info(data_for_update, with_replace=replace_flag)
+
 
     def fetch_videos_db(self):
         try:
@@ -384,31 +460,61 @@ class Model:
     def check_download_video_data(self, data):
         first_check = self.check_directory_exists(data['path'])
         if first_check:
+            path = data['path']
+            format = data['format']
+            name = self.manager['video_name']
+
+            self.manager['user_format'] = format
+            self.manager['user_full_path'] = f"{path}/{name}.{format}"
             return True
         else:
             return False
 
     def download_video(self):
-        video_filename = self.manager['suit_video_stream'].download()
-        audio_filename = self.manager['suit_audio_stream'].download()
+        video_filename = self.manager['suit_video_stream'].download(output_path='../../app/appData/')
+        audio_filename = self.manager['suit_audio_stream'].download(output_path='../../app/appData/')
 
         input_video = ffmpeg.input(video_filename)
         input_audio = ffmpeg.input(audio_filename)
+        output_video = self.manager['user_full_path']
 
-        ffmpeg.output(input_video, input_audio, "../finishedVid.mp4", codec='copy').overwrite_output().run(
+        ffmpeg.output(input_video, input_audio, output_video, codec='copy').overwrite_output().run(
             quiet=True)
-        return True
+
+        message = f"READY"
+
+        os.remove(video_filename)
+        os.remove(audio_filename)
+
+        self.append_after_download()
+        self.controller.download_end(message)
 
     def on_progress(self, stream, chunk, bytes_remaining):
         total_size = stream.filesize
         bytes_downloaded = total_size - bytes_remaining
         percentage = (bytes_downloaded / total_size) * 100
-        print(f"Downloaded {bytes_downloaded} out of {total_size} bytes ({percentage:.2f}%)")
-        self.feedback.download_going()
+        message = f"Downloading {stream.type}. ({percentage:.2f}%)"
+        self.controller.download_going(message)
+
+    def on_complete(self, stream, file_path):
+        message = f"Downloaded {stream.type}"
+        if stream.type == "audio":
+            message = f"Downloaded {stream.type}. Processing ..."
+        self.controller.download_going(message)
 
     def start_download(self):
-
         self.select_suit_stream()
         thread = threading.Thread(target=self.download_video)
         thread.start()
+
+    def append_after_download(self, stream):
+        formated_path = self.current_video['video_path']
+        video_data = {
+            "video_name": self.manager['video_name'],
+            "video_desc": "nf",
+            "video_format": self.manager['format'],
+            "video_date": self.manager['date'],
+            "video_path": formated_path,
+            "video_icon": "nf"
+        }
 

@@ -24,7 +24,10 @@ class Controller:
 
     ''' --------- СONTROLLER/MODEL/VIEW INTERACTIONS ------------- '''
 
+
+
     def update_video_tab(self):
+
         count = self.model.get_videos_count()
         self.view.update_displayed_count_videos(count)
         match count:
@@ -39,10 +42,9 @@ class Controller:
         self.view.mark_first_video_as_current(False)
         self.view.mark_second_video_as_current(False)
 
-        videos_data_for_show = self.model.get_videos_info()
-        first_video_data = videos_data_for_show['first']
-        second_video_data = videos_data_for_show['second']
-        current_video_data = videos_data_for_show['current']
+        first_video_data = self.model.get_first_video_info()
+        second_video_data = self.model.get_second_video_info()
+        current_video_data = self.model.get_current_video_info()
 
         if not (first_video_data is None):
             self.view.display_first_video(first_video_data)
@@ -66,8 +68,18 @@ class Controller:
     def video_close(self):
         self.view.undisplay_video()
 
-    def download_going(self):
-        pass
+    def download_going(self, msg):
+        self.view.setup_app_message(msg)
+
+    def download_end(self, msg):
+        self.view.setup_app_message(msg)
+        self.model.update_storages()
+        self.update_video_tab()
+        self.user_switch_to_video_tab()
+        self.view.enable_nav_controls(True)
+
+    def message_for_user(self, msg):
+        self.view.setup_app_message(msg)
 
     ''' --------- USER NAV BAR INTERACTION ------------- '''
 
@@ -98,27 +110,26 @@ class Controller:
         self.view.enable_video_controls(True)
 
     def user_click_delete(self):
-        current_video_data = self.model.get_videos_info()['current']
+        current_video_data = self.model.get_current_video_info()
         if current_video_data != None:
             self.view.switch_to_dialog_tab(msg=f"TO DELETE {current_video_data['video_name']}")
 
     def user_click_edit(self):
-        current_video = self.model.get_videos_info()['current']
+        current_video = self.model.get_current_video_info()
         if current_video != None:
             self.view.edit_video(current_video)
 
     def user_click_watch(self):
-        data = self.model.get_videos_info()
-        current_video = data['current']
+        current_video = self.model.get_current_video_info(en_full_path=True)
 
         if current_video != None:
-            path = data['current']['video_path']
+            path = current_video['video_path']
             self.view.display_video(path)
 
     ''' --------- USER DIALOG TAB INTERACTION ------------- '''
 
     def user_click_accept_delete(self):
-        current_video = self.model.get_videos_info()['current']
+        current_video = self.model.get_current_video_info()
         self.model.delete_video(current_video, True)
         self.model.update_storages()
         self.update_video_tab()
@@ -132,16 +143,10 @@ class Controller:
     ''' --------- USER EDIT TAB INTERACTION ------------- '''
 
     def user_accept_edit_clicked(self):
-        current_video = self.model.get_videos_info()['current']
         new_video_data = self.view.get_data_from_edit_fields()
-        is_good = self.model.check_video_data(new_video_data)
-        if is_good:
-            new_video_data['id'] = current_video['id']
-            new_video_data['video_format'] = current_video['video_format']
-            new_video_data['video_date'] = current_video['video_date']
-            new_video_data['video_icon'] = current_video['video_icon']
-            self.model.update_video_in_db(new_video_data)
-
+        data_correct = self.model.check_video_data(new_video_data)
+        if data_correct:
+            self.model.edit_video_info(new_video_data)
             self.model.update_storages()
             self.update_video_tab()
             self.user_switch_to_video_tab()
@@ -183,10 +188,10 @@ class Controller:
 
     def user_clicked_download(self):
         data_from_view = self.view.get_data_from_download_fields()
-
-        if self.model.check_download_video_data(data_from_view):
+        correct = self.model.check_download_video_data(data_from_view)
+        if correct:
+            self.view.enable_nav_controls(False)
             self.model.start_download()
-            self.user_switch_to_video_tab()
         else:
             self.user_select_fps()
 

@@ -45,7 +45,7 @@ class View():
         self.AppMessagerIcon.setText("")
         self.AppMessagerIcon.setObjectName("AppMessagerIcon")
         self.AppMessagerOutput = QtWidgets.QLabel(self.AppMessagerBar)
-        self.AppMessagerOutput.setGeometry(QtCore.QRect(110, 30, 55, 16))
+        self.AppMessagerOutput.setGeometry(QtCore.QRect(110, 30, 585, 16))
         self.AppMessagerOutput.setStyleSheet("\n"
 "background-color: rgb(0, 0, 0);\n"
 "color: rgb(255, 255, 255);")
@@ -769,7 +769,9 @@ class View():
 
     def edit_video(self, video):
         self.MainMenu.setCurrentWidget(self.EditVideoTab)
-        path, name = os.path.split(video['video_path'])
+
+        path = video['video_path']
+        name = video['video_name']
         desc = video['video_desc']
 
         self.EDT_NameInput.setText(name)
@@ -873,6 +875,17 @@ class View():
             self.set_disabled_style(self.DDT_DownloadButton)
             self.DDT_DownloadButton.setEnabled(False)
 
+    def enable_nav_controls(self, flag):
+        if flag:
+                self.set_enabled_style(self.VideosTabButton)
+                self.VideosTabButton.setEnabled(True)
+                self.set_enabled_style(self.DownloadTabButton)
+                self.DownloadTabButton.setEnabled(True)
+        else:
+                self.set_disabled_style(self.VideosTabButton)
+                self.VideosTabButton.setEnabled(False)
+                self.set_disabled_style(self.DownloadTabButton)
+                self.DownloadTabButton.setEnabled(False)
 
     def switch_to_video_tab(self):
         self.MainMenu.setCurrentWidget(self.VideoTab)
@@ -888,3 +901,6 @@ class View():
     def switch_to_dialog_tab(self, msg):
         self.MainMenu.setCurrentWidget(self.DialogTab)
         self.DLG_DetailsLabel.setText(msg)
+
+    def setup_app_message(self, msg):
+        self.AppMessagerOutput.setText(msg)
