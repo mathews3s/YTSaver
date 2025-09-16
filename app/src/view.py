@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication as AppQT,  QFileDialog
+from PyQt5.QtGui import QPixmap
 from player import VideoPlayer
 import os
 
@@ -10,6 +11,7 @@ class View():
         self.px_medium = 4
         self.player = None
         self.controller = None
+        self.temp_path = None
 
         self.app = AppQT([])
         self.window = QtWidgets.QMainWindow()
@@ -597,6 +599,8 @@ class View():
         self.DDT_DownloadButton.enterEvent = lambda event: self.highlight_item(self.DDT_DownloadButton, self.px_low)
         self.DDT_DownloadButton.leaveEvent = lambda event: self.unhighlight_item(self.DDT_DownloadButton, self.px_low)
 
+        self.EDT_ChangeButton.clicked.connect(lambda: self.discover_for_the_new_image())
+        self.DDT_CancelButton.clicked.connect(lambda: self.controller.user_click_cancel())
 
     def retranslate(self, MainWindow):
             _translate = QtCore.QCoreApplication.translate
@@ -657,6 +661,24 @@ class View():
             self.PT_SkipBackButton.setText(_translate("MainWindow", "5<< "))
             self.PT_TimeLabel.setText(_translate("MainWindow", "time"))
 
+    def discover_for_the_new_image(self):
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog.setNameFilter("Images (*.png *.jpg *.jpeg *.bmp)")
+
+        if file_dialog.exec_():
+            selected_file = file_dialog.selectedFiles()
+            self.temp_path = selected_file[0]
+            self.install_image_for_icon(self.EDT_Icon, self.temp_path)
+
+
+    def install_image_for_icon(self, icon, image):
+        pixmap = QPixmap(image)
+        scaled_pixmap = pixmap.scaledToHeight(icon.height())
+        icon.setPixmap(scaled_pixmap)
+        icon.setScaledContents(True)
+
+
     def edit_video_directory_discover(self):
         directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
         self.EDT_PathInput.setText(directory)
@@ -707,13 +729,14 @@ class View():
     def display_first_video(self, data):
         self.set_video1_info(data)
         self.VID1_Container.setVisible(True)
-
+        self.install_image_for_icon(self.VID1_Icon, data['video_icon'])
     def hide_first_video(self):
         self.VID1_Container.setVisible(False)
 
     def display_second_video(self, data):
         self.set_video2_info(data)
         self.VID2_Container.setVisible(True)
+        self.install_image_for_icon(self.VID2_Icon, data['video_icon'])
 
     def hide_second_video(self):
         self.VID2_Container.setVisible(False)
@@ -773,17 +796,22 @@ class View():
         path = video['video_path']
         name = video['video_name']
         desc = video['video_desc']
+        icon = video['video_icon']
+
+
 
         self.EDT_NameInput.setText(name)
         self.EDT_DescriptionInput.setText(desc)
         self.EDT_PathInput.setText(path)
+        self.temp_path = path
+        self.install_image_for_icon(self.EDT_Icon, icon)
 
     def get_data_from_edit_fields(self):
         info = {
             'video_name': self.EDT_NameInput.text(),
             'video_desc': self.EDT_DescriptionInput.text(),
             'video_path': self.EDT_PathInput.text(),
-            'video_icon': self.EDT_Icon.text()
+            'video_icon': self.temp_path
                 }
         return info
 
@@ -894,9 +922,11 @@ class View():
     def switch_to_download_tab(self):
         self.MainMenu.setCurrentWidget(self.DownloadTab)
 
-    def switch_to_download_details_tab(self, video_name):
+    def switch_to_download_details_tab(self, data):
         self.MainMenu.setCurrentWidget(self.DownloadDetailsTab)
-        self.DDT_VideoName.setText(video_name)
+        self.show_available_resolutions(data['resolutions'])
+        self.install_image_for_icon(self.DDT_VideoIcon, data['video_icon'])
+        self.DDT_VideoName.setText(data['video_name'])
 
     def switch_to_dialog_tab(self, msg):
         self.MainMenu.setCurrentWidget(self.DialogTab)

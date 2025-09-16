@@ -156,28 +156,31 @@ class Controller:
     def user_click_find(self):
         link = self.view.get_data_search_bar()
         if self.model.try_to_find(link):
-            info = self.model.get_suitable_streams_information()
-            self.view.switch_to_download_details_tab(info['video_name'])
-            self.view.show_available_resolutions(info['resolutions'])
+            self.model.fetch_common_download_data()
             print("++")
         else:
             print("___")
+
+    def common_download_data_ready(self, status):
+        if status:
+            data = self.model.get_common_download_data()
+            self.view.switch_to_download_details_tab(data)
+
 
     ''' --------- USER DOWNLOAD DETAILS TAB INTERACTION ------------- '''
 
     def user_select_resolution(self):
         data_from_view = self.view.get_data_from_download_fields()
         self.model.update_streams_by_filter(res=data_from_view['resolution'])
-        data_from_model = self.model.get_suitable_streams_information()
+        data_from_model = self.model.get_additional_download_data()
         self.view.show_available_formats(data_from_model['formats'])
 
     def user_select_format(self):
         data_from_view = self.view.get_data_from_download_fields()
         self.model.update_streams_by_filter(res=data_from_view['resolution'],
                                             fmt=data_from_view['format'])
-        data_from_model = self.model.get_suitable_streams_information()
+        data_from_model = self.model.get_additional_download_data()
         self.view.show_available_fps(data_from_model['fps'])
-        print("+++")
 
     def user_select_fps(self):
         data_from_view = self.view.get_data_from_download_fields()

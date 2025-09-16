@@ -1,24 +1,25 @@
 import sqlite3 as db
-import json
 import copy
 import os
 import time
 import re
 from datetime import datetime
-from pytubefix import YouTube as YTManager
+from pytubefix import YouTube
 import ffmpeg
 import threading
-import validators
+import requests
+
 from pytubefix.request import stream
 
 test_url = "https://www.youtube.com/watch?v=K6rKRdayW78"
-
+path_to_icons = "../appData/videoIcons"
 
 class Model:
 
     def __init__(self):
         self.db = "../appData/database.db"
         self.download_directory = "../../download"
+        self.path_to_icons = "../appData/videoIcons"
         self.controller = None
 
         self.founded_videos = None
@@ -28,18 +29,19 @@ class Model:
         self.current_video = None
         self.offset_collection = 0
 
+        self.pytube_instance = None
         self.download_url = None
-        self.manager = {
-            'youtube_obj' : None,
-            'streams': None,
+        self.video_for_downloading = {
+            'filtered_streams': None,
             'suit_video_stream': None,
             'suit_audio_stream': None,
             'video_name': None,
-            'resolutions' : None,
+            'resolutions': None,
             'formats': None,
             'fps': None,
-            'user_path': None,
             'user_format': None,
+            'thumbnail_url': None,
+            'video_icon': None
         }
 
     def set_feedback(self, cntrl):
@@ -58,16 +60,19 @@ class Model:
         return video_info
 
     def get_second_video_info(self):
-        video_info = {
-            "id": self.video_2['id'],
-            "video_name": self.video_2['video_name'],
-            "video_desc": self.video_2['video_desc'],
-            "video_format": self.video_2['video_format'],
-            "video_date": self.video_2['video_date'],
-            "video_path": self.video_2['video_path'],
-            "video_icon": self.video_2['video_icon']
-        }
-        return video_info
+        try:
+            video_info = {
+                "id": self.video_2['id'],
+                "video_name": self.video_2['video_name'],
+                "video_desc": self.video_2['video_desc'],
+                "video_format": self.video_2['video_format'],
+                "video_date": self.video_2['video_date'],
+                "video_path": self.video_2['video_path'],
+                "video_icon": self.video_2['video_icon']
+            }
+            return video_info
+        except Exception as e:
+            return None
 
     def get_current_video_info(self, en_full_path=None):
         try:
@@ -96,10 +101,11 @@ class Model:
     def update_storages(self):
         # проверяю записи в бд на их существование в NTFS
         self.check_videos_in_db()
-
+        video_in_db = self.fetch_videos_db()
         # проверяю баз. дир на наличие файлов
         if self.check_directory_exists(self.download_directory):
-            self.check_default_directory()
+            # self.check_default_directory()
+            pass
 
         self.set_videos_from_db()
         self.update_videos_count()
@@ -138,7 +144,7 @@ class Model:
             return False
 
     def find_videos_in_directory(self, dir):
-        video_extensions = ('.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv')  # Расширения видеофайлов
+        video_extensions = ('.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv')
         videos = []
 
         for root, dirs, files in os.walk(dir):
@@ -157,7 +163,6 @@ class Model:
                         'video_format': video_format,
                         'video_desc' : "nf",
                         'video_icon': "nf"
-
                     })
 
         return videos
@@ -172,7 +177,6 @@ class Model:
             RETURNS:  -
             """
         videos_to_remove = []
-        videos_to_change = []
         videos = self.fetch_videos_db()
 
         for video in videos:
@@ -181,9 +185,8 @@ class Model:
             id = video['id']
 
             if os.path.exists(video_path):
-                if not icon_path == 'nf':
-                    if not os.path.exists(icon_path):
-                        videos_to_change.append(video)
+                if not os.path.exists(icon_path):
+                    videos_to_remove.append(video)
             else:
                 videos_to_remove.append(video)
 
@@ -266,12 +269,12 @@ class Model:
 
         id = self.current_video['id']
         date = self.current_video['video_date']
-        icon = self.current_video['video_icon']
         format = self.current_video['video_format']
 
         new_path = data_for_update['video_path']
         new_name = data_for_update['video_name']
         new_desc = data_for_update['video_desc']
+        new_icon = data_for_update['video_icon']
 
         new_full_path = f"{new_path}/{new_name}.{format}"
         old_full_path = self.current_video['video_path']
@@ -280,7 +283,7 @@ class Model:
         data_for_update['id'] = id
         data_for_update['video_format'] = format
         data_for_update['video_date'] = date
-        data_for_update['video_icon'] = icon
+        data_for_update['video_icon'] = new_icon
         data_for_update['video_path'] = new_full_path
         data_for_update['video_name'] = new_name
         data_for_update['video_desc'] = new_desc
@@ -288,6 +291,17 @@ class Model:
         self.update_video_info(data_for_update, with_replace=replace_flag)
 
 
+    def fetch_last_id_db(self):
+        try:
+            with db.connect(self.db) as connection:
+                cursor = connection.cursor()
+                cursor.execute(f"SELECT MAX(id) FROM video")
+                last_id = cursor.fetchone()[0]
+                connection.commit()
+                return last_id
+
+        except Exception as e:
+            print(f"Произошла ошибка во время выполнения операции: {e}")
     def fetch_videos_db(self):
         try:
             with db.connect(self.db) as connection:
@@ -344,7 +358,9 @@ class Model:
                         video['video_date'],
                         video['video_path'],
                         video['video_icon']))
+            last_id = cursor.lastrowid
             connection.commit()
+            return last_id
         except Exception as e:
             print("Произошла ошибка во время выполнения операции вставки: %s", e)
 
@@ -376,39 +392,37 @@ class Model:
 
 
     def try_to_find(self, url):
-        # test_url = "https://www.youtube.com/watch?v=mRfUpvpEasQ"
         try:
-            self.manager['youtube_obj'] = YTManager(url, on_progress_callback=self.on_progress)
-            self.manager['video_name'] = self.manager['youtube_obj'].title
-            self.update_streams_by_filter()
-
+            self.pytube_instance = YouTube(url,
+                                           on_progress_callback=self.on_progress,
+                                           on_complete_callback=self.on_complete)
             return True
 
         except Exception as e:
             return False
 
-    def fetch_resolutions(self):
+    def fetch_resolutions(self, streams):
 
         resolutions = []
-        for stream in self.manager['streams']:
+        for stream in streams:
             resolution = stream.resolution
             if resolution and resolution not in resolutions:
                 resolutions.append(resolution)
         return resolutions
 
-    def fetch_formats(self):
+    def fetch_formats(self, streams):
 
         formats = []
-        for stream in self.manager['streams']:
+        for stream in streams:
             format = stream.subtype
             if format and format not in formats:
                 formats.append(format)
         return formats
 
-    def fetch_frames_per_second(self):
+    def fetch_frames_per_second(self, streams):
 
         result = []
-        for stream in self.manager['streams']:
+        for stream in streams:
             fps = stream.fps
             if fps and fps not in result:
                 result.append(fps)
@@ -416,78 +430,76 @@ class Model:
 
     def select_suit_stream(self):
 
-        self.manager['suit_video_stream'] = self.manager['streams'].first()
-        self.manager['suit_audio_stream'] = (self.manager['youtube_obj'].streams
-                                             .filter(only_audio=True, file_extension='mp4')
-                                             .order_by('abr')
-                                             .desc()
-                                             .first())
+        self.video_for_downloading['suit_video_stream'] = self.video_for_downloading['filtered_streams'].first()
+        self.video_for_downloading['suit_audio_stream'] = (self.pytube_instance.streams
+                                                           .filter(only_audio=True, file_extension='mp4')
+                                                           .order_by('abr')
+                                                           .desc()
+                                                           .first())
 
-    def get_suitable_streams_information(self):
+    def get_additional_download_data(self):
         return {
-            'video_name': self.manager['video_name'],
-            'resolutions': self.manager['resolutions'],
-            'formats': self.manager['formats'],
-            'fps': self.manager['fps']
+            'resolutions': self.video_for_downloading['resolutions'],
+            'formats': self.video_for_downloading['formats'],
+            'fps': self.video_for_downloading['fps']
         }
 
     def update_streams_by_filter(self, res=None, fmt=None, fps=None):
+        query = self.pytube_instance.streams.filter(progressive=False)
+        self.video_for_downloading['resolutions'] = self.fetch_resolutions(query)
 
-        if res and fmt and fps:
-            self.manager['streams'] = (self.manager['youtube_obj']
-                                       .streams.filter(progressive=False, res=res, file_extension=fmt, fps=int(fps) )
-                                       .order_by('resolution')
-                                       .desc())
-        elif res and fmt:
-            self.manager['streams'] = (self.manager['youtube_obj']
-                                       .streams.filter(progressive=False, res=res, file_extension=fmt)
-                                       .order_by('resolution')
-                                       .desc())
-            self.manager['fps'] = self.fetch_frames_per_second()
-        elif res:
-            self.manager['streams'] = (self.manager['youtube_obj']
-                                       .streams.filter(progressive=False,res=res)
-                                       .order_by('resolution')
-                                       .desc())
-            self.manager['formats'] = self.fetch_formats()
-        else:
-            self.manager['streams'] = (self.manager['youtube_obj']
-                                       .streams.filter(progressive=False)
-                                       .order_by('resolution')
-                                       .desc())
-            self.manager['resolutions'] = self.fetch_resolutions()
+        if res:
+            query = query.filter(res=res)
+            self.video_for_downloading['formats'] = self.fetch_formats(query)
+        if fmt:
+            query = query.filter(file_extension=fmt)
+            self.video_for_downloading['fps'] = self.fetch_frames_per_second(query)
+        if fps:
+            query = query.filter(fps=int(fps))
+
+        self.video_for_downloading['filtered_streams'] = query.order_by('resolution').desc()
 
     def check_download_video_data(self, data):
+        name = self.video_for_downloading['video_name']
+        format = data['format']
+        path = data['path']
+        if path == "default":
+            path = self.download_directory
+
         first_check = self.check_directory_exists(data['path'])
         if first_check:
-            path = data['path']
-            format = data['format']
-            name = self.manager['video_name']
+            self.video_for_downloading['user_format'] = format
+            self.video_for_downloading['user_full_path'] = f"{path}/{name}.{format}"
 
-            self.manager['user_format'] = format
-            self.manager['user_full_path'] = f"{path}/{name}.{format}"
             return True
         else:
             return False
 
-    def download_video(self):
-        video_filename = self.manager['suit_video_stream'].download(output_path='../../app/appData/')
-        audio_filename = self.manager['suit_audio_stream'].download(output_path='../../app/appData/')
+    def download_video_thread(self):
+        video_filename = self.video_for_downloading['suit_video_stream'].download(output_path='../../app/appData/')
+        audio_filename = self.video_for_downloading['suit_audio_stream'].download(output_path='../../app/appData/')
+
 
         input_video = ffmpeg.input(video_filename)
         input_audio = ffmpeg.input(audio_filename)
-        output_video = self.manager['user_full_path']
+        output_video = self.video_for_downloading['user_full_path']
 
-        ffmpeg.output(input_video, input_audio, output_video, codec='copy').overwrite_output().run(
-            quiet=True)
+        try:
+            ffmpeg.output(input_video, input_audio, output_video, codec='copy').overwrite_output().run(
+                quiet=True)
 
-        message = f"READY"
+            message = f"READY"
 
-        os.remove(video_filename)
-        os.remove(audio_filename)
+            os.remove(video_filename)
+            os.remove(audio_filename)
 
-        self.append_after_download()
-        self.controller.download_end(message)
+            self.append_after_download()
+            self.controller.download_end(message)
+        except Exception as e:
+            print(e)
+
+
+
 
     def on_progress(self, stream, chunk, bytes_remaining):
         total_size = stream.filesize
@@ -504,17 +516,67 @@ class Model:
 
     def start_download(self):
         self.select_suit_stream()
-        thread = threading.Thread(target=self.download_video)
+        thread = threading.Thread(target=self.download_video_thread)
         thread.start()
 
-    def append_after_download(self, stream):
-        formated_path = self.current_video['video_path']
-        video_data = {
-            "video_name": self.manager['video_name'],
-            "video_desc": "nf",
-            "video_format": self.manager['format'],
-            "video_date": self.manager['date'],
-            "video_path": formated_path,
-            "video_icon": "nf"
+    def fetching_common_data_thread(self):
+
+        self.video_for_downloading['video_name'] = self.pytube_instance.title
+        self.video_for_downloading['thumbnail_url'] = self.pytube_instance.thumbnail_url
+        self.video_for_downloading['video_icon'] = f"../../app/appData/temp/preview.jpg"
+        self.video_for_downloading['filtered_streams'] = self.pytube_instance.streams.filter(progressive=False)
+
+        response = requests.get(self.video_for_downloading['thumbnail_url'])
+
+        if response.status_code == 200:
+
+            file_name = self.video_for_downloading['video_icon']
+            with open(file_name, 'wb') as f:
+                f.write(response.content)
+            self.controller.common_download_data_ready(True)
+
+        else:
+            self.controller.common_download_data_ready(False)
+
+    def fetch_common_download_data(self):
+        thread = threading.Thread(target=self.fetching_common_data_thread)
+        thread.start()
+
+    def get_common_download_data(self):
+        self.update_streams_by_filter()
+        data = {
+            "video_name": self.video_for_downloading['video_name'],
+            "video_icon": self.video_for_downloading['video_icon'],
+            "resolutions": self.video_for_downloading['resolutions']
         }
+        return data
+
+
+    def append_after_download(self):
+        creation_time = os.path.getctime(self.video_for_downloading['user_full_path'])
+        formatted_date = datetime.fromtimestamp(creation_time).strftime('%d.%m.%Y')
+
+
+        video_data = {
+            "video_name": self.video_for_downloading['video_name'],
+            "video_desc": "-",
+            "video_format": self.video_for_downloading['user_format'],
+            "video_date": formatted_date,
+            "video_path": self.video_for_downloading['user_full_path'],
+            "video_icon": self.video_for_downloading['video_icon']
+        }
+        last_id = int(self.insert_video_into_db(video_data))
+
+
+        name = str(last_id)
+        temp_icon_path = f"../../app/appData/temp/preview.jpg"
+        formated_icon_path = f"../../app/appData/videoIcons/{name}.jpg"
+        os.rename(temp_icon_path, formated_icon_path)
+
+        video_data["video_icon"] = formated_icon_path
+        video_data["id"] = last_id
+
+        self.update_video_in_db(video_data)
+
+
 
