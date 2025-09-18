@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QApplication as AppQT,  QFileDialog
+from PyQt5.QtWidgets import QApplication as AppQT,  QFileDialog, QMessageBox
 from PyQt5.QtGui import QPixmap
 from player import VideoPlayer
 import os
@@ -11,7 +11,7 @@ class View():
         self.px_medium = 4
         self.player = None
         self.controller = None
-        self.temp_path = None
+        self.EDT_Icon_Path = None
 
         self.app = AppQT([])
         self.window = QtWidgets.QMainWindow()
@@ -506,12 +506,14 @@ class View():
         self.MainMenu.setCurrentIndex(0)
 
 
+
+
         self.window.setCentralWidget(self.WorkSpace)
         self.retranslate(self.window)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
-    def set_feedback(self, cntrl):
-        self.controller = cntrl
+    def set_feedback(self, instance):
+        self.controller = instance
 
     def setup_graphical_events(self):
         self.DownloadTabButton.clicked.connect(lambda: self.controller.user_switch_to_download_tab())
@@ -535,7 +537,7 @@ class View():
 
         self.VID2_Icon.mousePressEvent = lambda event: self.controller.user_click_video2_icon()
 
-        self.DOW_FindButton.clicked.connect(lambda: self.controller.user_click_find())
+        self.DOW_FindButton.clicked.connect(lambda: self.controller.find_youtube_video())
 
         self.DDT_DownloadButton.clicked.connect(lambda: self.controller.user_clicked_download())
         self.DDT_QualityBox.currentIndexChanged.connect(lambda: self.controller.user_select_resolution())
@@ -605,7 +607,7 @@ class View():
     def retranslate(self, MainWindow):
             _translate = QtCore.QCoreApplication.translate
             MainWindow.setWindowTitle(_translate("MainWindow", "YTSaver"))
-            self.AppMessagerOutput.setText(_translate("MainWindow", "SysMsg"))
+            self.AppMessagerOutput.setText(_translate("MainWindow", "Welcome!!"))
             self.VideosTabButton.setText(_translate("MainWindow", "Videos"))
             self.DownloadTabButton.setText(_translate("MainWindow", "Download"))
             self.VID_UpButton.setText(_translate("MainWindow", "↑"))
@@ -636,7 +638,7 @@ class View():
             self.DDT_BitrateLabel.setText(_translate("MainWindow", "Сhoose bitrate:"))
             self.DDT_DownloadButton.setText(_translate("MainWindow", "download video"))
             self.DDT_CancelButton.setText(_translate("MainWindow", "cancel"))
-            self.DDT_PathInput.setText(_translate("MainWindow", "..."))
+            self.DDT_PathInput.setText(_translate("MainWindow", "default"))
             self.DDT_PathLabel.setText(_translate("MainWindow", "Enter path"))
             self.DDT_LabLabel.setText(_translate("MainWindow", "Download details:"))
             self.EDT_TabLabel.setText(_translate("MainWindow", "Edit Video Info"))
@@ -668,8 +670,8 @@ class View():
 
         if file_dialog.exec_():
             selected_file = file_dialog.selectedFiles()
-            self.temp_path = selected_file[0]
-            self.install_image_for_icon(self.EDT_Icon, self.temp_path)
+            self.EDT_Icon_Path = selected_file[0]
+            self.install_image_for_icon(self.EDT_Icon, self.EDT_Icon_Path)
 
 
     def install_image_for_icon(self, icon, image):
@@ -793,7 +795,7 @@ class View():
     def edit_video(self, video):
         self.MainMenu.setCurrentWidget(self.EditVideoTab)
 
-        path = video['video_path']
+        path, _ = os.path.split(video['video_path'])
         name = video['video_name']
         desc = video['video_desc']
         icon = video['video_icon']
@@ -803,7 +805,7 @@ class View():
         self.EDT_NameInput.setText(name)
         self.EDT_DescriptionInput.setText(desc)
         self.EDT_PathInput.setText(path)
-        self.temp_path = path
+        self.EDT_Icon_Path = icon
         self.install_image_for_icon(self.EDT_Icon, icon)
 
     def get_data_from_edit_fields(self):
@@ -811,7 +813,7 @@ class View():
             'video_name': self.EDT_NameInput.text(),
             'video_desc': self.EDT_DescriptionInput.text(),
             'video_path': self.EDT_PathInput.text(),
-            'video_icon': self.temp_path
+            'video_icon': self.EDT_Icon_Path
                 }
         return info
 
@@ -934,3 +936,8 @@ class View():
 
     def setup_app_message(self, msg):
         self.AppMessagerOutput.setText(msg)
+
+    def end_by_error(self, code):
+        error_window = QMessageBox()
+        error_window.setFixedSize(1000, 200)
+        error_window.critical(self.window, 'Ошибка', "str(code)")
