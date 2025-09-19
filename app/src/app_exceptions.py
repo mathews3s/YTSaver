@@ -66,3 +66,21 @@ class DeleteVideoError(Exception):
     def __init__(self, message):
         super().__init__(message)
         self.title = "delete data from db error"
+
+
+class CheckingDataForVideoError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.title = "while checking data error"
+
+
+class FindingPytubeVideoError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.title = "delete data from db error"
+
+
+class ClearingDirectoryError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.title = "delete data from db error"

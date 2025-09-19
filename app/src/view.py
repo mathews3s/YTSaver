@@ -4,6 +4,7 @@ from PyQt5.QtGui import QPixmap
 from player import VideoPlayer
 import os
 
+
 class View():
 
     def __init__(self):
@@ -499,10 +500,10 @@ class View():
         self.MainMenu.addWidget(self.DialogTab)
 
 
-        self.enable_video_controls(False)
-        self.enable_download_controls(False)
+        self.enable_video_controls_buttons(False)
+        self.enable_download_tab_controls(False)
         self.EDT_PathLabel.setEnabled(False)
-        self.download_details_reset()
+        self.set_disabled_download_combo_boxes()
         self.MainMenu.setCurrentIndex(0)
 
 
@@ -512,97 +513,97 @@ class View():
         self.retranslate(self.window)
         QtCore.QMetaObject.connectSlotsByName(self.window)
 
-    def set_feedback(self, instance):
-        self.controller = instance
+    def view_set_feedback(self, controller):
+        self.controller = controller
 
     def setup_graphical_events(self):
-        self.DownloadTabButton.clicked.connect(lambda: self.controller.user_switch_to_download_tab())
-        self.VideosTabButton.clicked.connect(lambda: self.controller.user_switch_to_video_tab())
+        self.DownloadTabButton.clicked.connect(lambda: self.controller.user_switch_to_download_tab_handler())
+        self.VideosTabButton.clicked.connect(lambda: self.controller.user_switch_to_video_tab_handler())
 
-        self.VID_UpButton.clicked.connect(lambda: self.controller.user_click_scroll_up())
-        self.VID_DownButton.clicked.connect(lambda: self.controller.user_click_scroll_down())
+        self.VID_UpButton.clicked.connect(lambda: self.controller.user_click_scroll_up_page_handler())
+        self.VID_DownButton.clicked.connect(lambda: self.controller.user_click_scroll_down_page_handler())
 
-        self.VID1_Icon.mousePressEvent = lambda event: self.controller.user_click_video1_icon()
+        self.VID1_Icon.mousePressEvent = lambda event: self.controller.user_select_first_video_handler()
 
-        self.DLG_AcceptButton.mousePressEvent = lambda event: self.controller.user_click_accept_delete()
-        self.DLG_CancelButton.mousePressEvent = lambda event: self.controller.user_click_cancel()
+        self.DLG_AcceptButton.mousePressEvent = lambda event: self.controller.user_click_accept_delete_handler()
+        self.DLG_CancelButton.mousePressEvent = lambda event: self.controller.user_click_cancel_handler()
 
-        self.VID_DeleteButton.mousePressEvent = lambda event: self.controller.user_click_delete()
-        self.VID_EditButton.clicked.connect(lambda: self.controller.user_click_edit())
-        self.EDT_SaveButton.mousePressEvent = lambda event: self.controller.user_accept_edit_clicked()
-        self.EDT_CancelButton.mousePressEvent = lambda event: self.controller.user_click_cancel()
+        self.VID_DeleteButton.mousePressEvent = lambda event: self.controller.user_click_delete_selected_video_handler()
+        self.VID_EditButton.clicked.connect(lambda: self.controller.user_click_edit_selected_video_handler())
+        self.EDT_SaveButton.mousePressEvent = lambda event: self.controller.user_click_accept_edit_handler()
+        self.EDT_CancelButton.mousePressEvent = lambda event: self.controller.user_click_cancel_handler()
 
-        self.VID_WatchButton.clicked.connect(lambda: self.controller.user_click_watch())
-        self.PT_CancelButton.clicked.connect(lambda: self.controller.video_close())
+        self.VID_WatchButton.clicked.connect(lambda: self.controller.user_click_watch_selected_video_handler())
+        self.PT_CancelButton.clicked.connect(lambda: self.controller.user_close_video_preview_handler())
 
-        self.VID2_Icon.mousePressEvent = lambda event: self.controller.user_click_video2_icon()
+        self.VID2_Icon.mousePressEvent = lambda event: self.controller.user_select_second_video_handler()
 
-        self.DOW_FindButton.clicked.connect(lambda: self.controller.find_youtube_video())
+        self.DOW_FindButton.clicked.connect(lambda: self.controller.user_click_find_youtube_video_handler())
 
-        self.DDT_DownloadButton.clicked.connect(lambda: self.controller.user_clicked_download())
-        self.DDT_QualityBox.currentIndexChanged.connect(lambda: self.controller.user_select_resolution())
-        self.DDT_FormatBox.currentIndexChanged.connect(lambda: self.controller.user_select_format())
+        self.DDT_DownloadButton.clicked.connect(lambda: self.controller.user_clicked_download_youtube_video_handler())
+        self.DDT_QualityBox.currentIndexChanged.connect(lambda: self.controller.user_select_resolution_handler())
+        self.DDT_FormatBox.currentIndexChanged.connect(lambda: self.controller.user_select_format_handler())
         self.DDT_BitrateBox.currentIndexChanged.connect(lambda: self.controller.user_select_fps())
 
 
 
-        self.VideosTabButton.enterEvent = lambda event: self.highlight_item(self.VideosTabButton, self.px_low)
-        self.VideosTabButton.leaveEvent = lambda event: self.unhighlight_item(self.VideosTabButton, self.px_low)
-        self.DownloadTabButton.enterEvent = lambda event: self.highlight_item(self.DownloadTabButton, self.px_low)
-        self.DownloadTabButton.leaveEvent = lambda event: self.unhighlight_item(self.DownloadTabButton, self.px_low)
+        self.VideosTabButton.enterEvent = lambda event: self.highlight_item_border(self.VideosTabButton, self.px_low)
+        self.VideosTabButton.leaveEvent = lambda event: self.unhighlight_item_border(self.VideosTabButton, self.px_low)
+        self.DownloadTabButton.enterEvent = lambda event: self.highlight_item_border(self.DownloadTabButton, self.px_low)
+        self.DownloadTabButton.leaveEvent = lambda event: self.unhighlight_item_border(self.DownloadTabButton, self.px_low)
 
-        self.VID_UpButton.enterEvent = lambda event: self.highlight_item(self.VID_UpButton, self.px_low)
-        self.VID_UpButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_UpButton, self.px_low)
-        self.VID_DownButton.enterEvent = lambda event: self.highlight_item(self.VID_DownButton, self.px_low)
-        self.VID_DownButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_DownButton, self.px_low)
+        self.VID_UpButton.enterEvent = lambda event: self.highlight_item_border(self.VID_UpButton, self.px_low)
+        self.VID_UpButton.leaveEvent = lambda event: self.unhighlight_item_border(self.VID_UpButton, self.px_low)
+        self.VID_DownButton.enterEvent = lambda event: self.highlight_item_border(self.VID_DownButton, self.px_low)
+        self.VID_DownButton.leaveEvent = lambda event: self.unhighlight_item_border(self.VID_DownButton, self.px_low)
 
-        self.VID1_Icon.enterEvent = lambda event: self.highlight_item(self.VID1_Icon, self.px_low)
-        self.VID1_Icon.leaveEvent = lambda event: self.unhighlight_item(self.VID1_Icon, self.px_low)
-        self.VID_WatchButton.enterEvent = lambda event: self.highlight_item(self.VID_WatchButton, self.px_low)
-        self.VID_WatchButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_WatchButton, self.px_low)
-        self.VID_EditButton.enterEvent = lambda event: self.highlight_item(self.VID_EditButton, self.px_low)
-        self.VID_EditButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_EditButton, self.px_low)
-        self.VID_DeleteButton.enterEvent = lambda event: self.highlight_item(self.VID_DeleteButton, self.px_low)
-        self.VID_DeleteButton.leaveEvent = lambda event: self.unhighlight_item(self.VID_DeleteButton, self.px_low)
+        self.VID1_Icon.enterEvent = lambda event: self.highlight_item_border(self.VID1_Icon, self.px_low)
+        self.VID1_Icon.leaveEvent = lambda event: self.unhighlight_item_border(self.VID1_Icon, self.px_low)
+        self.VID_WatchButton.enterEvent = lambda event: self.highlight_item_border(self.VID_WatchButton, self.px_low)
+        self.VID_WatchButton.leaveEvent = lambda event: self.unhighlight_item_border(self.VID_WatchButton, self.px_low)
+        self.VID_EditButton.enterEvent = lambda event: self.highlight_item_border(self.VID_EditButton, self.px_low)
+        self.VID_EditButton.leaveEvent = lambda event: self.unhighlight_item_border(self.VID_EditButton, self.px_low)
+        self.VID_DeleteButton.enterEvent = lambda event: self.highlight_item_border(self.VID_DeleteButton, self.px_low)
+        self.VID_DeleteButton.leaveEvent = lambda event: self.unhighlight_item_border(self.VID_DeleteButton, self.px_low)
 
-        self.VID2_Icon.enterEvent = lambda event: self.highlight_item(self.VID2_Icon, self.px_low)
-        self.VID2_Icon.leaveEvent = lambda event: self.unhighlight_item(self.VID2_Icon, self.px_low)
+        self.VID2_Icon.enterEvent = lambda event: self.highlight_item_border(self.VID2_Icon, self.px_low)
+        self.VID2_Icon.leaveEvent = lambda event: self.unhighlight_item_border(self.VID2_Icon, self.px_low)
 
 
-        self.DOW_FindButton.enterEvent = lambda event: self.highlight_item(self.DOW_FindButton, self.px_low)
-        self.DOW_FindButton.leaveEvent = lambda event: self.unhighlight_item(self.DOW_FindButton, self.px_low)
+        self.DOW_FindButton.enterEvent = lambda event: self.highlight_item_border(self.DOW_FindButton, self.px_low)
+        self.DOW_FindButton.leaveEvent = lambda event: self.unhighlight_item_border(self.DOW_FindButton, self.px_low)
 
-        self.DLG_AcceptButton.enterEvent = lambda event: self.highlight_item(self.DLG_AcceptButton, self.px_low)
-        self.DLG_AcceptButton.leaveEvent = lambda event: self.unhighlight_item(self.DLG_AcceptButton, self.px_low)
-        self.DLG_CancelButton.enterEvent = lambda event: self.highlight_item(self.DLG_CancelButton, self.px_low)
-        self.DLG_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.DLG_CancelButton, self.px_low)
+        self.DLG_AcceptButton.enterEvent = lambda event: self.highlight_item_border(self.DLG_AcceptButton, self.px_low)
+        self.DLG_AcceptButton.leaveEvent = lambda event: self.unhighlight_item_border(self.DLG_AcceptButton, self.px_low)
+        self.DLG_CancelButton.enterEvent = lambda event: self.highlight_item_border(self.DLG_CancelButton, self.px_low)
+        self.DLG_CancelButton.leaveEvent = lambda event: self.unhighlight_item_border(self.DLG_CancelButton, self.px_low)
 
-        self.EDT_SaveButton.enterEvent = lambda event: self.highlight_item(self.EDT_SaveButton, self.px_low)
-        self.EDT_SaveButton.leaveEvent = lambda event: self.unhighlight_item(self.EDT_SaveButton, self.px_low)
-        self.EDT_CancelButton.enterEvent = lambda event: self.highlight_item(self.EDT_CancelButton, self.px_low)
-        self.EDT_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.EDT_CancelButton, self.px_low)
-        self.EDT_ChangeButton.enterEvent = lambda event: self.highlight_item(self.EDT_ChangeButton, self.px_low)
-        self.EDT_ChangeButton.leaveEvent = lambda event: self.unhighlight_item(self.EDT_ChangeButton, self.px_low)
+        self.EDT_SaveButton.enterEvent = lambda event: self.highlight_item_border(self.EDT_SaveButton, self.px_low)
+        self.EDT_SaveButton.leaveEvent = lambda event: self.unhighlight_item_border(self.EDT_SaveButton, self.px_low)
+        self.EDT_CancelButton.enterEvent = lambda event: self.highlight_item_border(self.EDT_CancelButton, self.px_low)
+        self.EDT_CancelButton.leaveEvent = lambda event: self.unhighlight_item_border(self.EDT_CancelButton, self.px_low)
+        self.EDT_ChangeButton.enterEvent = lambda event: self.highlight_item_border(self.EDT_ChangeButton, self.px_low)
+        self.EDT_ChangeButton.leaveEvent = lambda event: self.unhighlight_item_border(self.EDT_ChangeButton, self.px_low)
 
-        self.PT_CancelButton.enterEvent = lambda event: self.highlight_item(self.PT_CancelButton, self.px_low)
-        self.PT_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_CancelButton, self.px_low)
-        self.PT_StopOrPlayButton.enterEvent = lambda event: self.highlight_item(self.PT_StopOrPlayButton, self.px_low)
-        self.PT_StopOrPlayButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_StopOrPlayButton, self.px_low)
-        self.PT_ShipForwardButton.enterEvent = lambda event: self.highlight_item(self.PT_ShipForwardButton, self.px_low)
-        self.PT_ShipForwardButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_ShipForwardButton, self.px_low)
-        self.PT_SkipBackButton.enterEvent = lambda event: self.highlight_item(self.PT_SkipBackButton, self.px_low)
-        self.PT_SkipBackButton.leaveEvent = lambda event: self.unhighlight_item(self.PT_SkipBackButton, self.px_low)
+        self.PT_CancelButton.enterEvent = lambda event: self.highlight_item_border(self.PT_CancelButton, self.px_low)
+        self.PT_CancelButton.leaveEvent = lambda event: self.unhighlight_item_border(self.PT_CancelButton, self.px_low)
+        self.PT_StopOrPlayButton.enterEvent = lambda event: self.highlight_item_border(self.PT_StopOrPlayButton, self.px_low)
+        self.PT_StopOrPlayButton.leaveEvent = lambda event: self.unhighlight_item_border(self.PT_StopOrPlayButton, self.px_low)
+        self.PT_ShipForwardButton.enterEvent = lambda event: self.highlight_item_border(self.PT_ShipForwardButton, self.px_low)
+        self.PT_ShipForwardButton.leaveEvent = lambda event: self.unhighlight_item_border(self.PT_ShipForwardButton, self.px_low)
+        self.PT_SkipBackButton.enterEvent = lambda event: self.highlight_item_border(self.PT_SkipBackButton, self.px_low)
+        self.PT_SkipBackButton.leaveEvent = lambda event: self.unhighlight_item_border(self.PT_SkipBackButton, self.px_low)
 
-        self.EDT_PathInput.mousePressEvent = lambda event: self.edit_video_directory_discover()
-        self.DDT_PathInput.mousePressEvent = lambda event: self.download_video_directory_discover()
+        self.EDT_PathInput.mousePressEvent = lambda event: self.edit_video_tab_new_directory_discover()
+        self.DDT_PathInput.mousePressEvent = lambda event: self.download_video_tab_save_directory_discover()
 
-        self.DDT_CancelButton.enterEvent = lambda event: self.highlight_item(self.DDT_CancelButton, self.px_low)
-        self.DDT_CancelButton.leaveEvent = lambda event: self.unhighlight_item(self.DDT_CancelButton, self.px_low)
-        self.DDT_DownloadButton.enterEvent = lambda event: self.highlight_item(self.DDT_DownloadButton, self.px_low)
-        self.DDT_DownloadButton.leaveEvent = lambda event: self.unhighlight_item(self.DDT_DownloadButton, self.px_low)
+        self.DDT_CancelButton.enterEvent = lambda event: self.highlight_item_border(self.DDT_CancelButton, self.px_low)
+        self.DDT_CancelButton.leaveEvent = lambda event: self.unhighlight_item_border(self.DDT_CancelButton, self.px_low)
+        self.DDT_DownloadButton.enterEvent = lambda event: self.highlight_item_border(self.DDT_DownloadButton, self.px_low)
+        self.DDT_DownloadButton.leaveEvent = lambda event: self.unhighlight_item_border(self.DDT_DownloadButton, self.px_low)
 
-        self.EDT_ChangeButton.clicked.connect(lambda: self.discover_for_the_new_image())
-        self.DDT_CancelButton.clicked.connect(lambda: self.controller.user_click_cancel())
+        self.EDT_ChangeButton.clicked.connect(lambda: self.edit_video_tab_icon_file_discovery())
+        self.DDT_CancelButton.clicked.connect(lambda: self.controller.user_click_cancel_handler())
 
     def retranslate(self, MainWindow):
             _translate = QtCore.QCoreApplication.translate
@@ -663,7 +664,7 @@ class View():
             self.PT_SkipBackButton.setText(_translate("MainWindow", "5<< "))
             self.PT_TimeLabel.setText(_translate("MainWindow", "time"))
 
-    def discover_for_the_new_image(self):
+    def edit_video_tab_icon_file_discovery(self):
         file_dialog = QFileDialog()
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         file_dialog.setNameFilter("Images (*.png *.jpg *.jpeg *.bmp)")
@@ -671,128 +672,120 @@ class View():
         if file_dialog.exec_():
             selected_file = file_dialog.selectedFiles()
             self.EDT_Icon_Path = selected_file[0]
-            self.install_image_for_icon(self.EDT_Icon, self.EDT_Icon_Path)
+            self.install_image_in_icon(self.EDT_Icon, self.EDT_Icon_Path)
 
+    def edit_video_tab_new_directory_discover(self):
+        directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
+        self.EDT_PathInput.setText(directory)
 
-    def install_image_for_icon(self, icon, image):
+    def download_video_tab_save_directory_discover(self):
+        directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
+        self.DDT_PathInput.setText(directory)
+
+    def install_image_in_icon(self, icon, image):
         pixmap = QPixmap(image)
         scaled_pixmap = pixmap.scaledToHeight(icon.height())
         icon.setPixmap(scaled_pixmap)
         icon.setScaledContents(True)
 
-
-    def edit_video_directory_discover(self):
-        directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
-        self.EDT_PathInput.setText(directory)
-
-    def download_video_directory_discover(self):
-        directory = QFileDialog.getExistingDirectory(self.window,  'Выберите директорию', '/')
-        self.DDT_PathInput.setText(directory)
-
-    def show_main_window(self, allow):
-        if allow:
+    def main_window_open(self, allow_open):
+        if allow_open:
             self.window.show()
         else:
             self.window.hide()
 
-    def highlight_item(self, item, px):
+    def highlight_item_border(self, item, border_px):
         current_style = item.styleSheet()
-        new_style = current_style + f";border: {px}px solid white;"
+        new_style = current_style + f";border: {border_px}px solid white;"
         item.setStyleSheet(new_style)
 
-    def unhighlight_item(self, item, px):
+    def unhighlight_item_border(self, item, border_px):
         current_style = item.styleSheet()
-        new_style = current_style.replace(f"border: {px}px solid white;", "")
+        new_style = current_style.replace(f"border: {border_px}px solid white;", "")
         item.setStyleSheet(new_style)
 
-    def set_video1_info(self, video_info):
-        self.VID1_NameLabel.setText(str(video_info['video_name']))
-        self.VID1_DescriptionLabel.setText(str(video_info['video_desc']))
-        self.VID1_PathLabel.setText(str(video_info['video_path']))
-        self.VID1_DateCreationLabel.setText(str(video_info['video_date']))
-
-    def set_video2_info(self, video_info):
-        self.VID2_NameLabel.setText(str(video_info['video_name']))
-        self.VID2_DescriptionLabel.setText(str(video_info['video_desc']))
-        self.VID2_PathLabel.setText(str(video_info['video_path']))
-        self.VID2_DateCreationLabel.setText(str(video_info['video_date']))
-
-    def disable_videos_display(self):
-        self.VID_NothingLabel.setVisible(True)
-        self.VID1_Container.setVisible(False)
-        self.VID2_Container.setVisible(False)
-
-    def enable_videos_display(self):
-        self.VID_NothingLabel.setVisible(False)
-
-    def update_displayed_count_videos(self, count):
-        self.VID_CountValue.setText(str(count))
-
-    def display_first_video(self, data):
-        self.set_video1_info(data)
-        self.VID1_Container.setVisible(True)
-        self.install_image_for_icon(self.VID1_Icon, data['video_icon'])
-    def hide_first_video(self):
-        self.VID1_Container.setVisible(False)
-
-    def display_second_video(self, data):
-        self.set_video2_info(data)
-        self.VID2_Container.setVisible(True)
-        self.install_image_for_icon(self.VID2_Icon, data['video_icon'])
-
-    def hide_second_video(self):
-        self.VID2_Container.setVisible(False)
-
-    def mark_first_video_as_current(self, flag):
-        if flag:
-            self.highlight_item(self.VID1_Icon, self.px_medium)
-            self.unhighlight_item(self.VID2_Icon, self.px_medium)
-        else:
-            self.unhighlight_item(self.VID1_Icon, self.px_medium)
-
-    def mark_second_video_as_current(self, flag):
-        if flag:
-            self.highlight_item(self.VID2_Icon, self.px_medium)
-            self.unhighlight_item(self.VID1_Icon, self.px_medium)
-        else:
-            self.unhighlight_item(self.VID2_Icon, self.px_medium)
-
-    def set_disabled_style(self, element):
+    def set_disabled_style_for_element(self, element):
         current_style = element.styleSheet()
         new_style = current_style + f";background-color: lightgray; color: darkgray;"
         element.setStyleSheet(new_style)
         element.setEnabled(False)
 
-    def set_enabled_style(self, element):
+    def set_enabled_style_for_element(self, element):
         current_style = element.styleSheet()
         new_style = current_style.replace(f";background-color: lightgray; color: darkgray;", "")
         element.setStyleSheet(new_style)
         element.setEnabled(True)
 
-    def enable_video_controls(self, flag):
+    def set_first_video_container_info(self, video_info):
+        self.VID1_NameLabel.setText(str(video_info['video_name']))
+        self.VID1_DescriptionLabel.setText(str(video_info['video_desc']))
+        self.VID1_PathLabel.setText(str(video_info['video_path']))
+        self.VID1_DateCreationLabel.setText(str(video_info['video_date']))
+
+    def set_second_video_container_info(self, video_info):
+        self.VID2_NameLabel.setText(str(video_info['video_name']))
+        self.VID2_DescriptionLabel.setText(str(video_info['video_desc']))
+        self.VID2_PathLabel.setText(str(video_info['video_path']))
+        self.VID2_DateCreationLabel.setText(str(video_info['video_date']))
+
+    def videos_containers_empty(self):
+        self.VID_NothingLabel.setVisible(True)
+        self.VID1_Container.setVisible(False)
+        self.VID2_Container.setVisible(False)
+
+    def videos_containers_not_empty(self):
+        self.VID_NothingLabel.setVisible(False)
+
+    def set_videos_count_text(self, count):
+        self.VID_CountValue.setText(str(count))
+
+    def display_first_video_container(self, data):
+        self.set_first_video_container_info(data)
+        self.VID1_Container.setVisible(True)
+        self.install_image_in_icon(self.VID1_Icon, data['video_icon'])
+
+    def hide_first_video_container(self):
+        self.VID1_Container.setVisible(False)
+
+    def display_second_video__container(self, data):
+        self.set_second_video_container_info(data)
+        self.VID2_Container.setVisible(True)
+        self.install_image_in_icon(self.VID2_Icon, data['video_icon'])
+
+    def hide_second_video_container(self):
+        self.VID2_Container.setVisible(False)
+
+    def mark_first_video_as_selected(self, flag):
         if flag:
-            self.set_enabled_style(self.VID_WatchButton)
-            self.set_enabled_style(self.VID_EditButton)
-            self.set_enabled_style(self.VID_DeleteButton)
+            self.highlight_item_border(self.VID1_Icon, self.px_medium)
+            self.unhighlight_item_border(self.VID2_Icon, self.px_medium)
+        else:
+            self.unhighlight_item_border(self.VID1_Icon, self.px_medium)
+
+    def mark_second_video_as_selected(self, flag):
+        if flag:
+            self.highlight_item_border(self.VID2_Icon, self.px_medium)
+            self.unhighlight_item_border(self.VID1_Icon, self.px_medium)
+        else:
+            self.unhighlight_item_border(self.VID2_Icon, self.px_medium)
+
+    def enable_video_controls_buttons(self, flag):
+        if flag:
+            self.set_enabled_style_for_element(self.VID_WatchButton)
+            self.set_enabled_style_for_element(self.VID_EditButton)
+            self.set_enabled_style_for_element(self.VID_DeleteButton)
             self.VID_WatchButton.setEnabled(True)
             self.VID_EditButton.setEnabled(True)
             self.VID_DeleteButton.setEnabled(True)
         else:
-            self.set_disabled_style(self.VID_WatchButton)
-            self.set_disabled_style(self.VID_EditButton)
-            self.set_disabled_style(self.VID_DeleteButton)
+            self.set_disabled_style_for_element(self.VID_WatchButton)
+            self.set_disabled_style_for_element(self.VID_EditButton)
+            self.set_disabled_style_for_element(self.VID_DeleteButton)
             self.VID_WatchButton.setEnabled(False)
             self.VID_EditButton.setEnabled(False)
             self.VID_DeleteButton.setEnabled(False)
 
-
-
-    def delete_video_dialog(self, video_name):
-        self.MainMenu.setCurrentWidget(self.DialogTab)
-        self.DLG_DetailsLabel.setText(f"to delete video {video_name}")
-
-
-    def edit_video(self, video):
+    def open_edit_video_tab(self, video):
         self.MainMenu.setCurrentWidget(self.EditVideoTab)
 
         path, _ = os.path.split(video['video_path'])
@@ -800,15 +793,27 @@ class View():
         desc = video['video_desc']
         icon = video['video_icon']
 
-
-
         self.EDT_NameInput.setText(name)
         self.EDT_DescriptionInput.setText(desc)
         self.EDT_PathInput.setText(path)
         self.EDT_Icon_Path = icon
-        self.install_image_for_icon(self.EDT_Icon, icon)
+        self.install_image_in_icon(self.EDT_Icon, icon)
 
-    def get_data_from_edit_fields(self):
+    def open_video_preview_tab(self, data):
+        self.MainMenu.setCurrentWidget(self.PreviewTab)
+        self.player = VideoPlayer(
+                video_path= data['video_path'],
+                output_widget= self.PT_Video,
+                pause_widget= self.PT_StopOrPlayButton,
+                back_widget= self.PT_SkipBackButton,
+                forward_widget= self.PT_ShipForwardButton,
+                time_widget=self.PT_TimeLabel)
+
+    def clode_video_preview_tab(self):
+        self.MainMenu.setCurrentWidget(self.VideoTab)
+        del self.player
+
+    def get_data_from_edit_video_tab(self):
         info = {
             'video_name': self.EDT_NameInput.text(),
             'video_desc': self.EDT_DescriptionInput.text(),
@@ -817,78 +822,11 @@ class View():
                 }
         return info
 
-
-    def display_video(self, path):
-        self.MainMenu.setCurrentWidget(self.PreviewTab)
-        self.player = VideoPlayer(
-            path,
-            self.PT_Video,
-            self.PT_StopOrPlayButton,
-            self.PT_SkipBackButton,
-            self.PT_ShipForwardButton,
-            self.PT_TimeLabel
-        )
-
-    def undisplay_video(self):
-        self.MainMenu.setCurrentWidget(self.VideoTab)
-        del self.player
-
-    def get_data_search_bar(self):
+    def get_data_from_find_tab(self):
         url = self.DOW_LinkInput.text()
         return url
 
-
-
-
-
-    def show_available_resolutions(self, resolutions):
-
-        self.DDT_QualityBox.blockSignals(True)
-
-
-        self.set_disabled_style(self.DDT_FormatBox)
-        self.set_disabled_style(self.DDT_BitrateBox)
-        self.DDT_QualityBox.clear()
-        self.set_enabled_style(self.DDT_QualityBox)
-        self.DDT_QualityBox.addItem('-')
-        for element in resolutions:
-            self.DDT_QualityBox.addItem(element)
-
-        self.DDT_QualityBox.blockSignals(False)
-
-    def show_available_formats(self, formats):
-
-        self.DDT_FormatBox.blockSignals(True)
-
-
-        self.set_disabled_style(self.DDT_BitrateBox)
-        self.DDT_FormatBox.clear()
-        self.set_enabled_style(self.DDT_FormatBox)
-        self.DDT_FormatBox.addItem('-')
-        for element in formats:
-            self.DDT_FormatBox.addItem(element)
-
-        self.DDT_FormatBox.blockSignals(False)
-
-    def show_available_fps(self, frames):
-
-        self.DDT_BitrateBox.blockSignals(True)
-
-
-        self.DDT_BitrateBox.clear()
-        self.set_enabled_style(self.DDT_BitrateBox)
-        self.DDT_BitrateBox.addItem('-')
-        for element in frames:
-                self.DDT_BitrateBox.addItem(str(element))
-
-        self.DDT_BitrateBox.blockSignals(False)
-
-    def download_details_reset(self):
-        self.set_disabled_style(self.DDT_FormatBox)
-        self.set_disabled_style(self.DDT_QualityBox)
-        self.set_disabled_style(self.DDT_BitrateBox)
-
-    def get_data_from_download_fields(self):
+    def get_data_from_download_tab(self):
         info = {
             'resolution': self.DDT_QualityBox.currentText(),
             'format': self.DDT_FormatBox.currentText(),
@@ -897,47 +835,96 @@ class View():
         }
         return info
 
-    def enable_download_controls(self, flag):
-        if flag:
-            self.set_enabled_style(self.DDT_DownloadButton)
-            self.DDT_DownloadButton.setEnabled(True)
-        else:
-            self.set_disabled_style(self.DDT_DownloadButton)
-            self.DDT_DownloadButton.setEnabled(False)
+    def display_available_resolutions(self, resolutions):
 
-    def enable_nav_controls(self, flag):
+        self.DDT_QualityBox.blockSignals(True)
+
+
+        self.set_disabled_style_for_element(self.DDT_FormatBox)
+        self.set_disabled_style_for_element(self.DDT_BitrateBox)
+        self.DDT_QualityBox.clear()
+        self.set_enabled_style_for_element(self.DDT_QualityBox)
+        self.DDT_QualityBox.addItem('-')
+        for element in resolutions:
+            self.DDT_QualityBox.addItem(element)
+
+        self.DDT_QualityBox.blockSignals(False)
+
+    def display_available_formats(self, formats):
+
+        self.DDT_FormatBox.blockSignals(True)
+
+        self.set_disabled_style_for_element(self.DDT_BitrateBox)
+        self.DDT_FormatBox.clear()
+        self.set_enabled_style_for_element(self.DDT_FormatBox)
+        self.DDT_FormatBox.addItem('-')
+        for element in formats:
+            self.DDT_FormatBox.addItem(element)
+
+        self.DDT_FormatBox.blockSignals(False)
+
+    def display_available_fps(self, frames):
+
+        self.DDT_BitrateBox.blockSignals(True)
+
+        self.DDT_BitrateBox.clear()
+        self.set_enabled_style_for_element(self.DDT_BitrateBox)
+        self.DDT_BitrateBox.addItem('-')
+        for element in frames:
+                self.DDT_BitrateBox.addItem(str(element))
+
+        self.DDT_BitrateBox.blockSignals(False)
+
+    def set_disabled_download_combo_boxes(self):
+        self.set_disabled_style_for_element(self.DDT_FormatBox)
+        self.set_disabled_style_for_element(self.DDT_QualityBox)
+        self.set_disabled_style_for_element(self.DDT_BitrateBox)
+
+
+    def enable_download_tab_controls(self, flag):
         if flag:
-                self.set_enabled_style(self.VideosTabButton)
-                self.VideosTabButton.setEnabled(True)
-                self.set_enabled_style(self.DownloadTabButton)
-                self.DownloadTabButton.setEnabled(True)
+            self.set_enabled_style_for_element(self.DDT_DownloadButton)
+            self.DDT_DownloadButton.setEnabled(True)
+            self.set_enabled_style_for_element(self.DDT_CancelButton)
+            self.DDT_CancelButton.setEnabled(True)
         else:
-                self.set_disabled_style(self.VideosTabButton)
-                self.VideosTabButton.setEnabled(False)
-                self.set_disabled_style(self.DownloadTabButton)
-                self.DownloadTabButton.setEnabled(False)
+            self.set_disabled_style_for_element(self.DDT_DownloadButton)
+            self.DDT_DownloadButton.setEnabled(False)
+            self.set_enabled_style_for_element(self.DDT_CancelButton)
+            self.DDT_CancelButton.setEnabled(False)
+
+    def enable_navigation_bar_controls(self, flag):
+        if flag:
+            self.set_enabled_style_for_element(self.VideosTabButton)
+            self.VideosTabButton.setEnabled(True)
+            self.set_enabled_style_for_element(self.DownloadTabButton)
+            self.DownloadTabButton.setEnabled(True)
+        else:
+            self.set_disabled_style_for_element(self.VideosTabButton)
+            self.VideosTabButton.setEnabled(False)
+            self.set_disabled_style_for_element(self.DownloadTabButton)
+            self.DownloadTabButton.setEnabled(False)
 
     def switch_to_video_tab(self):
         self.MainMenu.setCurrentWidget(self.VideoTab)
-
 
     def switch_to_download_tab(self):
         self.MainMenu.setCurrentWidget(self.DownloadTab)
 
     def switch_to_download_details_tab(self, data):
         self.MainMenu.setCurrentWidget(self.DownloadDetailsTab)
-        self.show_available_resolutions(data['resolutions'])
-        self.install_image_for_icon(self.DDT_VideoIcon, data['video_icon'])
+        self.display_available_resolutions(data['resolutions'])
+        self.install_image_in_icon(self.DDT_VideoIcon, data['video_icon'])
         self.DDT_VideoName.setText(data['video_name'])
 
-    def switch_to_dialog_tab(self, msg):
+    def switch_to_delete_tab(self, msg):
         self.MainMenu.setCurrentWidget(self.DialogTab)
         self.DLG_DetailsLabel.setText(msg)
 
-    def setup_app_message(self, msg):
+    def set_text_app_messenger(self, msg):
         self.AppMessagerOutput.setText(msg)
 
-    def end_by_error(self, code):
+    def show_critical_error_window(self, error_message):
         error_window = QMessageBox()
         error_window.setFixedSize(1000, 200)
-        error_window.critical(self.window, 'Ошибка', "str(code)")
+        error_window.critical(self.window, 'Ошибка', error_message)

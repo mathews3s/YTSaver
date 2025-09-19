@@ -1,0 +1,184 @@
+from db_operations import *
+from files_operations import *
+from datetime import datetime
+import os
+
+
+def move_in_videos_collection(collection, offset):
+    next_item_1 = None
+    next_item_2 = None
+
+    new_item_1 = None
+    new_item_2 = None
+    try:
+        index_first = offset + 0
+        index_second = offset + 1
+        next_item_1 = collection[index_first]
+        next_item_2 = collection[index_second]
+    except Exception:
+        pass
+
+    if (next_item_2 is None) and (not next_item_1 is None):
+        new_item_1 = next_item_1
+        new_item_2 = None
+    elif (not next_item_1 is None) and (not next_item_2 is None):
+        new_item_1 = next_item_1
+        new_item_2  = next_item_2
+    else:
+        new_item_1  = next_item_1
+        new_item_2 = next_item_2
+    return new_item_1, new_item_2
+
+
+def change_offset_in_collection(offset: int, collection_count: int, direction_up: bool = True):
+    if direction_up:
+        if offset > 0:
+            offset -= 2
+    else:
+        if offset < collection_count - 2:
+            offset += 2
+    return offset
+
+
+def edit_video(data, database, with_replace: bool, replace_from_path, replace_to_path):
+    try:
+        update_video_db(database, data)
+        if with_replace:
+            os.rename(replace_from_path, replace_to_path)
+    except Exception as err:
+        raise EditVideoError(err)
+
+
+def delete_video(video, database, full_delete: bool):
+    try:
+        path_to_video_file = video['video_path']
+        video_id = video['id']
+        delete_video_db(database, video_id)
+
+        if full_delete:
+            if os.path.exists(path_to_video_file):
+                os.remove(path_to_video_file)
+
+    except Exception as err:
+        raise DeleteVideoError(err)
+
+def add_video(database, data, path_to_save):
+    try:
+        last_id = int(create_video_db(database, data))
+
+        icon_name = str(last_id)
+        temp_icon = data["video_icon"]
+        icon_extenshion = get_file_extension(temp_icon)
+        new_icon = get_full_path(f"{path_to_save}/{icon_name}.{icon_extenshion}")
+
+        os.rename(temp_icon, new_icon)
+
+        data["video_icon"] = new_icon
+        data["id"] = last_id
+
+        update_video_db(database, data)
+    except Exception as err:
+        raise AddingDownloadVideoDatabaseError(err)
+
+
+
+
+def check_new_data_for_edit_video(new_video_data):
+    try:
+        first_check = check_directory_for_existence(new_video_data['video_path'])
+        third_check = check_directory_for_existence(new_video_data['video_path'])
+        second_check = check_file_name(new_video_data['video_name'])
+
+        if not first_check or not second_check or not third_check:
+            return False
+        else:
+            return True
+    except Exception as err:
+        raise CheckingDataForVideoError(err)
+
+def check_data_for_downloading_video(data):
+    path = data['path']
+    if path == "default":
+        return True
+    first_check = check_directory_for_existence(path)
+
+    if first_check:
+        return True
+    else:
+        return False
+
+def prepare_data_for_downloading(data, path_to_download):
+    format = data['format']
+    path = data['path']
+    if path == "default":
+        path = get_full_path(path_to_download)
+    return path, format
+
+def prepare_new_data_for_downloaded_video(video_file_path, preview_file_path):
+    try:
+        creation_time = os.path.getctime(video_file_path)
+        date = datetime.fromtimestamp(creation_time).strftime('%d.%m.%Y')
+        name = get_file_name(absolute_path=video_file_path)
+        format = get_file_extension(absolute_path=video_file_path, with_dot=False)
+        icon = get_full_path(preview_file_path)
+        icon = normalize_path(icon)
+        full_path = normalize_path(video_file_path)
+
+        video_data = {
+            "video_name": name,
+            "video_desc": "empty",
+            "video_format": format,
+            "video_date": date,
+            "video_path": full_path,
+            "video_icon": icon
+        }
+        return video_data
+    except Exception as err:
+        raise PreparingDownloadedVideoDataError(err)
+
+
+
+
+
+def prepare_new_data_for_editing_video(video_for_edit, data):
+    id = video_for_edit['id']
+    date = video_for_edit['video_date']
+    format = video_for_edit['video_format']
+
+    new_path = data['video_path']
+    new_name = data['video_name']
+    new_desc = data['video_desc']
+    new_icon = data['video_icon']
+
+    new_full_path = f"{new_path}/{new_name}.{format}"
+    old_full_path = video_for_edit['video_path']
+
+    replace_flag = True if new_full_path != old_full_path else False
+
+    data['id'] = id
+    data['video_format'] = format
+    data['video_date'] = date
+    data['video_icon'] = new_icon
+    data['video_path'] = new_full_path
+    data['video_name'] = new_name
+    data['video_desc'] = new_desc
+
+    return replace_flag
+
+
+def get_nonexistence_videos_in_db(database):
+
+    videos_to_remove = []
+    video_records = read_videos_db(database)
+
+    if not video_records is None:
+
+        for video in video_records:
+            video_path = video['video_path']
+            icon_path = video['video_icon']
+            if os.path.exists(video_path):
+                if not os.path.exists(icon_path):
+                    videos_to_remove.append(video)
+            else:
+                videos_to_remove.append(video)
+    return videos_to_remove
