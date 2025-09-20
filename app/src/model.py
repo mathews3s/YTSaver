@@ -1,20 +1,19 @@
 import copy
 import threading
-from video_operations import *
-from pytube_operations import *
+from app.utils.video_operations import *
+from app.utils.pytube_operations import *
+from app.utils.files_operations import *
 
-temp_preview_filename = f"../../app/appData/temp/preview.jpg"
-db_filename = "../appData/database.db"
-save_icons_app_folder = f"../appData/videoIcons"
-temp_data_app_folder = '../../app/appData/temp/'
-download_app_folder = "../../download"
 
 
 class Model:
 
     def __init__(self):
-        self.db = db_filename
-        self.download_directory = download_app_folder
+        self.db_filename = None
+        self.download_app_folder = None
+        self.temp_data_folder = None
+        self.download_icons_app_folder = None
+        self.temp_preview_filename = None
 
         self.controller = None
 
@@ -46,18 +45,31 @@ class Model:
             'temp_aud_filename': None,
             'temp_out_filename': None,
         }
+    def prepare_paths_for_resources(self, paths_dict):
+        self.temp_preview_filename = paths_dict["temp_preview_filename"]
+        self.db_filename = paths_dict["db_filename"]
+        self.download_icons_app_folder = paths_dict["save_icons_app_folder"]
+        self.temp_data_app_folder = paths_dict["temp_data_app_folder"]
+        self.download_app_folder = paths_dict["download_app_folder"]
+
+        os.makedirs(os.path.join(paths_dict["download_app_folder"]), exist_ok=True)
+        os.makedirs(os.path.join(paths_dict["app_folder"]), exist_ok=True)
+        os.makedirs(os.path.join(paths_dict["app_data_folder"]), exist_ok=True)
+        os.makedirs(os.path.join(paths_dict["save_icons_app_folder"]), exist_ok=True)
+        os.makedirs(os.path.join(paths_dict["temp_data_app_folder"]), exist_ok=True)
 
     def model_check_resources(self):
         try:
-            if not check_file_exist(self.db):
-                create_database(self.db)
-            check_directory_for_existence(path=download_app_folder)
-            check_directory_for_existence(path=temp_data_app_folder)
-            check_directory_for_existence(path=save_icons_app_folder)
-            clear_directory(directory=temp_data_app_folder)
+            current_directory = os.getcwd()
+            if not check_file_exist(self.db_filename):
+                create_database(self.db_filename)
+            check_directory_for_existence(path=self.download_app_folder)
+            check_directory_for_existence(path=self.temp_data_app_folder)
+            check_directory_for_existence(path=self.download_icons_app_folder)
+            clear_directory(directory=self.temp_data_app_folder)
 
         except DatabaseOperationError as err:
-            self.controller.model_critical_error(error_code=1)
+            self.controller.model_critical_error(error_code=err.trouble)
 
     def reset_model_pytube(self):
         try:
@@ -140,8 +152,10 @@ class Model:
 
     def model_change_videos_page(self):
         try:
-            self.first_video, self.second_video = move_in_videos_collection(collection=self.videos_collection,
-                                                                            offset=self.offset_collection)
+            first_page, last_page = False, False
+            self.first_video, self.second_video, first_page, last_page = move_in_videos_collection(
+                collection=self.videos_collection,
+                offset=self.offset_collection)
 
         except Exception as err:
             pass
@@ -168,19 +182,18 @@ class Model:
 
     def delete_video_model(self, video, full_delete: bool):
         try:
-            delete_video(video=video, database=self.db, full_delete=full_delete)
+            delete_video(video=video, database=self.db_filename, full_delete=full_delete)
             return True
         except DeleteVideoError as err:
             self.controller.model_delete_video_error(err.title)
             return False
-            
 
     def edit_video_model(self, data):
         try:
 
             need_to_remove = prepare_new_data_for_editing_video(video_for_edit=self.selected_video, data=data)
 
-            edit_video(data=data, database=self.db, with_replace=need_to_remove,
+            edit_video(data=data, database=self.db_filename, with_replace=need_to_remove,
                        replace_from_path=self.selected_video['video_path'],
                        replace_to_path=data['video_path'])
 
@@ -196,11 +209,11 @@ class Model:
 
     def model_update_video_collection(self):
         try:
-            videos = get_nonexistence_videos_in_db(database=self.db)
+            videos = get_nonexistence_videos_in_db(database=self.db_filename)
             for video in videos:
                 self.delete_video_model(video, full_delete=False)
-            check_directory_for_existence(path=download_app_folder)
-            founded_videos_in_db = read_videos_db(database=self.db)
+            check_directory_for_existence(path=self.download_app_folder)
+            founded_videos_in_db = read_videos_db(database=self.db_filename)
             self.set_videos_from_db(collection=founded_videos_in_db)
             self.set_videos_count(count=len(self.videos_collection))
 
@@ -249,10 +262,10 @@ class Model:
             extension = self.downloading_video_data['user_format']
 
             audio_stream = (self.pytube_instance.streams
-                                                     .filter(only_audio=True,file_extension=extension)
-                                                     .order_by('abr')
-                                                     .desc()
-                                                     .first())
+                            .filter(only_audio=True, file_extension=extension)
+                            .order_by('abr')
+                            .desc()
+                            .first())
 
             self.pytube_info['suit_video_stream'] = video_stream
             self.pytube_info['suit_audio_stream'] = audio_stream
@@ -279,45 +292,44 @@ class Model:
         if not check_data_for_downloading_video(data=data):
             return False
         else:
-            path, extension = prepare_data_for_downloading(data=data, path_to_download=download_app_folder)
+            path, extension = prepare_data_for_downloading(data=data, path_to_download=self.download_app_folder)
             self.downloading_video_data['user_path'] = path
             self.downloading_video_data['user_format'] = extension
             return True
 
     def start_download_video_thread(self):
         try:
-            temp_video_file = download_stream(path_for_save='../../app/appData/temp/',
-                                                    file_name='vid',
-                                                    stream=self.pytube_info['suit_video_stream'])
+            temp_video_file = download_stream(path_for_save=self.temp_data_app_folder,
+                                              file_name='vid',
+                                              stream=self.pytube_info['suit_video_stream'])
 
-            temp_audio_file = download_stream(path_for_save='../../app/appData/temp/',
-                                                    file_name='aud',
-                                                    stream=self.pytube_info['suit_audio_stream'])
+            temp_audio_file = download_stream(path_for_save=self.temp_data_app_folder,
+                                              file_name='aud',
+                                              stream=self.pytube_info['suit_audio_stream'])
 
             self.ffmpeg_videos['temp_vid_filename'] = temp_video_file
             self.ffmpeg_videos['temp_aud_filename'] = temp_audio_file
 
             vido_file = concat_audio_video_files(video_file=temp_video_file,
                                                  audio_file=temp_audio_file,
-                                                 output_temp_video_path='../../app/appData/temp/',
+                                                 output_temp_video_path=self.temp_data_app_folder,
                                                  output_temp_name='concat',
                                                  output_path=self.downloading_video_data['user_path'])
 
-            data = prepare_new_data_for_downloaded_video(vido_file, temp_preview_filename)
+            data = prepare_new_data_for_downloaded_video(vido_file, self.temp_preview_filename)
 
-            add_video(database=self.db, data=data, path_to_save=save_icons_app_folder)
+            add_video(database=self.db_filename, data=data, path_to_save=self.download_icons_app_folder)
 
-
-            clear_directory(directory=temp_data_app_folder)
+            clear_directory(directory=self.temp_data_app_folder)
 
             self.controller.model_successfully_downloaded_video_handler("message")
         except (FfmpegError, DownloadAudioStreamError,
                 DownloadVideoStreamError, PreparingDownloadedVideoDataError) as err:
-            clear_directory(directory=temp_data_app_folder)
+            clear_directory(directory=self.temp_data_app_folder)
             self.reset_model_pytube()
             self.controller.model_downloading_youtube_video_error(name_err=err.title)
         except AddingDownloadVideoDatabaseError as err:
-            clear_directory(directory=temp_data_app_folder)
+            clear_directory(directory=self.temp_data_app_folder)
             self.controller.model_critical_error(error_code=3)
 
     def model_download_common_data_thread(self):
@@ -326,7 +338,7 @@ class Model:
             self.pytube_info['video_name'] = name
             self.pytube_info['thumbnail_url'] = thumbnail
             self.pytube_info['video_streams_all'] = get_all_video_streams(all_streams=self.pytube_instance.streams)
-            if not preview_download(thumbnail_url=thumbnail, filename_for_save=temp_preview_filename):
+            if not preview_download(thumbnail_url=thumbnail, filename_for_save=self.temp_preview_filename):
                 self.reset_model_pytube()
                 raise DownloadPreviewError
             self.controller.model_downloaded_youtube_video_info_handler()
@@ -346,13 +358,13 @@ class Model:
         try:
             data = {
                 "video_name": self.pytube_info['video_name'],
-                "video_icon": temp_preview_filename,
+                "video_icon": self.temp_preview_filename,
                 "resolutions": self.pytube_info['resolutions'],
                 "formats": self.pytube_info['formats'],
                 "fps": self.pytube_info['fps']
             }
             return data
         except Exception as err:
-           return None
+            return None
 
 

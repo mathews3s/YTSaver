@@ -1,0 +1,1423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1200</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1200</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>YTSaver</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">border-color: rgb(255, 16, 80);</string>
+  </property>
+  <widget class="QWidget" name="WorkSpace">
+   <property name="styleSheet">
+    <string notr="true">border-color: rgb(0, 0, 0);
+background-color: rgb(85, 85, 127);</string>
+   </property>
+   <widget class="QFrame" name="AppMessagerBar">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>1201</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 0px;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="AppMessagerIcon">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>51</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid;
+border-color: rgb(255, 255, 255);
+border-radius: 25px;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="AppMessagerOutput">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>15</y>
+       <width>1061</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 63 13pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="ControlButtonsBar">
+    <property name="geometry">
+     <rect>
+      <x>-10</x>
+      <y>90</y>
+      <width>1211</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 0px;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QPushButton" name="VideosTabButton">
+     <property name="geometry">
+      <rect>
+       <x>760</x>
+       <y>10</y>
+       <width>321</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+     </property>
+     <property name="text">
+      <string>История загрузки</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="DownloadTabButton">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>10</y>
+       <width>321</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+     </property>
+     <property name="text">
+      <string>Найти и загрузить</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="MainMenu">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>1171</width>
+      <height>631</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="VideoTab">
+     <widget class="QFrame" name="VID_Container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>1171</width>
+        <height>571</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 20px;
+text-align: center;
+</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="VID_UpButton">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>90</y>
+         <width>51</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>↑</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="VID_DownButton">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>380</y>
+         <width>51</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>↓</string>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="VID1_Container">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>40</y>
+         <width>731</width>
+         <height>211</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>GroupBox</string>
+       </property>
+       <widget class="QLabel" name="VID1_Icon">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>171</width>
+          <height>161</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID1_NameLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>20</y>
+          <width>531</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID1_DateCreationLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>60</y>
+          <width>141</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID1_DescriptionLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>100</y>
+          <width>531</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID1_PathLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>150</y>
+          <width>531</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="VID2_Container">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>310</y>
+         <width>741</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>GroupBox</string>
+       </property>
+       <widget class="QLabel" name="VID2_Icon">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>171</width>
+          <height>171</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID2_NameLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>30</y>
+          <width>551</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID2_DateCreationLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>70</y>
+          <width>321</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID2_DescriptionLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>110</y>
+          <width>541</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="VID2_PathLabel">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>170</y>
+          <width>541</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="VID_NothingLabel">
+       <property name="geometry">
+        <rect>
+         <x>410</x>
+         <y>250</y>
+         <width>261</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Ничего не найдено :(</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="VID_WatchButton">
+       <property name="geometry">
+        <rect>
+         <x>910</x>
+         <y>180</y>
+         <width>211</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>Открыть превью</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="VID_DeleteButton">
+       <property name="geometry">
+        <rect>
+         <x>910</x>
+         <y>270</y>
+         <width>211</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>Удалить</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="VID_EditButton">
+       <property name="geometry">
+        <rect>
+         <x>910</x>
+         <y>360</y>
+         <width>211</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 10px
+</string>
+       </property>
+       <property name="text">
+        <string>Редактирование</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="VID_ControlsLabel">
+       <property name="geometry">
+        <rect>
+         <x>890</x>
+         <y>80</y>
+         <width>241</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Управление выбранным 
+видео:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="VID_TabLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Найдено видео:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="VID_CountValue">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>10</y>
+        <width>55</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="DownloadTab">
+     <widget class="QFrame" name="DOW_Container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>1171</width>
+        <height>571</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="DOW_FindButton">
+       <property name="geometry">
+        <rect>
+         <x>450</x>
+         <y>340</y>
+         <width>271</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Найти виде в YouTube!</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="DOW_LinkInput">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>220</y>
+         <width>901</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">padding-left: 10px;
+background-color: rgb(255, 255, 255);
+border: 3px solid rgb(85, 85, 127);;
+border-radius: 10px;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Вставьте вашу ссылку сюда</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="DOW_TabLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>201</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Поиск видео</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="PreviewTab">
+     <widget class="QFrame" name="PT_Container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>1211</width>
+        <height>611</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="PT_CancelButton">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>540</y>
+         <width>221</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Назад</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="PT_Video">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>40</y>
+         <width>1131</width>
+         <height>481</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(56, 40, 110, 255), stop:1 rgba(255, 255, 255, 255));
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PT_StopOrPlayButton">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>540</y>
+         <width>231</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Воспроизвести / Стоп</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PT_ShipForwardButton">
+       <property name="geometry">
+        <rect>
+         <x>1030</x>
+         <y>540</y>
+         <width>91</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>&gt;&gt; 5</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PT_SkipBackButton">
+       <property name="geometry">
+        <rect>
+         <x>720</x>
+         <y>540</y>
+         <width>91</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>5 &lt;&lt; </string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="PT_TimeLabel">
+       <property name="geometry">
+        <rect>
+         <x>870</x>
+         <y>550</y>
+         <width>111</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="DownloadDetailsTab">
+     <widget class="QFrame" name="DDT_Container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>1181</width>
+        <height>571</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="DDT_VideoName">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>40</y>
+         <width>1111</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="DDT_QualityLabel">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>130</y>
+         <width>231</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Выберите качество:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="DDT_FormatLabel">
+       <property name="geometry">
+        <rect>
+         <x>590</x>
+         <y>130</y>
+         <width>251</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Выберите видеоформат:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="DDT_BitrateLabel">
+       <property name="geometry">
+        <rect>
+         <x>810</x>
+         <y>120</y>
+         <width>321</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Выберите FPS:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="DDT_QualityBox">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>200</y>
+         <width>231</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="DDT_FormatBox">
+       <property name="geometry">
+        <rect>
+         <x>570</x>
+         <y>200</y>
+         <width>231</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="DDT_BitrateBox">
+       <property name="geometry">
+        <rect>
+         <x>860</x>
+         <y>200</y>
+         <width>231</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="DDT_DownloadButton">
+       <property name="geometry">
+        <rect>
+         <x>860</x>
+         <y>480</y>
+         <width>241</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Загрузить!</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="DDT_CancelButton">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>480</y>
+         <width>141</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Назад</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="DDT_VideoIcon">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>190</y>
+         <width>181</width>
+         <height>181</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="DDT_PathInput">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>340</y>
+         <width>821</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">padding-left: 10px;
+background-color: rgb(255, 255, 255);
+border: 3px solid rgb(85, 85, 127);;
+border-radius: 10px;
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="DDT_PathLabel">
+       <property name="geometry">
+        <rect>
+         <x>300</x>
+         <y>270</y>
+         <width>851</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Выберите путь для загрузки:                       (default - сохранить в папку приложения)</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="DDT_LabLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Детали загрузки</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="EditPlaylistTab"/>
+    <widget class="QWidget" name="EditVideoTab">
+     <widget class="QLabel" name="EDT_TabLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>311</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Редактирование информации</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="EDT_Container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>1181</width>
+        <height>571</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="EDT_IconLabel">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>20</y>
+         <width>261</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Выберите новую иконку:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="EDT_NameLabel">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>20</y>
+         <width>351</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Придумайте новое имя файла:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="EDT_PathLabel">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>260</y>
+         <width>431</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Выберите новое расположение видео:</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="EDT_SaveButton">
+       <property name="geometry">
+        <rect>
+         <x>720</x>
+         <y>470</y>
+         <width>391</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Сохранить изменения</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="EDT_ChangeButton">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>310</y>
+         <width>221</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Выбрать</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="EDT_DescriptionLabel">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>140</y>
+         <width>491</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Дайте новое короткое описание видео:</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="EDT_CancelButton">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>460</y>
+         <width>211</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Назад</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="EDT_NameInput">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>80</y>
+         <width>751</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">padding-left: 10px;
+background-color: rgb(255, 255, 255);
+border: 3px solid rgb(85, 85, 127);;
+border-radius: 10px;
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="EDT_DescriptionInput">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>200</y>
+         <width>751</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">padding-left: 10px;
+background-color: rgb(255, 255, 255);
+border: 3px solid rgb(85, 85, 127);;
+border-radius: 10px;
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="EDT_Icon">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>80</y>
+         <width>221</width>
+         <height>201</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border: 3px solid rgb(85, 85, 127);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="EDT_PathInput">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>320</y>
+         <width>751</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">padding-left: 10px;
+background-color: rgb(255, 255, 255);
+border: 3px solid rgb(85, 85, 127);;
+border-radius: 10px;
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="DialogTab">
+     <widget class="QFrame" name="DLG_Container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>1181</width>
+        <height>551</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);
+border-radius: 20px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="DLG_TextLabel">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>110</y>
+         <width>341</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Подвердите действие:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="DLG_AcceptButton">
+       <property name="geometry">
+        <rect>
+         <x>620</x>
+         <y>280</y>
+         <width>221</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Подвердить</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="DLG_CancelButton">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>280</y>
+         <width>221</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);
+border-radius: 20px;</string>
+       </property>
+       <property name="text">
+        <string>Отмена</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="DLG_DetailsLabel">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>170</y>
+         <width>1081</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 63 10pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="DLG_TabLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>301</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 12pt &quot;Yu Gothic UI Semibold&quot;;
+background-color: rgb(85, 85, 127);
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Опасная операция</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -6,7 +6,6 @@ class DatabaseOperationError(Exception):
         self.trouble = trouble
 
 
-
 class FfmpegError(Exception):
     def __init__(self, message):
         super().__init__(message)

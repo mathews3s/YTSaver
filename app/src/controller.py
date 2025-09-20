@@ -1,19 +1,21 @@
 import sys
 
+
 class Controller:
 
-    def __init__(self, model, view):
+    def __init__(self, model, view, paths):
         self.view = view
         self.model = model
+        self.model.prepare_paths_for_resources(paths)
         self.setup_app()
         self.startup_app()
 
     # Input/Output points of the app
 
     def setup_app(self):
-        self.model.model_check_resources()
         self.model.model_set_feedback(controller=self)
         self.view.view_set_feedback(controller=self)
+        self.model.model_check_resources()
         self.view.setup_graphical_events()
         self.view.main_window_open(True)
         self.model.model_update_video_collection()
@@ -34,7 +36,7 @@ class Controller:
     def controller_update_video_tab(self):
         count = self.model.get_videos_count()
         self.view.set_videos_count_text(count)
-        
+
         match count:
             case 0:
                 self.view.videos_containers_empty()
@@ -57,7 +59,7 @@ class Controller:
             self.view.display_second_video__container(second_video_data)
         else:
             self.view.hide_second_video_container()
-            
+
         if current_video_data == None:
             self.view.enable_video_controls_buttons(False)
         elif current_video_data == second_video_data:
@@ -83,6 +85,7 @@ class Controller:
         if data is not None:
             self.controller_notify_user("Выберите параметры для загрузки видео")
             self.view.switch_to_download_details_tab(data)
+            self.view.enable_download_tab_download_controls(False)
         else:
             self.controller_notify_user("Ошибка во время получения сведений о видео. Попробуйте еще раз!")
 
@@ -91,7 +94,7 @@ class Controller:
         self.model.model_update_video_collection()
         self.controller_update_video_tab()
         self.user_switch_to_video_tab_handler()
-        self.view.enable_navigation_bar_controls(True)
+        self.view.enable_controls_while_downloading(flag=True)
 
     # Handler for user interaction in navigation bar
 
@@ -188,6 +191,7 @@ class Controller:
         self.model.update_video_streams_by_filter(res=data_from_view['resolution'])
         data_from_model = self.model.get_download_video_data()
         self.view.display_available_formats(data_from_model['formats'])
+        self.view.enable_download_tab_download_controls(False)
 
     def user_select_format_handler(self):
         data_from_view = self.view.get_data_from_download_tab()
@@ -195,19 +199,20 @@ class Controller:
                                                   fmt=data_from_view['format'])
         data_from_model = self.model.get_download_video_data()
         self.view.display_available_fps(data_from_model['fps'])
+        self.view.enable_download_tab_download_controls(False)
 
     def user_select_fps(self):
         data_from_view = self.view.get_data_from_download_tab()
         self.model.update_video_streams_by_filter(res=data_from_view['resolution'],
                                                   fmt=data_from_view['format'],
                                                   fps=data_from_view['fps'])
-        self.view.enable_download_tab_controls(True)
+        self.view.enable_download_tab_download_controls(True)
 
     def user_clicked_download_youtube_video_handler(self):
         data_from_view = self.view.get_data_from_download_tab()
         correct = self.model.model_prepare_before_downloading(data_from_view)
         if correct:
-            self.view.enable_navigation_bar_controls(flag=False)
+            self.view.enable_controls_while_downloading(flag=False)
             self.model.select_suit_stream()
             self.model.start_download_video()
         else:
@@ -222,7 +227,7 @@ class Controller:
 
     def model_downloading_youtube_video_error(self, name_err: str = ""):
         self.user_switch_to_download_tab_handler()
-        self.view.enable_navigation_bar_controls(True)
+        self.view.enable_controls_while_downloading(flag=True)
         self.controller_notify_user("Ошибка во время загрузки видео: " + name_err)
 
     def model_edit_video_error(self, name_err: str = ""):

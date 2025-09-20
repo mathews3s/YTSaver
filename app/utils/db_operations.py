@@ -1,9 +1,10 @@
 import sqlite3 as db
-from app_exceptions import *
-
+from app.utils.app_exceptions import *
+import os
 
 def create_database(database):
     try:
+
         with db.connect(database) as connection:
             cursor = connection.cursor()
 
@@ -27,7 +28,7 @@ def create_database(database):
                     cursor.execute(f"ALTER TABLE video ADD COLUMN {column} TEXT")
 
     except Exception as e:
-        raise DatabaseOperationError(message="Error", operation="on read", trouble=e)
+        raise DatabaseOperationError(message="Error", operation="on create_db", trouble=e)
 
 
 def update_video_db(database, video):

@@ -1,5 +1,5 @@
-from db_operations import *
-from files_operations import *
+from app.utils.db_operations import *
+from app.utils.files_operations import *
 from datetime import datetime
 import os
 
@@ -8,26 +8,19 @@ def move_in_videos_collection(collection, offset):
     next_item_1 = None
     next_item_2 = None
 
-    new_item_1 = None
-    new_item_2 = None
+    first_item_flag = False
+    last_item_flag = False
     try:
         index_first = offset + 0
+        if index_first == 0:
+            first_item_flag = True
         index_second = offset + 1
         next_item_1 = collection[index_first]
         next_item_2 = collection[index_second]
     except Exception:
-        pass
+        last_item_flag = True
 
-    if (next_item_2 is None) and (not next_item_1 is None):
-        new_item_1 = next_item_1
-        new_item_2 = None
-    elif (not next_item_1 is None) and (not next_item_2 is None):
-        new_item_1 = next_item_1
-        new_item_2  = next_item_2
-    else:
-        new_item_1  = next_item_1
-        new_item_2 = next_item_2
-    return new_item_1, new_item_2
+    return next_item_1, next_item_2, first_item_flag, last_item_flag
 
 
 def change_offset_in_collection(offset: int, collection_count: int, direction_up: bool = True):
