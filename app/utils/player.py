@@ -5,7 +5,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtCore import Qt
 
 
-class VideoPlayer():
+class VideoPlayer:
     def __init__(self, video_path, output_widget, pause_widget, back_widget, forward_widget, time_widget):
 
         self.video_path = video_path
@@ -24,7 +24,6 @@ class VideoPlayer():
         self.seek_backward_button = back_widget
         self.seek_backward_button.clicked.connect(self.seek_backward)
 
-
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(40)
@@ -32,17 +31,45 @@ class VideoPlayer():
         self.time_widget = time_widget
 
     def toggle_pause(self):
+        """
+            Toggle the pause/resume state of the video preview.
+
+            Returns:
+            - None
+        """
+
         self.paused = not self.paused
 
     def seek_forward(self):
+        """
+        Seek the video preview forward by a specified interval.
+
+        Returns:
+        - None
+        """
+
         current_pos = self.cap.get(cv2.CAP_PROP_POS_MSEC)
         self.cap.set(cv2.CAP_PROP_POS_MSEC, current_pos + self.interval)
 
     def seek_backward(self):
+        """
+            Seek the video preview backward by a specified interval.
+
+            Returns:
+            - None
+        """
+
         current_pos = self.cap.get(cv2.CAP_PROP_POS_MSEC)
         self.cap.set(cv2.CAP_PROP_POS_MSEC, max(current_pos - self.interval, 0))
 
     def update_frame(self):
+        """
+            Update the displayed preview video frame.
+
+            Returns:
+            - None
+        """
+
         if not self.paused:
             ret, frame = self.cap.read()
             if not ret:
@@ -55,7 +82,6 @@ class VideoPlayer():
             minutes = int(total_seconds // 60)
             seconds = int(total_seconds % 60)
 
-
             self.time_widget.setText(f"{minutes:02d}:{seconds:02d}")
 
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -63,11 +89,18 @@ class VideoPlayer():
             bytes_per_line = 3 * width
             q_img = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
 
-
             pixmap = QPixmap.fromImage(q_img).scaled(self.video_widget.size(), aspectRatioMode=Qt.KeepAspectRatio)
 
             self.video_widget.setPixmap(pixmap)
             self.video_widget.setAlignment(Qt.AlignCenter)
+
     def close_video(self):
+        """
+            Release the video capture object to close the video preview.
+
+            Returns:
+            - None
+        """
+
         self.cap.release()
 

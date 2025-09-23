@@ -1,3 +1,4 @@
+# there are all exceptions in app
 
 class DatabaseOperationError(Exception):
     def __init__(self, message, operation, trouble):
@@ -9,19 +10,13 @@ class DatabaseOperationError(Exception):
 class FfmpegError(Exception):
     def __init__(self, message):
         super().__init__(message)
-        self.title = "ffmpeg error"
+        self.title = "ffmpeg processing error"
 
 
-class DownloadVideoStreamError(Exception):
+class DownloadStreamError(Exception):
     def __init__(self, message):
         super().__init__(message)
-        self.title = "video stream error"
-
-
-class DownloadAudioStreamError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-        self.title = "audio stream error"
+        self.title = "download stream error"
 
 
 class DownloadPreviewError(Exception):
@@ -36,11 +31,10 @@ class CommonDataFetchError(Exception):
         self.title = "download common data error"
 
 
-
-class VideoStreamsDownloadError(Exception):
+class FindingVideoError(Exception):
     def __init__(self, message):
         super().__init__(message)
-        self.title = "download common data error"
+        self.title = "finding video error"
 
 
 class AddingDownloadVideoDatabaseError(Exception):
@@ -70,16 +64,16 @@ class DeleteVideoError(Exception):
 class CheckingDataForVideoError(Exception):
     def __init__(self, message):
         super().__init__(message)
-        self.title = "while checking data error"
-
-
-class FindingPytubeVideoError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-        self.title = "delete data from db error"
+        self.title = "edited data checking error"
 
 
 class ClearingDirectoryError(Exception):
     def __init__(self, message):
         super().__init__(message)
-        self.title = "delete data from db error"
+        self.title = "clearing temp folder error"
+
+
+class AppDirectoriesConstructingError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.title = "constructing app folders error"

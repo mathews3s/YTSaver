@@ -278,7 +278,7 @@ class Model:
 
         try:
 
-            need_to_remove = prepare_new_data_for_editing_video(video_for_edit=self.selected_video, data=data)
+            need_to_remove = prepare_new_data_for_editing_video(video_for_edit=self.selected_video, new_data=data)
 
             edit_video(data=data, database=self.db_filename, with_replace=need_to_remove,
                        replace_from_path=self.selected_video['video_path'],
