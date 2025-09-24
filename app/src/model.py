@@ -393,12 +393,13 @@ class Model:
         message = f"Downloading {stream.type}. ({percentage:.2f}%)"
         self.model_track_download_progress(message)
 
-    def on_complete_download_stream(self, stream):
+    def on_complete_download_stream(self, stream, file_path):
         """
             callback function for indicate completion of downloading stream.
 
             Parameters:
             - stream: The downloaded stream object.
+            - file_path: path of downloaded file.
 
             Returns:
             - None
