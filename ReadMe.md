@@ -41,7 +41,7 @@ YouTube, в зависимости от их предпочтений по ка�
 Конкретно в данной реализации модель никак не взаимосвязана с 
 представлением, а контроллер берет на себя все обязанности по их взаимодействиям.
 
-<div style="text-align:center; padding-top:20px; padding-bottom:20px;" align="center">
+<div style="text-align:center; margin-top:40px; margin-bottom:40px;" align="center">
     <img src="graphics/arch.jpg" width="500" height="450" />
 </div>
 
@@ -166,7 +166,7 @@ pyinstaller --noconfirm --onefile --windowed --icon "path_to_dir\app\appData\app
 * Свободное место на дисковом пространстве: 186 Мб;
 * Наличие стабильного интернет-соединения;
 
-#### Установке:
+#### Установка:
 
 Перед установкой, проверьте соответствие характеристик вашего устройства системным требованиям.
 
@@ -209,7 +209,7 @@ pyinstaller --noconfirm --onefile --windowed --icon "path_to_dir\app\appData\app
 
 
 
-<div style="text-align: center;" align="center">
+<div style="text-align:center; margin-top:40px; margin-bottom:40px;" align="center">
     <img src="graphics/snapshot.png" width="700" height="450" />
 </div>
 
