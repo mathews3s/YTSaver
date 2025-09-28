@@ -1,7 +1,7 @@
 
 
 
-<div style="text-align: center;">
+<div align="center">
     <img src="graphics/logo.png" width="200" height="200" />
 </div>
 
@@ -41,7 +41,7 @@ YouTube, в зависимости от их предпочтений по ка�
 Конкретно в данной реализации модель никак не взаимосвязана с 
 представлением, а контроллер берет на себя все обязанности по их взаимодействиям.
 
-<div style="text-align:center; padding-top:20px; padding-bottom:20px;">
+<div style="text-align:center; padding-top:20px; padding-bottom:20px;" align="center">
     <img src="graphics/arch.jpg" width="500" height="450" />
 </div>
 
@@ -209,7 +209,7 @@ pyinstaller --noconfirm --onefile --windowed --icon "path_to_dir\app\appData\app
 
 
 
-<div style="text-align: center;">
+<div style="text-align: center;" align="center">
     <img src="graphics/snapshot.png" width="700" height="450" />
 </div>
 
